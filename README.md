@@ -6,7 +6,7 @@
 > In case of issues please check the [FAQ](https://github.com/SAP/project-kernseife/blob/main/faq.md). Feel free to open an issue in case there is no solution. Keep in mind this is an open-source project.
 
 > [!CAUTION]  
-> Version 1.3.1 is out with major changes. Please checkout the [Release Information](https://github.com/SAP/project-kernseife/releases/tag/v1.3.2) for details.
+> Version 1.3.2 is out with major changes. Please checkout the [Release Information](https://github.com/SAP/project-kernseife/releases/tag/v1.3.2) for details.
 
 ## About this project
 
