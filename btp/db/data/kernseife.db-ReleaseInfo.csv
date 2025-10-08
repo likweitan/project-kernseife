@@ -1,0 +1,6 @@
+code,title,criticality_code
+"undefined","Unreleased",W
+"deprecated","Deprecated",E
+"notToBeReleased","Not to be released",W
+"notToBeReleasedStable","Not to be released",W
+"released","Released",S

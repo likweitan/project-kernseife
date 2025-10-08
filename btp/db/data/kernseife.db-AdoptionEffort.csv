@@ -1,0 +1,7 @@
+code,title,criticality_code
+"undefined","Not defined",I
+XS,"Adoption via Quickfix / Automated Approach",S
+S,"Simple Adoption of small Length and no Dependent Changes",I
+M,"Medium Change with smaller Dependant Changes",W
+L,"Major Rebuild needed within the existing Framework",E
+XL,"Complete Rework needed (e.g. Custom Dynpro App to Fiori UI)",E

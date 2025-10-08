@@ -1,0 +1,4 @@
+code,title,criticality_code
+"X","Standard ABAP",E
+"2","ABAP for Key Users",W
+"5","ABAP for Cloud Development",S

@@ -1,0 +1,4 @@
+code,title,criticality_code
+"STANDARD","Standard",S
+"DIRECT", "Direct",S
+"ABSTRACT", "Abstraction",W

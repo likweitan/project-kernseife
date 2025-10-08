@@ -1,0 +1,4 @@
+code,title,criticality_code
+"SIMPLIFICATION_DB","Simplification Item",W
+"CONSULTING", "Consulting Note",S
+"OTHER", "Other",I

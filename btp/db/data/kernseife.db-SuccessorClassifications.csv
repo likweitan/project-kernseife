@@ -1,0 +1,4 @@
+code,title,criticality_code,custom,obsolete
+"undefined","None",W,false,false
+"STANDARD","Standard",S,false,false
+"CUSTOM","Custom",I,true,false

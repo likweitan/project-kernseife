@@ -1,0 +1,5 @@
+code,title,criticality
+I,"Default",0
+E, "Error",1
+W, "Warning",2
+S, "Success",3

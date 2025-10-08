@@ -1,0 +1,10 @@
+code,title,criticality_code,score
+"undefined","Unkown",E,0
+"NO_API","Must not be used",E,-10
+"NOT_TO_BE_RELEASED","Must not be used",E,-10
+"STABLE","Stable",E,2
+"INTERNAL","Internal API",E,-5
+"CLASSIC","Classic API",W,5
+"DEPRECATED","ABAP Cloud",E,8
+"RELEASED","ABAP Cloud",S,10
+"CONFLICT","Conflict",E,0

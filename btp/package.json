@@ -1,0 +1,151 @@
+{
+  "name": "kernseife",
+  "version": "1.0.0",
+  "description": "CAP App for Kernseife",
+  "repository": "https://github.tools.sap/Kernseife/kernseifeApp.git",
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "Daniel Huser",
+  "scripts": {
+    "start": "cds-serve",
+    "dev": "cds-ts watch",
+    "postinstall": "npm run generate-cds-types",
+    "format": "npx pretty-quick --pattern \"**/*.*(js|ts|json)\" && format-cds",
+    "lint": "eslint . --fix",
+    "prebuild": "npm run lint && npm run cleanup:build",
+    "build": "cds build --production",
+    "postbuild": "npm run cleanup:ts",
+    "build:bundle": "npm ci --omit=dev --prefix=gen/srv && npm i --omit=dev --prefix=gen/db",
+    "cleanup:build": "npx rimraf resources mta_archives app/**/dist",
+    "cleanup:ts": "npx rimraf gen/**/*.ts",
+    "generate-cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory @cds-models",
+    "test": "jest --silent",
+    "mbt": "mbt build -t gen/mtar -m=verbose -j=8",
+    "deploy-dev": "cf deploy gen/mtar/kernseife_1.0.0.mtar -e=BTP_DEV.mtaext",
+    "deploy-production": "cf deploy gen/mtar/kernseife_1.0.0.mtar -e=BTP_PROD.mtaext"
+  },
+  "dependencies": {
+    "@cap-js/hana": "^2.1.2",
+    "@grpc/grpc-js": "^1.13.3",
+    "@sap-cloud-sdk/connectivity": "^4.1.1",
+    "@sap-cloud-sdk/http-client": "^4.1.1",
+    "@sap-cloud-sdk/resilience": "^4.1.1",
+    "@sap-cloud-sdk/util": "^4.1.1",
+    "@sap/cds": "^9.2.1",
+    "@sap/xssec": "^4.9.1",
+    "dayjs": "^1.11.13",
+    "express": "^4.21.2",
+    "helmet": "^8.1.0",
+    "is-ci": "^4.1.0",
+    "jszip": "^3.10.1",
+    "papaparse": "^5.5.2"
+  },
+  "devDependencies": {
+    "@cap-js/cds-test": "^0.4.0",
+    "@cap-js/cds-typer": "^0.36.0",
+    "@cap-js/cds-types": "^0.13.0",
+    "@cap-js/sqlite": "^2.0.2",
+    "@eslint/js": "^9.34.0",
+    "@jest/globals": "^29.7.0",
+    "@sap/eslint-plugin-cds": "^4.1.0",
+    "@sap/ux-specification": "^1.124.14",
+    "@types/express": "^5.0.1",
+    "@types/jest": "^29.5.14",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.15.3",
+    "@types/papaparse": "^5.3.15",
+    "@types/sap__xsenv": "^3.3.2",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-jest": "^29.0.1",
+    "husky": "^9.1.7",
+    "jest": "^29.7.0",
+    "mbt": "^1.2.34",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.4.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.41.0"
+  },
+  "cds": {
+    "requires": {
+      "queue": false,
+      "[production]": {
+        "db": "hana"
+      },
+      "[development]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": "db.sqlite"
+          }
+        },
+        "auth": {
+          "kind": "mocked",
+          "users": {
+            "any": {
+              "roles": [
+                "viewer"
+              ]
+            },
+            "viewer": {
+              "password": "viewer",
+              "roles": [
+                "viewer"
+              ]
+            },
+            "admin": {
+              "password": "admin",
+              "roles": [
+                "admin"
+              ]
+            }
+          }
+        }
+      },
+      "API_OBJECT_METADATA": {
+        "kind": "odata-v4",
+        "model": "srv/external/API_OBJECT_METADATA",
+        "[production]": {
+          "credentials": {
+            "path": "/sap/opu/odata4/sap/zapi_ks_object_metadata/srvd_a2x/sap/zapi_ks_object_metadata/0001",
+            "destination": "kernseife"
+          }
+        }
+      }
+    },
+    "log": {
+      "levels": {
+        "db": "error",
+        "sql": "error",
+        "cds": "info"
+      }
+    }
+  },
+  "sapux": [
+    "app/view-classification",
+    "app/analyze-score",
+    "app/analyze-overview",
+    "app/import-center",
+    "app/configure-framework",
+    "app/configure-rating",
+    "app/configure-system",
+    "app/configure-default",
+    "app/manage-development-object",
+    "app/monitor-job",
+    "app/manage-release-state",
+    "app/manage-classification",
+    "app/manage-extension",
+    "app/configure-default"
+  ],
+  "workspaces": [
+    "app/*",
+    "db/*"
+  ],
+  "imports": {
+    "#cds-models/*": "./@cds-models/*/index.js"
+  }
+}

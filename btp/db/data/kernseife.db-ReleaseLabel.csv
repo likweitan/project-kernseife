@@ -1,0 +1,3 @@
+code,title,criticality_code
+"remote-enable","remote-enable",S
+"transactional-consistent","transactional-consistent",S

@@ -1,0 +1,5 @@
+code,title,criticality_code
+"undefined","Not defined",I
+"classicAPI","Classic API",I
+"internalAPI","Internal API",W
+"noAPI","No API",E

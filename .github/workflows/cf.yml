@@ -1,0 +1,55 @@
+name: Cloud Foundry
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Deployment environment name'
+        required: false
+        default: Staging
+        type: string
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment name'
+        required: false
+        default: Staging
+        type: string
+  
+
+permissions:
+  contents: read
+  deployments: write
+
+env:
+  APP_NAME: kernseife
+  FORCE_COLOR: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'Staging' }}
+    defaults:
+      run:
+        working-directory: ./btp
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: ./.github/actions/cf-setup # cap-js/cf-setup@v1
+        with:
+          cf-api: ${{ vars.CF_API }}
+          cf-org: ${{ vars.CF_ORG }}
+          cf-space: ${{ vars.CF_SPACE }}
+          cf-username: ${{ vars.CF_USERNAME }}
+          cf-password: ${{ secrets.CF_PASSWORD }}
+      - run: npm add -D @sap/cds-dk
+      - run: npx cds add hana
+      - run: npm install
+      - run: npm run mbt
+      - run: npm run deploy-dev
+      - run: cf logs ${{ env.APP_NAME }}-srv --recent
+        if: always()
+      - run: cf logs ${{ env.APP_NAME }}-db-deployer --recent
+        if: always()

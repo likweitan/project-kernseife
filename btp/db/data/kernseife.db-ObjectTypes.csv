@@ -1,0 +1,1757 @@
+objectType,title,category
+*,All,wildcard
+01DY,Screen sequence for rental units transport object,exotic
+0KM1,Screen variant for cost center collective processing,exotic
+0KW3,Screen Variant: Collective Processing for Business Processes,exotic
+1APP,BPC: APPLICATION,exotic
+24FO,HR Forms (KSA),exotic
+AABC,BPC APA Global Bands & KPI Category Setting,exotic
+AADT,BPC APA Application Global Setting,exotic
+AAOE,Analysis Office Excel Workbook,exotic
+AAOP,Analysis Office Powerpoint,exotic
+AAPP,BPC Model,exotic
+AAPS,BPC Environment Info,exotic
+AART,"Order type (CO, PP, PM, network)",exotic
+ABLC,Settings for ABAP Language Version for Software Component,exotic
+ABPC,BPC Objects,exotic
+ABPF,BPC BPF,exotic
+ABRU,BPC Business Rule,exotic
+ABRV,Settlement variant,exotic
+ACGA,BPC Environment Configuration,exotic
+ACGP,BPC Model Configuration,exotic
+ACGR,Role,exotic
+ACGS,BPC System Configuration,exotic
+ACGT,Role - User assignment,exotic
+ACID,Checkpoint Group,exotic
+ACLA,Archiving Class,exotic
+ACLB,BPC Library,exotic
+ACTR,BPC Control,exotic
+ADAF,BPC Data Access Profile,exotic
+ADEE,BPC Deletion Entity,exotic
+ADEI,BPC deletion item,exotic
+ADEL,BPC Deletion,exotic
+ADIM,BPC Dimension,exotic
+ADMC,BPC DM Data File,exotic
+ADMD,BPC DM File Folder,exotic
+ADMF,BPC DM File,exotic
+ADMG,BPC Data Mananger Package Group,exotic
+ADML,BPC DM Package Link,exotic
+ADMP,BPC DM Package,exotic
+ADSO,Datastore Object,exotic
+ADTC,ADT Compatibility Graph,exotic
+ADTG,BPC Drill Through,exotic
+ADTS,ADT scopes for HTTP resource authorization via OAUTH2,exotic
+ADVC,App Variant (LRep cross-client content),exotic
+ADVD,App Variant (LRep client-dependent content),exotic
+ADVT,App Variant (LRep client-dependent content customizing req.),exotic
+AFCS,ABAP Fiori Code snippet,exotic
+AFLC,BPC File Category,exotic
+AFLD,BPC File Folder,exotic
+AFLE,BPC Files,exotic
+AFLG,BPC File Group,exotic
+AFOT,ABAP Fiori Object Type,exotic
+AGGR,Aggregate,exotic
+AIFC,Objects from AIF content,exotic
+AIFE,Object for extension content,exotic
+AJUT,BPC Jounal Template,exotic
+AKPI,BPC AVA KPI,exotic
+ALID,Transport Object for Alternative ID Types,exotic
+ALPT,BPC Web documents - LiveReport,exotic
+ALVC,"ALV Templates (for example, Crystal Layouts) from Customer",exotic
+ALVL,Aggregation Level,exotic
+ALVT,"ALV Templates (for example, Crystal Layouts) from SAP",exotic
+ALVW,ALV (WebDynroABAP) - BLOBs for Views delivered by SAP,exotic
+AM00,Asset Accounting FI-AA: Chart of depreciation,exotic
+AM01,Asset Accounting FI-AA: Calculation key,exotic
+AM02,Asset Accounting FI-AA: Company codes,exotic
+AM03,Asset Accounting FI-AA: Cut-off value/scrap value,exotic
+AM04,Asset Accounting FI-AA: Depreciation Keys,exotic
+AM05,Asset Accounting FI-AA: Account allocation,exotic
+AM07,Asset Accounting FI-AA: Transaction types,exotic
+AM08,Asset Accounting FI-AA: Screen layout rule asset master,exotic
+AM09,Asset Accounting FI-AA: Screen layout rule deprec. areas,exotic
+AM10,Asset Accounting FI-AA: Asset history sheet (definition),exotic
+AM11,Asset Accounting FI-AA: Index points,exotic
+AM12,Asset Accounting FI-AA: Views,exotic
+AM13,Asset Accounting FI-AA: Field groups and asset views,exotic
+AM14,Asset Accounting FI-AA: Period weighting,exotic
+AM15,Asset Accounting: Asset classes,exotic
+AM16,Asset Accounting: Account groups,exotic
+AM17,Asset Accounting: chart of accounts,exotic
+AM18,Asset Accounting: Transaction type proposals,exotic
+AMBR,BPC Dimension member,exotic
+AMHC,ABAP-Managed (Logical) HDI Containers,exotic
+AMOP,APO Alert Monitor Profile,exotic
+AMPF,BPC Member Access Profile,exotic
+AMSD,Logical Database Schema,exotic
+AMSM,Mapping of Logical Schema to Physical Schema,exotic
+ANMO,Analytical Model,exotic
+ANPR,Analysis Process,exotic
+ANSE,Analytical Service,exotic
+ANSO,Source for analytical model,exotic
+ANST,Analytical service types,exotic
+AOBJ,Archiving Object,exotic
+APCO,Application components,exotic
+APIA,API Release: API Catalog Assignment,exotic
+APIC,API Catalog,exotic
+APIS,API Release State of Objects,exotic
+APIV,API Version,exotic
+APIX,API Snapshot,exotic
+APLO,Application Log Object,exotic
+APOB,Application Object,exotic
+APPL,Application Class,minor
+APPS,BPC Appset,exotic
+AQBG,ABAP Query: User group,exotic
+AQHT,SAP Query: HTML Templates,exotic
+AQQU,ABAP Query: Query,exotic
+AQQV,ABAP Query: Query variant,exotic
+AQSG,ABAP Query: Functional area,exotic
+AQTR,SAP Query: HTML Templates (raw),exotic
+AQXI,ABAP Query: Additional functions,exotic
+AREA,InfoArea,exotic
+ARLE,Meta Data for Derivation Cluster,exotic
+ARTP,BPC Report template,exotic
+ASFC,SAP AS: Field Catalog,exotic
+ASIS,SAP AS: Archiving Information Structure,exotic
+ASOB,Analytics Security Object (BI Analysis Authorizations),exotic
+ASPD,BPC Script Folder,exotic
+ASPF,BPC Script File,exotic
+ASPR,BPC Script File Resource,exotic
+ATCS,ABAP Test Cockpit: Step,exotic
+ATEM,BPC Team,exotic
+ATOC,System Data for Cross Release Customizing Transports,exotic
+ATOD,System Data for Cross Release Transports,exotic
+ATOM,ATO Manifest,exotic
+ATOT,ATO System Transfer,exotic
+ATPF,BPC Task Profile,exotic
+ATPL,Transport of Profile Generator templates,exotic
+ATRT,Data Types for Attributes,exotic
+ATTR,Logical Transport Object for Set Type Attributes,exotic
+AUDI,General Structure Repository: Audit Information Structure,exotic
+AUTH,Authorization Check Fields,exotic
+AVAR,Activation Variants for Assertions and Breakpoints,exotic
+AVAS,Classification,exotic
+AVRS,ABAP Version,exotic
+AWDC,BPC Web document category,exotic
+AWFD,BPC Web document folder,exotic
+AWKP,BPC Web document - workspace,exotic
+AWSS,BPC Workstatus,exotic
+AXDB,BPC Web documents - XcelsiusDashBoard,exotic
+AXEC,Rapid Application Embedded Views (Customer maintained),exotic
+AXEM,Embeddable view,exotic
+AXES,Rapid Application Embedded Views (SAP delivered),exotic
+AXTA,Application Group,exotic
+AXTB,Extensible business objects,exotic
+AXTC,Generation Catalogue,exotic
+AXTE,Extension,exotic
+AXTL,Logical Table object,exotic
+AXTN,Extensibility number range definition,exotic
+AXTO,Extension object type,exotic
+AXTP,Extensible place,exotic
+AXTS,Extensible search,exotic
+AXTT,Extensible table place,exotic
+AXTV,Navigational object,exotic
+AZAP,Analysis Application,exotic
+AZEX,Design Studio Extension,exotic
+BADI,Badi,major
+BAOE,BPC: Workbook,exotic
+BBPF,BPC: BPF,exotic
+BCCH,Business Configuration Check,exotic
+BCCU,Business Configuration Check Units,exotic
+BCDE,BC-Sets for Delta Activation,exotic
+BCTC,Business Configuration - Table Field Classification,exotic
+BDAP,BPC: Data access profile,exotic
+BDEF,Behavior Definition,minor
+BEN1,Benefit area plans,exotic
+BEN2,Benefit area administration,exotic
+BEN3,Flexible Benefit Area Tables,exotic
+BFTR,Business Feature,exotic
+BGQC,Background Processing Context,exotic
+BIBD,BI Content Bundle,exotic
+BIDC,Logical Transport object for BP ID Categories,exotic
+BILA,Language Transport of Financial Statement Version,exotic
+BIMO,BI Meta (Transport) Object Type,exotic
+BITM,BI Web Items (NW7.0+),exotic
+BIXP,Object for Controlling Data Conversions in BI,exotic
+BLFO,BW: LOIO Class Folder,exotic
+BLMA,BW: LOIO Class Master Data,exotic
+BLRC,Customizing for RFC Blacklist Entries,exotic
+BLRF,Blacklist Entries RFC,exotic
+BLSC,Build Script,exotic
+BLTM,BW: LOIO Class Web Templates,exotic
+BMAO,Any object,exotic
+BMBS,Collaborative Business Scenario,exotic
+BMEF,Function in process model,exotic
+BMEO,Enterprise OrgUnit type (3.0 only),exotic
+BMEP,Diagram in process model,exotic
+BMET,Process hierarchy level below OrgUnit (3.0 only),exotic
+BMEV,Event in process model,exotic
+BMFR,Application Component,exotic
+BMFU,Function,exotic
+BMFV,Global function variant,exotic
+BMFZ,Function relationship diagram,exotic
+BMGR,Group,exotic
+BMGT,Process list for application components 3.1,exotic
+BMHF,"Process list for application components, 3.0",exotic
+BMHT,Application component hierarchy level,exotic
+BMPC,Software Module,exotic
+BMPM,Process selection matrix for components (3.0 only),exotic
+BMPV,Software Variant,exotic
+BMSL,Diagram variants in process model,exotic
+BMSM,Process selection matrix for OrgUnits (3.0 only),exotic
+BMSP,Scenario process (3.0 only),exotic
+BMSZ,Scenario (3.0 only),exotic
+BMTH,Structure Repository for Processes: Node Definition,exotic
+BMVA,Component selection for IMG,exotic
+BMVG,Display group process model,exotic
+BOBC,BOPF Contract Compliance Check Configuration,exotic
+BOBF,BOPF: Business Object Model,exotic
+BOBL,BOPF: Business Object Library,exotic
+BOBX,BOPF: Business Object Model Extension,exotic
+BOCT,Linked Analytics Story,exotic
+BOPF,BOPF: Business Object Model,exotic
+BOPX,BOPF: Business Object Model Extension,exotic
+BOTY,Object Type for General Object Number,exotic
+BPMA,BW: PHIO Class Master Data,exotic
+BPTM,BW: PHIO Class Web Templates,exotic
+BR01,SAP Object Type,exotic
+BR02,SAP Object Node Type,exotic
+BRCL,Attributes - Producer/Distributor Classes in Broadcasting BW,exotic
+BRF0,BRF: Application Class,exotic
+BRR1,Business Rule,exotic
+BRR2,Business Rule (Client-Specific),exotic
+BRSE,Broadcasting Settings (BW),exotic
+BSAL,Business Suite Side Panel: Logical information object,exotic
+BSAP,Business Suite Side Panel: Physical information object,exotic
+BSNL,Business Suite Side Panel: Logical information object,exotic
+BSNP,Business Suite Side Panel: Physical information object,exotic
+BSVI,Status management: System status,exotic
+BSVO,Status management: Object type,exotic
+BSVS,Status management: status profile,exotic
+BSVV,Status management: Process,exotic
+BTMP,BI Web Templates (NW7.0+),exotic
+BWBK,BPC: Workbook,exotic
+BWLA,BW: Processor for Language Export in BW,exotic
+CAAR,Business Configuration Framework Activity - Customer,exotic
+CABB,Business Configuration Framework Building Block - Customer,exotic
+CACC,CDM App Config (LREP cross-client content),exotic
+CACD,CDM App Config (LREP client-dependent content),exotic
+CACE,Business Configuration Framework Configuration Entity - Cust,exotic
+CACT,CDM App Config (LREP client-dependent cont. - custom. req.),exotic
+CACX,Business Configuration Framework Context - Customer,exotic
+CADD,Business Configuration Framework Dataset - Customer,exotic
+CALE,Public Holidays,exotic
+CAPK,Business Configuration Framework Solution Package - Customer,exotic
+CAQF,Business Configuration Framework Qualifier - Customer,exotic
+CASI,Business Configuration Framework - Customer,exotic
+CASO,Business Configuration Framework Scope Option - Customer,exotic
+CASP,SCC: Check Aspect,exotic
+CASV,SCC: Check Aspect Value,exotic
+CBAL,Floorplan Manager - Context Based Adaptations - Links/Rules,exotic
+CBAS,Floorplan Manager - Context Based Adaptations - Sets,exotic
+CBPA,Transport of BP Sales Templates (Link Tables),exotic
+CBPB,Transport of BP Shipping Templates (Link Tables),exotic
+CBPC,Transport of BP Billing Templates (Link Tables),exotic
+CBPJ,Transport of BP Status Templates (Link Tables),exotic
+CBSA,Transport of BP Sales Templates (Set Tables),exotic
+CBSB,Transport of BP Shipping Templates (Set Tables),exotic
+CBSC,Transport of BP Billing Templates (Set Tables),exotic
+CBSJ,Transport of BP Status Templates (Set Tables),exotic
+CCAC,CDM Catalog (LREP cross-client content),exotic
+CCAD,CDM Catalog (LREP client-dependent content),exotic
+CCAT,CDM Catalog (LREP client-dependent content - custom. req.),exotic
+CCEI,Client Export-/Import Helper Object - Never Change Manually,exotic
+CCFG,SCC: Check Configuration,exotic
+CCPR,Client Copy Profile,exotic
+CCRU,SCC: Check Configuration Rule,exotic
+CDAT,View Cluster Maintenance: Data,exotic
+CDBO,Customer Data Browser,exotic
+CDDH,Packages for Table Entries: Granularity,exotic
+CDDL,Default Original Language in Customizing,exotic
+CDDO,Default Originality Attributes in Customizing,exotic
+CDLH,Original Language for Table Entries: Granularity,exotic
+CDOH,Originality for Table Entries: Granularity,exotic
+CEBR,BPC: Consolidation business rule for environment,exotic
+CELM,Elements of the Query Builder (SAP Delivery),exotic
+CFAA,Business Configuration Framework Act. Ada. Cnt. (Obsolete),exotic
+CFAR,Business Configuration Framework Activity (Obsolete),exotic
+CFBA,Business Configuration Framework Building Block (Obsolete),exotic
+CFBB,Business Configuration Framework Building Block (Obsolete),exotic
+CFCE,Business Configuration Framework Conf. Entity (Obsolete),exotic
+CFCL,Business Configuration Framework Log. Cnt. Layer (Obsolete),exotic
+CFCS,Business Configuration Framework Change Set (Obsolete),exotic
+CFCX,Business Configuration Framework Context  (Obsolete),exotic
+CFD1,Custom fields: IDoc Type Registry,exotic
+CFDA,Custom Logic Registration,exotic
+CFDB,Custom Fields: Business Context Registry,exotic
+CFDC,Custom Fields: CDS View Registry,exotic
+CFDD,Business Configuration Framework Dataset  (Obsolete),exotic
+CFDE,Data Source Extension,exotic
+CFDF,Custom Field,exotic
+CFDG,Custom Fields: SAP GUI Registry,exotic
+CFDH,Custom Behavior Extension Registration,exotic
+CFDI,Business Configuration Framework Dimension (Obsolete),exotic
+CFDM,Custom fields: Function Module Registry,exotic
+CFDO,Custom Fields: OData Model Registry,exotic
+CFDP,Custom fields: SOAP Service Interface Registry,exotic
+CFDR,Custom Fields: Association Target,exotic
+CFDS,Custom Fields: Business Scenario Registry,exotic
+CFDT,Custom Fields: Data Transfer Registry,exotic
+CFDX,Custom Fields: Suffix Registry,exotic
+CFDY,Custom Fields: Abstract Entity Registry,exotic
+CFEX,Business Configuration Framework Expression (Obsolete),exotic
+CFIA,Business Configuration Framework Issue Ada. Cnt. (Obsolete),exotic
+CFIU,Business Configuration Framework Issue (Obsolete),exotic
+CFPK,Business Configuration Framework Solution Package (Obsolete),exotic
+CFQF,Business Configuration Framework Qualifier (Obsolete),exotic
+CFRA,Business Configuration Framework Record Ada. Cnt. (Obsolete),exotic
+CFRK,Business Configuration Framework Record Key (Obsolete),exotic
+CFRR,Business Configuration Framework Record (Obsolete),exotic
+CFSA,Business Configuration Framework Scope Item Cnt. (Obsolete),exotic
+CFSI,Business Configuration Framework Scope Item (Obsolete),exotic
+CFSO,Business Configuration Framework Scope Option (Obsolete),exotic
+CFSU,Business Configuration Framework SSC UI (Obsolete),exotic
+CFVA,Business Configuration Framework SVA Adap. Cnt. (Obsolete),exotic
+CFVR,Business Configuration Framework Scoping Val. Ar. (Obsolete),exotic
+CGRC,CDM Group (LREP cross-client content),exotic
+CGRD,CDM Group (LREP client-dependent content),exotic
+CGRT,CDM Group (LREP client-dependent content - customizing req.),exotic
+CHAR,Object characteristic,exotic
+CHDO,Change Document Object,exotic
+CHKC,Check category,exotic
+CHKE,Check Exemptions,exotic
+CHKO,Check,exotic
+CHKV,Check Variant,minor
+CINS,Correction Instruction,exotic
+CLAS,Class (ABAP Objects),major
+CMBR,BPC: Consolidation business rule for model,exotic
+CMBT,BPC: Consolidation task sequence for model,exotic
+CMHC,Cloud Management Health Check,exotic
+CMOD,Customer enhancement projects,exotic
+CMPA,Client Multiplexer Scenario Task List Parameters,exotic
+CMPT,Code Composer Template,exotic
+CMSQ,Client Multiplexer Scenario Sequence,exotic
+CMTM,Cloud Management Tenant Multiplexer Trigger,exotic
+CNAR,Business Configuration Framework Activity Semantic Obj,exotic
+CNBB,Business Configuration Framework Building Block Semantic Obj,exotic
+CNCE,Business Configuration Framework Configuration Semantic Obj,exotic
+CNDD,Business Configuration Framework Dataset Semantic Key,exotic
+CNIU,Business Configuration Framework Issue Semantic Obj,exotic
+CNPA,DMC: Definition of a control parameter,exotic
+CNPC,DMC: Migration Settings of a Control Parameter,exotic
+CNPK,Business Configuration Framework Soln. Package Semantic Key,exotic
+CNRR,Business Configuration Framework Record Semantic Key,exotic
+CNSI,Business Configuration Framework Scope Item Semantic Key,exotic
+CNSO,Business Configuration Framework Scope Option Semantic Key,exotic
+CNSU,Business Configuration Framework SSCUI Semantic Key,exotic
+CNTL,SEM-SRM Contacts: Logical InfoObject (SRM:CNT),exotic
+CNTN,DMC: Definition of a Container (Sender/Recipient),exotic
+CNTP,SEM-SRM Contacts: Physical InfoObject (SRM_CNT),exotic
+CNTX,Context,exotic
+CNVN,Conversion Tools: Notification Events,exotic
+CNVR,Business Configuration Framework SVA Record Semantic Key,exotic
+COAC,ESF: Action,exotic
+COAS,ESF: Aspect,exotic
+COBB,Controlling CO: Calculation base for overhead - detail,exotic
+COBJ,DMC: Definition of a Conversion Object,exotic
+COBO,ESF: Business Object,exotic
+COC1,CO: Cost Centers,exotic
+COC2,CO: Activity Types,exotic
+COC3,CO: Statistical Key Figures,exotic
+COCF,ESF: Configuration,exotic
+COCO,Control Composite,exotic
+COE1,Controlling CO: Credit for surcharges - Overview,exotic
+COE2,Controlling CO: Credit for surcharges - detail,exotic
+COF1,CO: Cost Elements (Dependent on Chart of Accounts),exotic
+COF2,Cost elements (controlling area specific data),exotic
+COK1,Controlling CO: Overview of surcharge conditions,exotic
+COK2,Controlling CO: Additional data for surcharge conditions,exotic
+COKS,Controlling CO: costing sheet for overhead,exotic
+COPR,CompositeProvider,exotic
+CORL,ESF: Relation,exotic
+COSM,ESF: Service Modules,exotic
+COVG,Controlling CO: Transaction groups,exotic
+CPKM,Meta data of a transport-based correction instruction,exotic
+CRME,CRM Enterpise Search,exotic
+CRMF,Folder for CRM,exotic
+CRML,Logical Information Object for CRM Document Templates,exotic
+CRMP,Physical Information Object for CRM Document Templates,exotic
+CRWB,Crystal Reports Template,exotic
+CTAF,Condition Technique - Application Field,exotic
+CTAP,Condition Technique - Application,exotic
+CTAS,S/4HANA Condition Technique - Access Sequence,exotic
+CTCR,BPC: Control for BPC embeded model,exotic
+CTCS,BPC: Control set for BPC embeded model,exotic
+CTCT,Condition Technique - Condition Table,exotic
+CTDD,Condition Technique - Procedure Type for Info. Determination,exotic
+CTEM,Customizing templates,exotic
+CTFC,S/4HANA Condition Technique - Field Catalog,exotic
+CTFD,Condition Technique - Data Element in Global Field Catalog,exotic
+CTFF,Condition Technique - Field Name in Global Field Catalog,exotic
+CTFP,Condition Technique - Dependencies in Global Field Catalog,exotic
+CTFR,Condition Technique - Relationships in Global Field Catalog,exotic
+CTMC,Condition Technique - Maintenance Context for Cond. Maint.,exotic
+CTRF,Condition Technique: Reference Type for Condition Maint.,exotic
+CTRT,Currency Translation Type,exotic
+CTSB,Condition Technque - Scale Base Type of Scale,exotic
+CTTK,Condition Technique - Task (Signature Part),exotic
+CTTS,Condition Technique - Task (Definition Part),exotic
+CTUF,Condition Technique - Field of a Usage,exotic
+CTUS,Condition Technique - Usage,exotic
+CUAT,Customer enhancements: Menu enhancement texts,exotic
+CUBE,InfoCube,exotic
+CUCF,Configuration of a customer initiated Add-On Uninstallation,exotic
+CUS0,Customizing IMG Activity,exotic
+CUS1,Customizing Transactions,exotic
+CUS2,Customizing Attributes,exotic
+CUS3,Variants of IMG Attributes,exotic
+CWB1,CWB Project,exotic
+CWBN,Note Assistant Modification Data,exotic
+DAAG,Data Aging Object,exotic
+DAGP,Partitioning Object,exotic
+DAGR,Aggregate (SAP Delivery),exotic
+DAGW,Data Aging Object Relevant in Cloud and On-Premise,exotic
+DALV,Aggregation Level (SAP Delivery),exotic
+DANM,Analytical Model (shipped version),exotic
+DANP,Analysis Process (SAP Delivery),exotic
+DANS,Source for analytical model (shipment version),exotic
+DAOE,Analysis Office Excel Workbook (SAP Delivery Version),exotic
+DAOP,Analysis Office Powerpoint (SAP Delivery Version),exotic
+DAPA,BW Data Archiving Process (Active Version),exotic
+DAPC,Application Components (SAP Delivery),exotic
+DAPD,BW Data Archiving Process (Delivered Version),exotic
+DAQC,Data Analyzer Query(Cross-client content),exotic
+DAQR,Embedded Data Analyzer Query,exotic
+DARE,InfoArea (SAP Delivery),exotic
+DASO,D Version for Analytics Security Object (BI Analysis Auth.),exotic
+DBAC,Decision Basis Model data - client depending data,exotic
+DBAW,Decision Basis Model data - cross-client data,exotic
+DBBP,BPC: BPF (Delivery Version),exotic
+DBDA,BPC: Data access profile (Delivery Version),exotic
+DBIT,BI Web Item (NW7.0+) D-Version,exotic
+DBIX,Delivery Version Control for Data Conversions in BI,exotic
+DBRS,D-Version: Broadcast Settings (BW),exotic
+DBTM,BI Web Templates (NW7.0+) D-Version,exotic
+DCAT,Data Category,exotic
+DCLS,ABAP Data Control Language Sources,exotic
+DCOP,Composite Provider (SAP Delivery),exotic
+DCRW,Crystal Reports Template (SAP Delivery),exotic
+DCTR,Currency Translation Type (SAP Delivery),exotic
+DCUB,InfoCube  (SAP Delivery),exotic
+DDAS,Modeled Data Access Service,exotic
+DDBF,Actions for Database Functions,exotic
+DDCC,DD: Cache Configuration,exotic
+DDDA,Modeled Data Access Service (SAP Delivery),exotic
+DDDD,Changes to Nametab Structure,exotic
+DDES,Open Hub Destination (SAP Delivery),exotic
+DDIL,ABAP Dictionary: Trigger CBDA Persistence Update (Ini. Load),exotic
+DDLA,CDS Annotation Definition,exotic
+DDLS,Data Definition Language Source,major
+DDLV,CDS Variant,exotic
+DDLX,CDS metadata extension,exotic
+DDMM,DataMining Model (Shipped Version),exotic
+DDMO,Data Flow (SAP Shipment),exotic
+DDOC,Documents Application (SAP Delivery),exotic
+DDSO,Datastore Object (SAP Delivery),exotic
+DEBR,BPC: Consolidation business rule for environment(D Version),exotic
+DELM,Elements of the Query Builder (SAP Delivery),exotic
+DENV,BPC: Environment (Delivery Version),exotic
+DEST,Open Hub Destination,exotic
+DEVC,Package,exotic
+DEVE,Event Chain Processing (SAP Delivery),exotic
+DFTH,Structure Buffer for Scenarios: Definition of Nodes,exotic
+DHAA,HANA Analysis Process (SAP Delivery),exotic
+DHCP,Hana Composite Provider (SAP Delivery),exotic
+DHIE,BW Hierarchy (SAP Delivery),exotic
+DHYB,HybridProvider  (SAP Delivery),exotic
+DIAL,Dialog Module,exotic
+DICA,InfoCatalog (SAP Delivery),exotic
+DINS,IQM Inspection Plan (BI) (D Version),exotic
+DIOB,InfoObject (SAP Delivery),exotic
+DIOC,InfoObjectCatalog (SAP Delivery),exotic
+DISC,Call Package (SAP Delivery),exotic
+DISE,InfoSet in BW (SAP Delivery),exotic
+DISG,InfoPackage Groups (SAP Delivery),exotic
+DITM,Transport Object for BW Web Items (D Version),exotic
+DKEY,Logical Transport Object for Differentiation Key Types,exotic
+DKPC,BI: KPI Catalog Folder (Delivery),exotic
+DKPD,BI: KPI Definition (Delivery),exotic
+DLCC,"CRM UIF, Dynamic Layout Configuration / Customer Layer",exotic
+DLCS,"CRM UIF, Dynamic Layout Configuration / SAP layer",exotic
+DLXX,Extension Index for Table Entities,exotic
+DMBR,BPC: Consolidation business rule for model(Delivery Version),exotic
+DMBT,BPC: Consolidation task sequence for model (D version),exotic
+DMDL,BPC: Model (Delivery Version),exotic
+DME1,DMEE Format Tree for Outgoing/Incoming Files,exotic
+DMEA,DMEE Format Tree for Incoming Files,exotic
+DMEC,Data Medium Exchange Engine (Customer Formats),exotic
+DMEE,Data Medium Exchange Engine (Formats),exotic
+DMMO,DataMining Model,exotic
+DMOD,Data Flow,exotic
+DMON,ABAP Daemon Application,exotic
+DMPR,Multi Provider (SAP Delivery),exotic
+DMSK,Data Masking: Logical transport object,exotic
+DOBJ,Data Destruction Object,exotic
+DOCA,Document Store,exotic
+DOCT,General Text,exotic
+DOCV,Documentation (Independent),exotic
+DODS,DataStore Object (SAP Delivery),exotic
+DOKU,Nodes for Documentation Structure,exotic
+DOMA,Domain,exotic
+DPLC,Planning: Characteristic Relationship Object (SAP Delivery),exotic
+DPLD,Planning: Data Slices (SAP Delivery),exotic
+DPLQ,Planning Sequence (SAP Delivery),exotic
+DPLS,Planning Service (SAP Delivery),exotic
+DPLT,Planning Service Type (SAP Delivery),exotic
+DQVI,Transport Object for BW Query Views (D Version),exotic
+DRAS,CDS Aspects,exotic
+DREL,"Report Designer: Reusable Elements, D Version",exotic
+DRNL,BPC: Journal (Delivery version),exotic
+DROU,Routine (SAP Delivery),exotic
+DRPM,Dictionary Replication Metadata,exotic
+DRPT,BW Enterprise Report Delivery Version,exotic
+DRTY,CDS Type Definitions,exotic
+DRUL,Dependency Rule,exotic
+DSAA,DataSource Application Component Hierarchy (Active Version),exotic
+DSAD,DataSource Application Component (Delivered Version),exotic
+DSCS,Communication Structure (SAP Delivery),exotic
+DSEL,Selection View,exotic
+DSFD,CDS Scalar Function Definition,exotic
+DSFI,CDS Scalar Function Implementation Reference,exotic
+DSFO,BW Formula (Version for Delivery),exotic
+DSPC,Process Chain (SAP Delivery),exotic
+DSPI,Interrupting Process (SAP Delivery),exotic
+DSPT,Process Chain Starter (SAP Delivery),exotic
+DSPV,Process Variant (SAP Delivery),exotic
+DSTD,InfoSource Transaction Data (SAP Delivery),exotic
+DSYS,Chapter of a Book Structure,exotic
+DTCR,BPC: Control for BPC embeded model (D version),exotic
+DTCS,BPC: Control set for BPC embeded model (D version),exotic
+DTDC,Dictionary Tuning: Dynamic Cache,exotic
+DTEA,BPC: Team (Delivery Version),exotic
+DTEB,Entity Buffer,exotic
+DTEL,Data Element,exotic
+DTF1,Date Functions,exotic
+DTHJ,Key Date Derivation Type (SAP Delivery),exotic
+DTMP,Transport Object for BW Web Templates (D Version),exotic
+DTPA,Data Transfer Process: Active Version,exotic
+DTPD,Data Transfer Process (SAP Delivery),exotic
+DTPT,Dictionary Tuning: Partitioning,exotic
+DTRC,Communication Structure for Transfomration (SAP Delivery),exotic
+DTRF,Transformation (SAP Delivery),exotic
+DTSC,Dictionary Tuning: Static Cache,exotic
+DTTG,Dictionary Tuning: Table Grouping,exotic
+DUOM,Quantity Conversion Type (SAP Delivery),exotic
+DUPD,Update Rules (SAP Delivery),exotic
+DVSL,KW: Logical info object (DVS),exotic
+DVSP,KW: Physical info object (DVS),exotic
+DVSS,KW: Structure storage for DVS,exotic
+DWIB,BW Web Item (BI-Runtime),exotic
+DWKS,BPC: workspace (Delivery Version),exotic
+DWPA,BW Web Runtime:  Parameter (for Web Item or Command),exotic
+DXCL,Xcelcius Dashboard Delivery version,exotic
+DXLW,Excel Workbook (SAP Delivery),exotic
+DZAP,Analysis Application (SAP Delivery Version),exotic
+DZEX,Design Studio Extension (SAP Delivery Version),exotic
+ECAT,eCATT Test Script,exotic
+ECSD,eCATT System Data Container,exotic
+ECSP,eCATT Start Profile,exotic
+ECTC,eCATT Test Configuration,exotic
+ECTD,eCATT Test Data Container,exotic
+ECVO,eCATT Validation Object,exotic
+ED01,SD: EDI Customizing: Table EDPAR,exotic
+ED02,SD: EDI Customizing: Table EDSYN,exotic
+ED03,SD: EDI Customizing: Table EDMAP,exotic
+ED04,SD: EDI Customizing: Table EDPVW,exotic
+ED05,SD: EDI Customizing: Table EDSDC,exotic
+EDID,Document Compliance:eDoc. Proc. Step Interface determination,exotic
+EDMD,Document Compliance:eDoc. Mapping Class determination,exotic
+EDOA,Document Compliance Fiori Cockpit Extensibility,exotic
+EDOC,Document Compliance Cockpit FlowChart Route,exotic
+EDOD,Document Compliance Fiori Cockpit:Dialog Handling Classes,exotic
+EDOE,Document Compliance: eDocument Extended,exotic
+EDOF,Document Compliance: eDocument File Type,exotic
+EDOI,Document Compliance: eDocument Interface,exotic
+EDOM,Document Compliance: eDocument Incoming Message,exotic
+EDOP,Document Compliance: Process Manager,exotic
+EDOR,Document Compliance: eDocument RAL Configuration,exotic
+EDOS,Document Compliance Fiori Cockpit:Status Allowed Function,exotic
+EDOT,Document Compliance: eDocument Type,exotic
+EDOX,Document Compliance: eDocument Fields to be excluded,exotic
+EDOY,Document Compliance Fiori Cockpit:Error Analysis Classes,exotic
+EEEC,Enterprise Event Enablement - Event Consumer,exotic
+EEEP,Enterprise Event Enablement - Event Producer,exotic
+EFCL,Form Class,exotic
+EFOM,Print Workbench Application Form,exotic
+EHVD,Profile for HTML/XML Customer Information,exotic
+ELEM,Elements of the Query Builder,exotic
+ELEV,Query Designer: Text Verticalization,exotic
+ENBC,Switch On/Off BAdI Implementation per IMG,exotic
+ENHC,Composite Enhancement Implementation,exotic
+ENHO,Enhancement Implementation,exotic
+ENHS,Enhancement Spot,exotic
+ENQU,Lock Object,exotic
+ENSC,Composite Enhancement Spot,exotic
+ENVD,Data Environment for CIC Navigation Area,exotic
+ENVM,BPC: Environment,exotic
+EPDC,IS-U: Master Data Template,exotic
+EREL,Report Designer: Reusable Element,exotic
+ERPT,BW Enterprise Report,exotic
+ESH1,ESH: CDS Search Model,exotic
+ESH2,Enterprise Search: CDS Search Model Metadata,exotic
+ESH3,Enterprise Search: CDS Search Model Metadata Extension,exotic
+ETDC,ETD Configuration,exotic
+EVEN,Event- Administration Chains,exotic
+EVTB,RAP Event Binding,exotic
+EXCC,External operating system command defined by customer,exotic
+EXCS,External operating system command delivered by SAP,exotic
+F011,Financial statement version,exotic
+F01U,Company Code Clearing,exotic
+F03,Document Types,exotic
+F09,Fiscal Year Variants,exotic
+F12,House Banks/Bank Accounts in Company Code,exotic
+F211,Line Layout Variants - Document Display,exotic
+F212,Line Layout Variants - Line Items,exotic
+F213,Line Layout Variants - Clearing Transactions,exotic
+F214,Line Layout Variants - Automatic Payment,exotic
+F215,Line Layout Variants - Automatic Payments/Line Items,exotic
+F216,Line Layout Variants for Payment Advice Items,exotic
+F217,Line Layout Variants - External Documents,exotic
+F218,Line Layout Variants - Invoice Parking,exotic
+F219,Line Layout Variant for Overview when Posting Document,exotic
+F21B,Totals Variants,exotic
+F21C,Line structure variants - credit management,exotic
+F21M,FI-CA: Line item line layout variants (open items),exotic
+F21O,FI-CA: Clearing line layout variants (open items),exotic
+F21P,FI-CA: Document overview line layout variants (display doc),exotic
+F21R,Field Selection Lists,exotic
+F21S,FI-CA: Posting totals line layout variants,exotic
+F21V,Default Values for Line Layout/Totals variants,exotic
+F21W,FI-CA: Repetition items line layout variants,exotic
+F221,Credit Management Sort Variants,exotic
+F222,Sort Variants - Payment Media/Correspondence,exotic
+F223,Sort Variants - Payment Media/Line Items,exotic
+F224,Sort Variants - Correspondence/Nodes,exotic
+F225,Sort Variants - Correspondence/Internal Documents,exotic
+F226,Sort Variants - Correspondence/Line Items,exotic
+F227,Sort Variants for Line Item Display,exotic
+F228,Line Layout,exotic
+F22M,Line Layout: Line Item,exotic
+F22N,Sort variants: Printing of dunning notice/dunning header,exotic
+F22O,Line Layout,exotic
+F22P,Line Layout,exotic
+F22Q,Sort variants: Printing of dunning notice/dunning line item,exotic
+F22S,Line Layout: Posting Totals,exotic
+F22W,Line Layout,exotic
+F30,Automatic Postings - Account Determination,exotic
+F30B,Automatic Postings - Posting Keys,exotic
+F30G,Automatic Postings - Business Area Breakdown,exotic
+F30K,Automatic Tax Postings - Account Determination,exotic
+F30R,Automatic Postings: Rules,exotic
+F30S,Automat. Postings Exchange Rate Diff. - Account Determin.,exotic
+F30U,Automatic Postings - Bal.Sheet Prep./Bus.Area Breakdown,exotic
+F33F,Account Determination (Posting Interface),exotic
+F41A,Clearing Transactions,exotic
+F42,Payment Program: Company Codes,exotic
+F42A,Payment Program: Bank Selection (ranking),exotic
+F42B,Payment Program: Paying Company Codes,exotic
+F42D,Payment Program: Available Amounts,exotic
+F42E,Payment Program: Payment Methods in Company Code,exotic
+F42I,Payment Program: Account Determination,exotic
+F42P,Payment Program: Bank Selection (by Postal Code),exotic
+F42S,Payment Program: Charges,exotic
+F42V,Payment Program: Value Date,exotic
+F42Z,Payment Program: Payment Methods in Country,exotic
+F47,Dunning program: Company code data,exotic
+F47A,Dunning program: Dunning procedure,exotic
+F47F,Dunning program: Sort fields,exotic
+F47I,Dunning program: Texts,exotic
+F74,Special G/L: Account Determination,exotic
+F74U,Special G/L: Indicator,exotic
+FARC,TABU entries in TR01 ( Archiving ),exotic
+FAV,Worklists,exotic
+FAVA,Automatic Worklists,exotic
+FBCP,Configurable Components,exotic
+FBCT,Logical Transport Object,exotic
+FBLC,Local Content,exotic
+FBPA,BW: Open ODS View,exotic
+FBPD,BW: Open ODS View (SAP Delivery),exotic
+FC01,Copy company code: XSKB1,exotic
+FC02,Copy company code: XT012,exotic
+FC03,Copy company code: XT001S,exotic
+FC04,Copy company code: XT001T,exotic
+FC07,Copy company code: XT043T,exotic
+FC08,Copy company code: XT043G,exotic
+FC10,Copy company code: XT079D,exotic
+FC11,Copy company code: XT079K,exotic
+FC12,Copy company code: XT042,exotic
+FC13,Copy company code: XT047,exotic
+FC14,Copy company code: XT031,exotic
+FC15,Copy company code: XT001R,exotic
+FC16,Copy company code: XTBAER,exotic
+FC17,Copy company code: XT035,exotic
+FC18,Copy company code: XT048I,exotic
+FC19,Copy company code: XT001N,exotic
+FC30,Copy company code: XT012 + XT042,exotic
+FC31,Copy company code: XT012 + XT035,exotic
+FC32,Copy company code: XT001T (T056D),exotic
+FC40,Copy company code: Without condition,exotic
+FC42,Transport company code: Fixed ledgers (T895),exotic
+FC43,Copy company code: Special Ledgers (T886B),exotic
+FC44,Transport company code: Fixed ledgers (T882),exotic
+FC60,Transport chart of accounts: Chart of accounts (T004),exotic
+FC61,"Transport Chart of Accounts: Accounts (SKA1,SKM1)",exotic
+FC62,"Transport chart of accounts: T030,T030R with restrictions",exotic
+FC63,"Transport chart of accounts: Acct. det. (T030x,T045W,T074)",exotic
+FC64,Transport Chart of Accounts: Accounts (Texts in Sep.Lang.),exotic
+FC65,Transport Chart of Accounts: Accounts (T077S/Z),exotic
+FC66,Transport chart of accounts: Posting interface (T033G),exotic
+FC67,"Transport chart of accounts:  T030, T030R w/out restrictions",exotic
+FC68,Transport Chart of Accounts: Accounts in Company Code (SKB1),exotic
+FC69,Transport Chart of Accts: Accounts (Texts in All Languages),exotic
+FDT0,FDT/BRFplus: System Application,exotic
+FDT1,FDT/BRFplus: Customizing Application,exotic
+FDT3,BRFplus ATO Transport (Application),exotic
+FDT4,BRFplus CTS Transport (System),exotic
+FDT5,BRFplus CTS Transport (Customizing),exotic
+FF$6,Check setting,exotic
+FILE,File Container,exotic
+FKM0,TABLES WITH CHANGED DOCUMENT TYPES,exotic
+FO12,Management contract field status transport,exotic
+FO6A,Application field status transport,exotic
+FOBJ,Scmb front-end objects,exotic
+FORM,SAPscript Form,exotic
+FS01,Fast Entry: SAPMF05A-RE/GU,exotic
+FS02,Fast Entry: SAPMF05A-SAKOP,exotic
+FS03,Fast Entry: SAPMF40K-KNTAZ,exotic
+FS04,Fast Entry: SAPMF40S-SCHKR,exotic
+FS05,Fast Entry: SAPMK23B-CI,exotic
+FS06,Fast Entry: SAPMK23B-CL,exotic
+FS07,Fast Entry: SAPMK23B-CU,exotic
+FS08,Fast Entry: SAPLF040-PRPOS,exotic
+FS09,Fast Entry: SAPLFICP-ICPOS,exotic
+FS10,Fast Entry: SAPMK23B-CU2,exotic
+FS11,Fast Entry: SAPMK23B-CN,exotic
+FS12,Fast Entry: SAPMKMA1-COMA1,exotic
+FS13,Fast Entry: SAPLFKMT-KMPOS,exotic
+FS14,Fast Entry: SAPLFRAD-AVIP,exotic
+FS15,Fast Entry: SAPMKAUF-ORC,exotic
+FS20,Fast Entry: SAPLKWM3-COBPR,exotic
+FS21,Fast Entry: SAPLKMA1-COKST,exotic
+FS91,Fast Entry: Business Partner Line Items,exotic
+FS92,Fast Entry: General Ledger Line Items,exotic
+FS93,Fast Entry: Payment Lot Line Items,exotic
+FSIP,Implementation Project (Service Implementation Workbench),exotic
+FSL,Posting Keys,exotic
+FSLT,Posting Key Texts,exotic
+FT01,Document Type/Posting Key - Default Values,exotic
+FTCT,Feature Toggle: activation for business configuration,exotic
+FTG2,Feature Toggle,exotic
+FTGL,Feature toggle,exotic
+FTIN,Feature Toggle - PFDB Innovation Data,exotic
+FTRL,FINB Transport-Tool: Client Copy - Bill of Material,exotic
+FTXP,Tax Code,exotic
+FUNC,Function Module,major
+FUGR,Function Group,major
+FUGS,Function Group with Customer Include: SAP Part,exotic
+FUGX,Function Group with Customer Include: Customer Part,exotic
+FVAC,DMC: Migration Settings of a Fixed Value,exotic
+FVAL,DMC: Definition and Standard Variant of a Fixed Value,exotic
+FXER,Relevant Text IDs,exotic
+FXID,Text IDs,exotic
+G4BA,SAP Gateway OData V4 Backend Service Group & Assignments,exotic
+G4BG,OBSOLETE - replaced by G4BA,exotic
+G4BS,SAP Gateway OData V4 Backend Service,exotic
+GADO,Generic Audit Filter - Registered Data Objects,exotic
+GAFI,Generic Audit Filter - Audit Filter Set,exotic
+GALF,Generic Audit Filter - Logical Field,exotic
+GAPR,Generic Audit Filter - Mapp Report SelScreen to Data Object,exotic
+GCCV,Cross-Client Validation Check,exotic
+GCLP,Registry Entry of a Code in Generic Codelist Provider,exotic
+GCPM,SAP Gateway OData Client Proxy - Proxy Model,exotic
+GEVT,Events table in Gemini,exotic
+GFSQ,Generic Fast Search Query,exotic
+GFSV,Generic Fast Search View,exotic
+GILE,GenIL Component Enhancement,exotic
+GLE0,ECS Derivation Strategy,exotic
+GLE1,ECS Derivation Strategy (Steps),exotic
+GLOS,Transport of Glossary Tables,exotic
+GPVD,Variants for locally gen.proga. with client-spec.meta object,exotic
+GPVI,Variants for locally gen.prog.with client-indep.meta object,exotic
+GSMP,Generic Simple Metric Provider,exotic
+GURL,Predefined URL,exotic
+HAAP,HANA Analysis Process,exotic
+HCFQ,Help Center: FAQs,exotic
+HCLN,Help Center: Documents,exotic
+HCNS,Help Center: Namespace,exotic
+HCPR,SAP HANA Composite Provider,exotic
+HDSA,Derivation Tree (HDS) / Application Data,exotic
+HDSI,Derivation Tree (HDS) / System Customizing,exotic
+HDST,Derivation Tree (HDS),exotic
+HEUR,Heuristics,exotic
+HIER,BW Hierarchies,exotic
+HLPF,Link DS/screen field,exotic
+HOTA,Full Package (SAP HANA Transport for ABAP),exotic
+HRFC,HR Forms: Form Class,exotic
+HRFD,HR Forms: Relations LDB Fields-MetaFields,exotic
+HRFO,HR Forms,exotic
+HRMD,HR Forms: MetaDimension,exotic
+HRMF,HR Forms: MetaFigure,exotic
+HRMN,HR Forms: MetaNet,exotic
+HRMO,HR Forms: Country-Specific MetaStars for Int. MetaNet,exotic
+HRMS,HR Forms: MetaStar,exotic
+HRMT,HR Forms: Country-Specific MetaDims for Int. MetaStar,exotic
+HRNR,Organizational Management and Workflow: Prefix Numbers,exotic
+HRPM,HR Process Model,exotic
+HTST,HTTP State,exotic
+HTTP,HTTP Service,exotic
+HYBR,HybridProvider,exotic
+IAJU,IAC - JavaScript Objects (Non-Language-Specific),exotic
+IAKC,Table for Converting IAC Object Names,exotic
+IAM0,IAM: Insurance Activity Management,exotic
+IAMA,MiniApps,exotic
+IAML,Language-Dependent IAC Binary Data,exotic
+IAMU,Language-Independent IAC Binary Data,exotic
+IAMX,MiniApp,exotic
+IAPD,Project Data for Implementation Assistant Nodes,exotic
+IARP,Parameters of IAC Language Resource,exotic
+IASP,Parameters of an IAC service,exotic
+IATH,Implementation Assistant: Nodes,exotic
+IATL,Language-Dependent IAC Templates,exotic
+IATU,Language-Independent IAC Templates,exotic
+IAXU,ITS: XML Templates for HTML Templates,exotic
+ICFA,Administrative ICF services,exotic
+IDCV,View of logical message for IDoc type,exotic
+IDOC,IDoc Type,exotic
+IEXT,Enhancement,exotic
+IFFI,Interface Definition,exotic
+IFFM,Interface Mapping,exotic
+IFMC,Incoming File Mapping (Customer),exotic
+IFME,Incoming File Mapping,exotic
+ILM1,"OBSOLETE, NOT TO BE USED",exotic
+ILM2,"OBSOLETE, NOT TO BE USED",exotic
+ILMB,ILM Object,exotic
+ILMP,ILM Object (Paper Documents),exotic
+ILOT,Logic. Transport Object for Object Types for Object Relships,exotic
+ILTP,Logical Transport Object for Relationship Types,exotic
+IMP0,IMP: Insurance Mass Procesing,exotic
+INA1,InA Service,exotic
+INSP,IQM Inspection Plan (BI),exotic
+INTF,Interface (ABAP Objects),major
+INTM,Intelligent Scenario Model,exotic
+INTS,Intelligent Scenario,exotic
+IOBC,InfoObject catalog,exotic
+IOBJ,InfoObject,exotic
+IOBV,BI InfoObject Texts for Text Verticalization,exotic
+ISCP,Call Package,exotic
+ISCS,Communication structure,exotic
+ISET,InfoSet in BW,exotic
+ISFS,DataSource Replica,exotic
+ISIG,InfoPackage group,exotic
+ISIP,InfoPackage,exotic
+ISMD,InfoSource master data,exotic
+ISMP,Transfer Rules,exotic
+ISMT,Transfer InfoSource master data,exotic
+ISRC,Insurance: Search Application,exotic
+ISRV,Intelligent Services,exotic
+ISTD,InfoSource transaction data,exotic
+ISTS,Transfer structure,exotic
+ISTT,Transfer InfoSource transaction data,exotic
+ISVC,Services: Assignment to Classes,exotic
+ITEM,Transport Object for BW Web Items,exotic
+IWCL,Logical information object,exotic
+IWCP,Physical Information Object,exotic
+IWCS,Structure storage system,exotic
+IWMO,SAP Gateway Business Suite Enablement - Model,exotic
+IWNG,Notification Gateway - Notification Provider Registration,exotic
+IWOM,SAP Gateway: Model Metadata,exotic
+IWPR,SAP Gateway BSE - Service Builder Project,exotic
+IWSC,SAP Gateway:Screen scraping,exotic
+IWSG,SAP Gateway: Service Groups Metadata,exotic
+IWSV,SAP Gateway Business Suite Enablement - Service,exotic
+IWVB,SAP Gateway Business Suite Enablement -Vocabulary Annotation,exotic
+IWVO,SAP Gateway Business Suite Enablement - Vocabulary,exotic
+JOBD,Technical Job Definition,exotic
+JRNL,BPC: Journal,exotic
+K33E,FI-CA Account Determ.: Key Selection,exotic
+K33F,FI-CA Account Determination,exotic
+K33V,FI-CA Account Determination (Views),exotic
+K34E,FI-CA Acct Determination: Key Selection (Current Setting),exotic
+K34F,FI-CA Account Determination (Current Setting),exotic
+K34V,FI-CA Account Determination - Views (Current Setting),exotic
+KCDM,SAP-EIS: Sender programs and environment,exotic
+KCHI,SAP EIS: Hierarchies,exotic
+KCKF,SAP-EIS: Key figures - formula levels,exotic
+KCKK,SAP-EIS: Key figures - aspect assignment,exotic
+KCKR,SAP-EIS: Key figures,exotic
+KCKT,SAP-EIS: Key figure - table assignment,exotic
+KEFI,"CO-PA: logical object for characteristics, value fields",exotic
+KEHR,CO-PA General Structure Repository,exotic
+KEOP,Logical object for an operating concern,exotic
+KEPF,Planning Profile,exotic
+KEPV,Planning Level,exotic
+KES1,Transport form/Report Painter,exotic
+KOM1,Controlling: Model order,exotic
+KOM2,Controlling: Model order - dependent data,exotic
+KPCE,BI: KPI Catalog Folder,exotic
+KPDF,BI: KPI Definition,exotic
+KPPL,KPP: Logical Information Object,exotic
+KPPP,KPP: Physical Information Object,exotic
+KPPR,KPP: Relationship Between Information Objects,exotic
+KWPL,KWPW: Logical Information Object,exotic
+KWPP,KWPW: Physical Information Object (Help),exotic
+KWPW,KWPW: Structure Storage,exotic
+LAYO,TM: Page Layout of Transportation Management,exotic
+LDBA,Logical Database,exotic
+LDPL,Process Sheet: Logical Information Object,exotic
+LDPP,Process Sheet: Physical Information Object,exotic
+LDPS,Process Sheet: Physical Info Object (Delivery),exotic
+LFCC,TM: Field Catalog of Page Layouts - C-tables,exotic
+LFCS,TM: Field Catalog of Page Layouts - S-tables,exotic
+LGNR,MM-WM: Warehouse number,exotic
+LOBJ,Object relevant for translation,exotic
+LODC,HRDSYS: Logical information object client-dep. table C,exotic
+LODE,HRDSYS: Logical information object client-dep. table E,exotic
+LODS,HRDSYS: Logical information object client-dep. table E SYST,exotic
+LOIE,HRDSYS: Logical information object client-indep. table E,exotic
+LOIO,Solution Manager Document: Logical Info Object,exotic
+LPDC,Launchpad short texts,exotic
+LPDS,Launchpad Short Texts,exotic
+LPDT,Launchpad Short Texts,exotic
+LPOA,Semantically partitioned object: Active version,exotic
+LPOD,Semantically partitioned object: Content version,exotic
+LRCC,LRepository cross-client content,exotic
+LRCD,LRepository client-dependent content,exotic
+LRST,LRepository client-dependent content - customizing requests,exotic
+LTHR,ALV: HTML Templates (Raw Version),exotic
+LTHT,ALV: HTML Templates (Translated Templates),exotic
+LTRC,Landscape Transformation Repository: Object Version,exotic
+LTRD,Landscape Transformation Repository: Object Header,exotic
+LTXP,Language Transport: Exit Handling,exotic
+M457,Profile for Master Production Scheduling Evaluations,exotic
+MAPN,Solution Map: Node definition,exotic
+MBCA,Measure Catalog (Active Version),exotic
+MBCD,Measure Catalog (SAP Delivery Version),exotic
+MBHA,Measure Hierarchy (Active Version),exotic
+MBHD,Measure Hierarchy (SAP Delivery Version),exotic
+MBMA,Measures (Active Version),exotic
+MBMD,Measures (SAP Delivery Version),exotic
+MBNA,Measure Nodes (Active Version),exotic
+MBND,Measure Nodes (SAP Delivery Version),exotic
+MBRA,Measure Reference,exotic
+MC01,Migration Cockpit Project,exotic
+MC02,Migration Cockpit: Staging,exotic
+MCDT,Migration Cockpit Project - Direct Transfer,exotic
+MCEV,LIS Event,exotic
+MCID,Matchcode ID,exotic
+MCIN,Info Structure: Lockable Object,exotic
+MCOB,Matchcode Object,exotic
+MCPT,"LIS: planning type, macro",exotic
+MCUA,Update Setting of an Info Structure,exotic
+MCUN,LIS Units,exotic
+MD25,Planning Calendar,exotic
+MDAS,Definition of eCATTs for Handling of non transp. objects,exotic
+MDGT,Transport Tool: Client Copy - Piece List,exotic
+MESD,Mobile Solution Descriptor,exotic
+MGCF,Device Configuration - Configuration Template,exotic
+MODL,BPC: Model,exotic
+MPRO,MultiProvider,exotic
+MSAG,Message Class,exotic
+MSPI,Representative List of Rents,exotic
+MTXT,Manual Activities in the Correction Instructions,exotic
+MWBU,MWB: Data for Integrated Upgrade,exotic
+NHDU,HANA Transport Container,exotic
+NHLC,HANA Language Container,exotic
+NONT,RESTful ABAP Programming Model: Object Node Type,exotic
+NOTE,SAP Note,exotic
+NRIV,Number Range Object,exotic
+NROB,Number Range Object,exotic
+NSPC,Namespace in R/3 Repository,exotic
+NTTA,Note Type Assignments for RAP,exotic
+NTTY,Note Types for RAP,exotic
+OA2G,OAuth 2.0 Scopeset,exotic
+OA2P,OAuth 2.0 Client Profile,exotic
+OA2S,OAuth2 Scope,exotic
+OBJA,SOBJ: API called by an after import method,exotic
+OBJM,SOBJ: Meta data of an AIM of a transport object,exotic
+OCAO,Output Control Application Object Type,exotic
+OCSV,,exotic
+ODPE,Operational Data Provider (ESH-Based),exotic
+ODPN,ODP,exotic
+ODSO,DataStore Object,exotic
+OFAM,Logical Transport Object for Object Families,exotic
+OIIS,Storage object characteristics - type ref.data (IS Oil BDRP),exotic
+OIIT,Storage object characteristics - type (IS Oil BDRP),exotic
+OIIV,Operations Time Window Set (OTWS) - ref set ID,exotic
+OIIW,Operations Time Window Set (OTWS) - reference set,exotic
+OMLM,Output Management: T100 Longtext Link Mapping,exotic
+OSOA,DataSource (Active Version),exotic
+OSOD,DataSource (Delivered Version),exotic
+OTGR,Object type group,exotic
+OVFC,Online Validation Framework Check Definition,exotic
+PA01,SD: Partner customizing - partner determination procedure,exotic
+PA02,SD: Partner Customizing - Partner Roles,exotic
+PA03,SD: Partner customizing - partner roles,exotic
+PAI1,Predictive Analytics Integrator : Predictive Scenario,exotic
+PAIM,Predictive Analytics Integrator : Predictive Model,exotic
+PAPL,Personas: SAPUI5 Applets Allowlist,exotic
+PARA,SPA/GPA Parameters,exotic
+PCEX,Exceptions for Package Check,exotic
+PCFF,Predefined Custom Field,exotic
+PCFN,Predefined Field: Extensible Node,exotic
+PCHK,Setting Parameters for Package Check,exotic
+PCI1,"Interface toolbox: Transport object, interface format",exotic
+PCI2,Interface toolbox: Transport object for file layout,exotic
+PCLA,Program Class for BW Generation Tools,exotic
+PCOL,Personas: Colors,exotic
+PCYC,HR: Transport customer PC rules,exotic
+PCYS,HR: Transport standard personnel calculation rules,exotic
+PDAC,Standard rule,exotic
+PDTG,Task Group,exotic
+PDTS,Standard Task,exotic
+PDWA,Workflow Pattern with All Versions,exotic
+PDWS,Workflow template,exotic
+PE00,Posting Engine Used TRules,exotic
+PE01,Migration Project - Direct Transfer,exotic
+PE02,Migration Object - Direct Transfer,exotic
+PE12,Migration Interface - Direct Transfer,exotic
+PE14,Migration Interface Mapping - Direct Transfer,exotic
+PERS,Personalization object,exotic
+PFCC,Transport User-Defined Functions in Payroll,exotic
+PFCS,Transport SAP Standard Function in Payroll,exotic
+PFLV,Personas: Flavor,exotic
+PFNR,Personas: Flavor Naming Rules,exotic
+PFON,Personas: Fonts,exotic
+PFRM,Form for payroll remuneration statement,exotic
+PFRS,Personas: Flavor Role sharing,exotic
+PFTC,Transport user-defined function in time management,exotic
+PFTS,Transport SAP standard function in time management,exotic
+PFUS,Personas: User Sharing,exotic
+PGSC,Personas: Global script,exotic
+PHDC,HRDSYS: physical information object client-dep. table C,exotic
+PHDE,HRDSYS: physical information object client-dep. table E,exotic
+PHDS,HRDSYS: physical information object client-dep. table E SYST,exotic
+PHIE,HRDSYS: physical information object client-indep. table E,exotic
+PHIO,Solution Manager Document: Physical Info Object,exotic
+PICN,Personas: Icon,exotic
+PIMC,Personas: Import Clients,exotic
+PINF,Package interface,exotic
+PLCR,Characteristic Relationship Object for Planning,exotic
+PLDS,Planning Data Slices,exotic
+PLGN,Plugin,exotic
+PLGX,cCTS Service Plug-Ins,exotic
+PLSE,Planning Service,exotic
+PLSQ,Planning Sequence,exotic
+PLST,Planning Service Type,exotic
+PMKC,HR: Transport customer features,exotic
+PMKS,HR: Transport of standard features,exotic
+POCC,Transport User-Defined Operation in Payroll,exotic
+POCS,Transport SAP standard operation in payroll,exotic
+PORG,Organizational Dependency Types (Product Master),exotic
+POTC,Transport user-defined operation in time management,exotic
+POTS,Transport SAP standard operation in time management,exotic
+POVC,Personas: Control Overwrite Entries,exotic
+POVS,Personas: Screen Overwrite Entries,exotic
+PQST,Personas: Quick Styles,exotic
+PRAG,Pragma in ABAP Source Code,exotic
+PRAP,Logical Transport Object for Applications in Product Master,exotic
+PRAW,Personas: RAW data (resource or icon),exotic
+PREO,Personas: Resource,exotic
+PRFC,Personas: Allowed Remote Function Call Modules,exotic
+PRIN,Printer Description,exotic
+PROG,Program,major
+PROJ,DMC: Definition of a Project,exotic
+PROL,Personas: Role,exotic
+PROX,Proxy for Interface from IFR,exotic
+PRTA,Personas: Role-/Theme-Assignment,exotic
+PRWZ,Wizard Definition,exotic
+PSCC,HR: Transport customer schemas,exotic
+PSCS,HR: Transport standard schemas,exotic
+PSHL,Personas: Allowed Search Helps,exotic
+PSRO,Project Status Report (Element and Sample),exotic
+PSTG,Personas: Settings,exotic
+PT01,Migration Project Template - Direct Transfer,exotic
+PT02,Migration Object Template - Direct Transfer,exotic
+PTHE,Personas: Theme,exotic
+PTML,Personas: Template,exotic
+PTMP,Personas: Transaction Mappings,exotic
+PTYP,Logical Transport Object for Product Types,exotic
+PURL,Personas: Allowed URLs,exotic
+PURP,Purpose,exotic
+PVPA,HR-CH: PC Parameters,exotic
+PVSP,HR-CH: Processing schedule,exotic
+PYAC,Payroll Control Center - Analytical Chart Configuration,exotic
+PYAD,Payroll Control Center - Analytics Designer Type,exotic
+PYAN,Payroll Control Center - Analytics Configuration,exotic
+PYDI,"Generated Inst(for Step, Validation Rule, Analytics Chart)",exotic
+PYKT,Payroll Control Center - KPI Type Configuration,exotic
+PYPL,Payroll Control Center Configuration Workbench Policy,exotic
+PYPR,Payroll Control Center - Process Configuration,exotic
+PYPT,Payroll Control Center - Process Template,exotic
+PYSL,Payroll Control Center - Solution Configuration,exotic
+PYST,Payroll Control Center - Step Template Configuration,exotic
+PYTA,Payroll Control Center - Tasklist Analytics,exotic
+PYTD,Payroll Control Center - Tasklist Analytics Designer,exotic
+PYTK,Payroll Control Center - Tasklist KPI,exotic
+PYTP,Payroll Control Center - Policy Type Configuration,exotic
+PYTR,Payroll Control Center - Process Type Configuration,exotic
+PYTV,Payroll Control Center - Tasklist Validation Rule,exotic
+PYVR,Payroll Control Center - Validation Rule Configuration,exotic
+PYVT,Payroll Control Center - Validation Rule Type Configuration,exotic
+QMML,KW: Logical Information Object (QM_MANUAL),exotic
+QMMP,Logical Transport Object,exotic
+QMMS,KW: Structure repository for QMMANUAL,exotic
+QVIW,Transport Object for BW Query View,exotic
+RABR,Read Access Logging: Recording,exotic
+RADB,Read Access Logging: Dynpro,exotic
+RADY,Read Access Logging: Dynpro (old),exotic
+RAGB,Read Access Logging: Generic Channel,exotic
+RAGC,Read Access Logging: Generic Channel (old),exotic
+RAPA,Planning package for the Report Agent,exotic
+RARB,Read Access Logging: Remote Function Call,exotic
+RARF,Read Access Logging: Remote Function Call (old),exotic
+RASB,Read Access Logging: Web-Service,exotic
+RASE,Settings for the Report Agent (BW),exotic
+RAWB,Read Access Logging: Web Dynpro,exotic
+RAWD,Read Access Logging: Web Dynpro (old),exotic
+RAWS,Read Access Logging: Web-Service (old),exotic
+RCAL,DMC: Rule Calls,exotic
+RD01,Route Definition: Routes,exotic
+RD02,Route Definition: Legs,exotic
+RD03,Route Definition: Nodes,exotic
+RD04,Route Definition: Modes of Transport,exotic
+RD05,Route Definition: Shipping Type,exotic
+RDOM,Read Access Logging: Log Domain,exotic
+RECW,Recording Object for Web Dynpro Applications,exotic
+REP0,Reports,exotic
+REP1,Report Evaluations,exotic
+REP2,Reports,exotic
+REP3,Report Evaluations,exotic
+REVN,Nodes for SAP Review Program,exotic
+RF01,Route Determination: Actual Routes for Delivery,exotic
+RF02,Route Determination: In Sales Documents/Deliveries,exotic
+RF03,Route Determination: Shipping Points/Shipping p. for Routes,exotic
+RF04,Route Determination: Weight Groups for Deliveries,exotic
+RF05,Route Determination: Transportation Zones,exotic
+RF06,Route Determination: Transportation groups,exotic
+RF07,Route Determination: Shipping Conditions,exotic
+RF08,Route Determination: Weights per Weight Group,exotic
+RFCT,Transport RFC Destination,exotic
+RFST,RFC State,exotic
+RGRP,Role Group,exotic
+RLBL,Reuse Library: Libraries,exotic
+RLBP,Reuse Library: Products,exotic
+RLBT,Reuse Library: Transport Object for Structure Repository,exotic
+RMCE,Responsibility Management Context Extension,exotic
+RMCT,Responsibility Management Context,exotic
+RMRC,Responsibility Management : Reuse Object: Customizing,exotic
+RMRL,Responsibility Management Rule,exotic
+RMRW,Responsibility Management : Reuse Object for Workbench,exotic
+RMTC,Responsibility Management Team Category,exotic
+RONT,RESTful ABAP Programming Model: Object (Node) Type,exotic
+ROUT,Routine,exotic
+RPDF,Report definition for the classification tool-set,exotic
+RPUR,Read Access Logging: Purpose,exotic
+RRCA,BW: RRI InfoCube Recipient,exotic
+RRCD,BW: RRI InfoCube Recipient (SAP Outbound Delivery),exotic
+RRQA,BW: RRI Query Recipient,exotic
+RRQD,BW: RRI Query Recipient (SAP Outbound Delivery),exotic
+RRUL,Remodeling Rule,exotic
+RSDC,Display Component Tree,exotic
+RSDS,DataSource in BW,exotic
+RSFO,BW Formula,exotic
+RSPC,Process chain,exotic
+RSPE,BEx Personalization Application,exotic
+RSPI,Interrupt Process,exotic
+RSPT,Process Chain Starter,exotic
+RSPV,Process variants,exotic
+RSRV,Package for RSRV Tests,exotic
+RTCA,Real-Time Consolidation Model Objects,exotic
+RTCM,Real-time Consolidation Model,exotic
+RULC,DMC: Migration Settings of a Rule,exotic
+RULE,DMC: Definition and Implementation of a Rule,exotic
+RVBA,Review Booklet Application,exotic
+RVBC,Review Booklet Configuration,exotic
+SAAC,Component Use in the System Administration Assistant,exotic
+SAAT,Customizing Settings for System Administration Assistant,exotic
+SACT,Standalone SAP Analytics Cloud Applications,exotic
+SADT,ABAP Development Tools REST Service Group,exotic
+SAID,Language-Independent Doc. for mySAP.com Application Server,exotic
+SAIM,Audit Info System - Check Sets for Automatic Monitoring,exotic
+SAIS,Data Object in Audit Info System,exotic
+SAJC,Application Job Catalog Entry,exotic
+SAJT,Application Job Template,exotic
+SAJX,Application Job Template - App,exotic
+SAJY,Application Job Catalog - App,exotic
+SALC,Application Log Catalog Entry,exotic
+SALO,Logical Info Object in SAP Solution Architect,exotic
+SALV,ALV ATO Transport for Standard Layouts,exotic
+SAMC,ABAP Messaging Channel Application,exotic
+SAMD,S&AM Design Time Metadata,exotic
+SAMS,SAM Metadata,exotic
+SAMT,Message Types for ABAP Messaging Channels,exotic
+SAPC,ABAP Push Channel Application,exotic
+SAPH,Physical Info Object in SAP Solution Architect,exotic
+SAPL,Storage Plan: SAP Records,exotic
+SARC,Entries in the tables of the archiving tool (TRK00 etc.),exotic
+SASD,Document for mySAP.com Application Server,exotic
+SAUA,ABAP Unit Method Attributes,exotic
+SBC1,Techical Object Group,exotic
+SBCL,Semantic Business Configuration Lock Definition,exotic
+SBCT,Semantic Business Configuration Lock Token,exotic
+SBDL,Logical information object for BDS,exotic
+SBDP,Physical information object,exotic
+SBDR,BDS: Relationship between information objects,exotic
+SBEL,BW: LOIO Class Metadata,exotic
+SBEP,BW: PHIO Class Metadata,exotic
+SBGL,BW: LOIO Class Transaction Data,exotic
+SBGP,BW: PHIO Class Transaction Data,exotic
+SBHL,Logical Information Object for BDS,exotic
+SBHP,Logical Information Object for BDS,exotic
+SBHR,BDS: Relationship Between Information Objects,exotic
+SBIL,Logical Information Object for BDS,exotic
+SBIP,Physical Information Object,exotic
+SBIR,Relationship between Information Objects,exotic
+SBJL,Logical Information Object for BDS,exotic
+SBJP,Logical Information Object for BDS,exotic
+SBJR,BDS: Relationship Between Information Objects,exotic
+SBKL,Logical Information Object for BDS,exotic
+SBKP,Logical Information Object for BDS,exotic
+SBKR,BDS: Relationship Between Information Objects,exotic
+SBLE,Customer Extension of Business Logic with restricted ABAP,exotic
+SBNL,Logical Information Object for BDS,exotic
+SBNP,Logical Information Object for BDS,exotic
+SBNR,BDS: Relationship Between Information Objects,exotic
+SBOL,Logical information object for BDS,exotic
+SBOP,Physical information object,exotic
+SBOR,BDS: Relationship between information objects,exotic
+SBRL,Logical Information Object for BDS,exotic
+SBRP,Physical Information Object,exotic
+SBRR,BDS: Relationship Between Information Objects,exotic
+SBSL,Logical Information Object for BDS,exotic
+SBSP,Physical Information Object,exotic
+SBSR,BDS: Relationship Between Information Objects,exotic
+SBTL,Logical Information Object for BDS,exotic
+SBTP,Physical Information Object,exotic
+SBTR,BDS: Relationship Between Information Objects,exotic
+SBVL,Logical Information Object for BDS,exotic
+SBVP,Physical Information Object for BDS,exotic
+SBVR,BDS: Relationship Between Information Objects,exotic
+SBWL,Logical information object for BDS,exotic
+SBWP,Logical information object for BDS,exotic
+SBWR,BDS: Relationship between information objects,exotic
+SBXL,Logical information object for BDS: AEW ABAP tools,exotic
+SBXP,Physical information object,exotic
+SBXR,BDS: Relationship between information objects,exotic
+SBYL,Logical information object for BDS,exotic
+SBYP,Logical information object for BDS,exotic
+SBYR,BDS: Relationship between information objects,exotic
+SBZL,Logical Information Object for BDS,exotic
+SBZP,Logical Information Object for BDS,exotic
+SBZR,BDS: Relationship Between Information Objects,exotic
+SCAT,Test case,exotic
+SCAU,Customer authorization groups (SREPOATH),exotic
+SCBE,Custom Behaviour Extensions,exotic
+SCBO,Custom Business Object,exotic
+SCCL,Custom Code List,exotic
+SCCV,Custom CDS Views,exotic
+SCDT,Mapping Information for Scout and Customizing Synchronizer,exotic
+SCGR,Service Consumer Group,exotic
+SCHK,Check Results Management: Check ID,exotic
+SCME,Custom Metadata Extension,exotic
+SCNT,Workflow Container PPF (Definition + Data),exotic
+SCON,Parameter Condition,exotic
+SCP1,BC Set or Customizing Profile,exotic
+SCP2,Switch BC Sets,exotic
+SCPD,SAP codepage definition,exotic
+SCPR,Customizing Profile,exotic
+SCPS,Code Page Segment,exotic
+SCPX,BC Set: Exception Handling,exotic
+SCRL,Custom Reuse Library,exotic
+SCTA,Context Attributes (Central Context Management),exotic
+SCTM,Context Object Type (Central Context Management),exotic
+SCUH,Replacement information for hierarchies,exotic
+SCUT,Customizing templates,exotic
+SCVI,Screen variants,exotic
+SDAT,SAP Delivered Table Authorization Group Assignments,exotic
+SDBP,Microsoft SQL Server,exotic
+SDEP,Object dependency,exotic
+SDER,Spool: Device Description - Use SPDV Instead,exotic
+SDEV,Output Devices (Use SPDV Instead),exotic
+SDM0,DME: Metadata to describe a maintenance object,exotic
+SDM1,DME: Dialog pool,exotic
+SDMI,TLogo for Silent Data Migration (Metadata for SUM uptime),exotic
+SDP1,APO Planning Object Structure (Through Transport Tables),exotic
+SDP2,APO Storage Buckets Profile (Through Transport Tables),exotic
+SDP3,APO Planning Area (Through Transport Tables),exotic
+SDP8,SCM DP/SNP: User Settings for Interactive Planning,exotic
+SDPA,APO: Planning Books for Macros,exotic
+SDPE,APO Selection ID,exotic
+SDPI,Periodicities for Planning Areas,exotic
+SDPJ,APO: Mass Processing Jobs,exotic
+SDPK,APO: Activities for Mass Processing Jobs,exotic
+SDPP,APO: Planning Book,exotic
+SDPR,APO: Time bucktes profile for Demand PLanning & SNP,exotic
+SDPS,APO: Planning Object Structures,exotic
+SDPT,SCM Demand Planning Seasons,exotic
+SDPU,SCM Demand Planning Season Years,exotic
+SDPV,SCM Demand Planning Seasonal Pattern,exotic
+SE19,BAdi Implementation,exotic
+SECU,Security Audit Log Configuration,exotic
+SEGR,Semantic Group,exotic
+SESA,Enterprise Search: DDL Activation,exotic
+SESR,Enterprise Search: Ranking Factor,exotic
+SEST,Enterprise Search: Template,exotic
+SETA,Entries in the Table COMC_SETTYP_ATTR,exotic
+SETG,Object List for the Set Type Generation,exotic
+SETO,Object Types in the Set Type Generation,exotic
+SETT,Logical Transport Object for Set Types,exotic
+SF01,Status Tables Switch Framework Client-Specific,exotic
+SF02,Status Tables Switch Framework Cross-Client,exotic
+SFB1,Business Function Set,exotic
+SFB2,Business Function,exotic
+SFBF,Business Function + Assignment,exotic
+SFBS,Business Function Set + Assignment,exotic
+SFCS,Conflict Switch Assignment - Dependent Switches,exotic
+SFHI,Logical object - information object: System info - note,exotic
+SFKX,Foreign Key Check Exception,exotic
+SFLO,Form Template Logo,exotic
+SFNH,Hierarchy Nodes in Complete List of Release Notes,exotic
+SFPF,Form Object: Form,exotic
+SFPI,Form Object: Interface,exotic
+SFRH,SAPscript Form Tree: Transport Object for Node,exotic
+SFRN,Logical object - information object: Release note,exotic
+SFSS,Status of Switch,exotic
+SFSW,Switch + Assignment of Objects to the Switch,exotic
+SFSY,Logical object - hypertext: System profile parameter supplmt,exotic
+SFTE,Form Template Text,exotic
+SGFL,Global fields,exotic
+SHAP,Shadow Tables for Application Components (Obsolete!),exotic
+SHAR,Nodes for archived structures read back,exotic
+SHCS,OBSOLET shadow table communication structure,exotic
+SHDI,Image data for transaction variants,exotic
+SHDS,Shadow Table DataSource,exotic
+SHFS,Can Maintain Data Source Manually - not R/3 (SAP Delivery),exotic
+SHI0,Link type definition of general structure storage,exotic
+SHI1,Node type definition of general structure storage,exotic
+SHI2,Structure types of general structure storage,exotic
+SHI3,General structure storage: Definition of a structure,exotic
+SHI5,Gen. hierarchy storage extrension name,exotic
+SHI6,Gen. structure repos.: Extension ID / structure assignment,exotic
+SHI7,General hierarchy store node attribute,exotic
+SHI8,SFW Switch Assignment in Hierarchy Tool,exotic
+SHI9,General Structure Repository: Enhancement ID Order,exotic
+SHIC,Hierarchy Tool: Comparison of Structures,exotic
+SHIG,InfoPackage Group (SAP Delivery) Obsolete !!!,exotic
+SHIM,OBSOLETE Shadow Tables InfoSource Master Data,exotic
+SHIN,General structure storage: Definition of nodes,exotic
+SHIP,InfoPackage (SAP Delivery),exotic
+SHIT,OBSOLETE Shadow Tables InfoSource Transaction Data,exotic
+SHIV,Hierarchy Tool: Version of a Structure,exotic
+SHK4,SDOK: KPro Structure Repository (Definition of Nodes),exotic
+SHLP,Search Help,exotic
+SHMA,Shared Objects: Defined Area Attributes,exotic
+SHMP,Mapping DataS./Fields and InfoS/Objects (SAP Delivery),exotic
+SHPH,Project management: Node definitions,exotic
+SHTR,Transfer Structure - 2.0  (SAP Delivery),exotic
+SHTS,Shadow Tables Transfer Structure,exotic
+SI0L,KEN: Logical information object (general),exotic
+SI0P,KEN: Physical information object (general),exotic
+SI0R,KEN: Relationship between information objects (general),exotic
+SI0S,KEN: Structure repository for general objects,exotic
+SI2L,KEN: Logical information object (training),exotic
+SI2P,KEN: Physical information object (training),exotic
+SI2R,KEN: Relationship between information objects (training),exotic
+SI2S,KW: Structure repository for training,exotic
+SI3L,NR3: Logical Information Object (Help),exotic
+SI3P,NR3: Physical Information Object (Help),exotic
+SI3R,NR3: Relationship Between Information Objects (Help),exotic
+SICF,ICF Service,exotic
+SIFL,Workflow Documents: Logical Information Object,exotic
+SIFP,Workflow Documents: Physical Information Object,exotic
+SIM1,IMG attributes,exotic
+SIMH,IMG Structure Repository: Nodes,exotic
+SIRA,Definition of an IO attribute (runtime object),exotic
+SIRC,Definition of an IO class (runtime object),exotic
+SIRE,KPro: Content Repository for contents of information objects,exotic
+SIRL,Logical information object,exotic
+SIRM,Physical Information Object (Language Delivery-Compatible),exotic
+SIRP,Physical information object,exotic
+SIRR,Relationship between information objects,exotic
+SIRS,Customizing for Content Repositories,exotic
+SISM,ISM Channel Group,exotic
+SITA,Situation Solution Proposal,exotic
+SITB,Situation Base Templates,exotic
+SITC,Situation Configuration Template,exotic
+SITD,Situation data context,exotic
+SITF,Situation Type Condition Filter Values,exotic
+SITG,Situation Application Tag,exotic
+SITO,Situation Object,exotic
+SITT,Situation Types,exotic
+SITU,Situation Standard Templates,exotic
+SIWL,KEN: Logical information object (help),exotic
+SIWP,KEN: Physical information object (help),exotic
+SIWR,KEN: Relationship between information objects (help),exotic
+SIWS,KW: Structure repository for application help,exotic
+SIXO,Index objects for logical databases,exotic
+SIXT,Index types for logical databases,exotic
+SKDL,KW: Logical Info Object (KW_DEMO),exotic
+SKDP,KW: Physical Info Object (KW_DEMO),exotic
+SKDS,Structure Storage for KW_DEMO,exotic
+SKTD,Knowledge Transfer Document - Documentation Infrastructure,exotic
+SKWL,KW: Logical Information Object (KWNet),exotic
+SKWN,KW: Structure Storage for HTML-Based Documents,exotic
+SKWP,KW: Physical Information Object (KWNet),exotic
+SKWS,CM: Status Management,exotic
+SLDC,Active Generic Application Access Rules,exotic
+SLDD,Generic Application Access Rules (Definition),exotic
+SLDH,Generic Whitelist - Header Data,exotic
+SLDO,SLAD: Object Set,exotic
+SLDP,SLAD: Profile,exotic
+SLEC,LEI Event Linkages (Customizing),exotic
+SLEI,LEI Event Linkages (Design),exotic
+SLOM,Logical output management systems,exotic
+SMBC,Business Configuration Object,exotic
+SMBL,XML Message Broker: Pipeline,exotic
+SMCX,SLC UI Extension Configuration,exotic
+SMD1,Definition of an R-LOIO class,exotic
+SMD2,Definition of a V-LOIO class,exotic
+SMD3,Definition of an R-PHIO class,exotic
+SMD4,Definition of a V-PHIO class,exotic
+SMD5,Definition of an R-RELA class,exotic
+SMD6,Definition of a V-RELA class,exotic
+SMDA,Definition of an IO attribute,exotic
+SMDC,IO class link area,exotic
+SMDD,DDIC Modification Logs,exotic
+SMDK,Definition of a context class,exotic
+SMDL,Internal Use,exotic
+SMDM,Document model area,exotic
+SMEH,Area Menu,exotic
+SMIF,Matching Interface,exotic
+SMIM,Info Object from the MIME Repository,exotic
+SMOD,SAP enhancements,exotic
+SMP0,Solution Map: Process category,exotic
+SMP1,Solution Map: Main process,exotic
+SMP2,Solution Map: Process,exotic
+SMPB,Solution Map: Best Practice,exotic
+SMPC,Solution Map: Component,exotic
+SMPD,Solution Map: Product information,exotic
+SMPI,Solution Map: Key Performance Indicator,exotic
+SMPP,Solution Map: Partner product,exotic
+SMTC,"Service Mapping Tool, Customer Mappings",exotic
+SMTE,Service Mapping Tool: Extension,exotic
+SMTG,OM: Email Template,exotic
+SMTO,Service Mapping Tool,exotic
+SMTV,Service Mapping Tool: Variant,exotic
+SNAP,SNAPT texts (long texts for ABAP/4 short dump analysis),exotic
+SOAS,BTFR: Object Type-Specific Attributes Long Texts,exotic
+SOAT,BTFR: Object Type-Specific Attributes Short Texts,exotic
+SOBJ,Business object types,exotic
+SOD1,Api Package,exotic
+SOD2,API Package Assignment,exotic
+SOMS,Output management systems,exotic
+SONT,SAP Object Node Type,exotic
+SOT1,SAP Object Type,exotic
+SOTR,All Concepts (OTR) of a Package - Short Texts,exotic
+SOTS,All Concepts (OTR) of a Package - Long Texts,exotic
+SPAR,Parameter Storage: Transport Object,exotic
+SPCD,Command records to print,exotic
+SPCO,Char. set manufacturers,exotic
+SPCS,Character sets,exotic
+SPDV,Spool: Output Devices,exotic
+SPFL,Profile parameter,exotic
+SPLO,Format Types,exotic
+SPOK,BW InfoSpoke,exotic
+SPPC,Normal Print Controls,exotic
+SPPF,Page formats,exotic
+SPRF,CheckMan: Logical Transport Object Check Profile,exotic
+SPRJ,DMC: Definition of a Sub-Project,exotic
+SPRL,SPRO: Transport object for logical information objects,exotic
+SPRO,Projects,exotic
+SPRP,SPRO: Physical transport object for project documents,exotic
+SPRS,Printer Resources,exotic
+SPRV,Service Provider for ADT,exotic
+SPRX,Proxy Object,exotic
+SPSE,Security: PSE Definition,exotic
+SPSV,Spool: Formatting server,exotic
+SPTP,Text pool for print formats,exotic
+SQAB,Industry-specific question,exotic
+SQAC,Question Category,exotic
+SQAG,Industry-specific configuration group,exotic
+SQAK,Configuration group,exotic
+SQAQ,Question,exotic
+SQAV,Question Context,exotic
+SQBR,Industry,exotic
+SQL1,SQL Service Binding (SQL1),exotic
+SQLI,Links for Implementation Assistant,exotic
+SQSC,Database Procedure Proxy,exotic
+SRAE,Index Management Application Exit,exotic
+SRAL,Read Access Logging: User Blacklist,exotic
+SRC0,Logical Information Object For SRM,exotic
+SRC1,Physical Information Object for SRM,exotic
+SRC2,Logical Information Object For SRM,exotic
+SRC3,Physical Information Object for SRM,exotic
+SRC4,Logical Information Object For SRM,exotic
+SRC5,Physical Information Object for SRM,exotic
+SRC6,Logical Information Object For SRM,exotic
+SRC7,Physical Information Object for SRM,exotic
+SREL,DMC: Structure Relations,exotic
+SRFA,Advanced Compliance Reporting Application,exotic
+SRFC,RFC Service,exotic
+SRFP,Advanced Compliance Reporting Configuration Parameters,exotic
+SRFQ,Advanced Compliance Reporting Report Category,exotic
+SRFR,Advanced Compliance Reporting Report Definition,exotic
+SRFS,Advanced Compliance Reporting Schema Definition,exotic
+SRHL,SRM: Hierarchical Lists,exotic
+SRLD,Language-Dependent Client-Specific Retrieval Index Object,exotic
+SRLI,Language-Dependent Cross-Client Retrieval Index Object,exotic
+SRM1,Element Type,exotic
+SRM2,Service Provider,exotic
+SRM3,Area - Definition,exotic
+SRM4,Area - Value for SPS Classification Parameter,exotic
+SRM5,Class Role,exotic
+SRM6,Service Provider Type,exotic
+SRM7,Records Management: Component Role,exotic
+SRML,SEM-SRM: Logical InfoObject,exotic
+SRMP,SEM-SRM: Physical InfoObject,exotic
+SRSR,Search Server Relation,exotic
+SRTD,Transport Release/Configuration for SOAP Runtime,exotic
+SRTI,Index Category,exotic
+SRTL,Transport Object: SOAP Runtime Logical Port,exotic
+SRTR,Report tree,exotic
+SRVB,Service Binding,exotic
+SRVC,Service Consumption Model,exotic
+SRVD,Service Definition,exotic
+SSB0,Groups,exotic
+SSB1,KPIs,exotic
+SSB2,DO NOT USE -- Basic Data of Chips Representing KPI-Tiles,exotic
+SSB3,DO NOT USE -- Drill-Down-App Configurations in SSB,exotic
+SSB4,Associations between Groups,exotic
+SSB5,Groups,exotic
+SSB6,KPIs,exotic
+SSB7,Associations between Groups,exotic
+SSB8,Generic Drilldown Reports,exotic
+SSB9,Reports,exotic
+SSFO,SAP Smart Form,exotic
+SSST,SAP Smart Style,exotic
+SSUI,SSUI Transport Object,exotic
+STC1,Configuration Entity,exotic
+STC2,Technical Configuration Set,exotic
+STC4,Technical Configuration Layer,exotic
+STC5,Technical Configuration LM Scenario,exotic
+STCB,TC Task List Group,exotic
+STCS,TC Task List,exotic
+STCV,TC Task List Variant,exotic
+STOB,Structured Object,major
+STOR,Storage Parameters,exotic
+STUE,Status in overview screen of sales order,exotic
+STVI,Transaction variants (cross-client),exotic
+STVR,Transaction variants,exotic
+STYC,Embedded Analytics Story,exotic
+STYL,SAPscript Style,exotic
+SUCC,Scenario for Switchable Authorization Check (Runtime),exotic
+SUCD,Scenario for Switchable Authorization Check (Definition),exotic
+SUCK,Header Data for General Authorization Groups,exotic
+SUCO,Assign Authorization Default Variant > Application,exotic
+SUCU,Authorization Groups (TBRG_AUTH),exotic
+SUIF,SCMB: UI Framework,exotic
+SUIU,SCMB: UI Framework (user specific),exotic
+SUKR,Kernel Trace Revocation Object,exotic
+SUSC,Authorization object class,exotic
+SUSH,Assignment: Service --> Authorization Objects,exotic
+SUSI,Assignment: Service --> Authorization Objects (with TADIR),exotic
+SUSK,Customer: Assignment of transaction -> authorization object,exotic
+SUSO,Authorization object,exotic
+SUSP,Templates for authorization profiles (Profile Generator),exotic
+SUST,Assignment transaction > auth. objects,exotic
+SVAL,Version Management: Object Type Alias,exotic
+SVCI,Selection Variants (Cross-Client),exotic
+SVER,Substitution Validation Event and rules,exotic
+SVRL,Substitution Validation for Rule and Rule Text,exotic
+SVRS,Financial Substitution Validation Rule Set,exotic
+SVSR,Substitution Validation:System Rule and Rule Text,exotic
+SVUI,Substitution Validation User Interface Objects,exotic
+SWFC,Workflow Correlation Definition,exotic
+SWFL,WF: Logical Information Object,exotic
+SWFP,WF: Physical Information Object,exotic
+SWFS,Service-Definition for WebFlow,exotic
+SWFT,Workflow: process type,exotic
+SWFX,Workflow XML Proxy,exotic
+SWHL,Logical Information Object for BDS: Excel Templates,exotic
+SWHP,Logical Information Object for BDS: Excel Templates,exotic
+SWHR,BDS: Relationship Between Information Objects:Excel Template,exotic
+SWIL,Logical Information Object for BDS,exotic
+SWIP,Logical Information Object for BDS,exotic
+SWIR,BDS: Relationship Between Information Objects,exotic
+SWKL,Transport Object for SEM_STS,exotic
+SWKP,Logical Information Object for BDS,exotic
+SWKR,BDS: Relationship Between Information Objects,exotic
+SXCC,Customizing Entries for Business Add-In Implementations,exotic
+SXCI,Business Add-Ins - Implementations,exotic
+SXFT,Customizing Entries for BAdI Definitions (Sorting),exotic
+SXMS,Interfaces for Archiving,exotic
+SXSD,Business Add-Ins - Definitions,exotic
+SYAG,System Log Messages,exotic
+SYND,Syntax Documentation,exotic
+TAAV,Table Analysis: Analysis Variant,exotic
+TABL,Table,major
+TABU,Table Contents,exotic
+TAPL,CTS: Template application type,exotic
+TAVF,Table Analysis: Virtual Field,exotic
+TBPS,Long texts for Tasked-Based Process Steps,exotic
+TDAT,Customizing: Table Contents,exotic
+TEAM,BPC: Team,exotic
+TEMC,IS Migration Workbench: Conversion Object,exotic
+TEMF,IS Migration Workbench: Fixed Values,exotic
+TEMO,IS-U Migration Workbench: Migration Object,exotic
+TEMP,IS Migration Workbench: Control Parameters,exotic
+TEMR,IS-U Migration Workbench: Distributed Import Profile,exotic
+TERM,Transport of Terminology Tables,exotic
+TEXT,SAPscript Text,exotic
+TFRM,Formulae and Requirements: Table Entries,exotic
+TFRT,Font,exotic
+THED,Themes D version,exotic
+THEM,"Themes for BW Frontend (Analyzer, Reportdesigner)",exotic
+THJT,Key Date of Type Derivation,exotic
+TIMR,Date Rule,exotic
+TMCO,TMC: Content Object,exotic
+TMCW,Technical Monitoring Content,exotic
+TMPL,BW Web Templates,exotic
+TMWO,Tracking Multiplexer runs without Object List,exotic
+TOBJ,Definition of a Maintenance and Transport Object,exotic
+TRAN,Transaction,exotic
+TRCS,Communication Structure for Transformation,exotic
+TREP,Transformation Rule Repository,exotic
+TRFN,Transformation,exotic
+TRIF,Interface Definition,exotic
+TRIM,Interface Mapping,exotic
+TRMS,Transport of Syntax Check Messages,exotic
+TROB,DMC: Definition of a Translation Object,exotic
+TROC,DMC: Migration Settings of a Translation Object,exotic
+TRPC,Translation Project - Customizing,exotic
+TRPR,Translation Project,exotic
+TRUC,Transformation Rule (Client Dependent),exotic
+TRUL,Transformation Rule,exotic
+TTPL,Transaction Templates for Activity Groups,exotic
+TTYP,Table Type,exotic
+TUSE,TLOGO for Client Provisioning Include List,exotic
+TVNS,Variant Group Definition,exotic
+TVUS,Assignment User - Variant Group,exotic
+TWBH,Test catalog,exotic
+TX01,Text Control: Text Types and Text Procedures,exotic
+TX02,Text Control: Access Sequences,exotic
+TX03,Text Control: Generated Access Sequence Table,exotic
+TX04,Text Control: Allowed Text Objects,exotic
+TX05,Text Controlling: Text Procedure Assignments,exotic
+TYPE,Type Group,exotic
+UAMC,ICH Alert Monitor Alert Category entries  (UI),exotic
+UAMO,ICH Alert Monitor Configuration (UI),exotic
+UAMT,ICH Alert Monitor Alert Type entries (UI),exotic
+UAPO,Logical object ADW position,exotic
+UCLO,Logical object area,exotic
+UCOC,Transportobject UCON HTTP Customizing Object,exotic
+UCOP,UCON: Transport object for Ucon Http Server Profile,exotic
+UCSA,Unified Connectivity Service Assembly,exotic
+UCSM,Transport object for SMTP hosts,exotic
+UCVH,Transportobject for virtual hosts,exotic
+UDMO,Data model,exotic
+UDSC,Web Service User defined Search Configuration,exotic
+UENO,Entity type,exotic
+UFKT,Logical object - function,exotic
+UHIE,Logical object - hierarchy,exotic
+UI5F,UI5 File,exotic
+UIAA,Fiori Launchpad App Descriptor Item Adaptation,exotic
+UIAC,Fiori Launchpad Technical Catalog,exotic
+UIAD,Fiori Launchpad App Descriptor Item,exotic
+UIBA,UI2 Business Application,exotic
+UIPC,Fiori Launchpad Page - Customizing,exotic
+UIPG,Fiori Launchpad Page Template,exotic
+UISC,Fiori Launchpad Space - Customizing,exotic
+UIST,Fiori Launchpad Space Template,exotic
+UMB0,Scorecard,exotic
+UMB1,Performance Overview,exotic
+UMB2,Strategy Map,exotic
+UMB3,Derived Scorecard,exotic
+UMB4,"Scorecard (Without Initiatives, Reports, and Links)",exotic
+UMB5,Scorecard (Initiatives),exotic
+UMB6,Scorecard (Reports and Links),exotic
+UMB7,"Derived Scorecard (Without Initiatives, Reports, and Links)",exotic
+UMBR,Scorecard - Report Builder,exotic
+UMR0,Risk Management Common Table,exotic
+UOMT,Quantity Conversion Type,exotic
+UPDR,Update rules,exotic
+UWSF,Web Service Definition,exotic
+UWSS,Web Survey Definition,exotic
+UWST,Target Group Hierarchy,exotic
+UXSD,Web Service Component,exotic
+V80B,Totals variants,exotic
+V80P,Selection fields per variant,exotic
+V80V,Default Value Layout Variant,exotic
+V80Z,Layouts,exotic
+VBAP,Visual Business Application,exotic
+VBED,VOFM,exotic
+VBP0,Analytical Query publishing from View Browser,exotic
+VCLS,View cluster,exotic
+VCMD,Value Chain Management Designtime Model,exotic
+VCN0,VRS/CWB Testobject,exotic
+VCN1,VRS/CWB Testobject,exotic
+VDAT,View Maintenance: Data,exotic
+VERS,Version Number,exotic
+VERT,Text Verticalization,exotic
+VIEW,View,major
+VKOI,"Condition Table, Info Structure: Lockable Object",exotic
+VKOS,Condition Table: Object can be Locked,exotic
+VNPA,Index update for business partners,exotic
+VRBL,DMC: Definition of a Variable,exotic
+VTRM,Verticalization Terminology,exotic
+VTRR,Verticalization: Text repository Registration,exotic
+VUV1,SD: Incompletion Customizing,exotic
+VWDF,View Definition of Migration Object Modeler,exotic
+W3HT,Web Reporting/Internet Transaction Server HTML Templates,exotic
+W3MI,Web Reporting/Internet Transaction Server MIME Types(binary,exotic
+WAPA,BSP (Business Server Pages) Application,exotic
+WBTT,ABAP Workbench: Dummy object type for unit tests,exotic
+WCPO,Workload Capture Profile,exotic
+WDCA,Web Dynpro Application Configuration,exotic
+WDCC,Web Dynpro Component Configuration,exotic
+WDCL,Web Dynpro Customizing Data,exotic
+WDCP,Web Dynpro CHIP,exotic
+WDRC,Web Dynpro Condition for a Recording Plug-In,exotic
+WDRP,Web Dynpro Recording Plug-In,exotic
+WDYA,Web Dynpro Application,exotic
+WDYL,Web Dynpro : UI Element Library,exotic
+WDYN,Web Dynpro Component,exotic
+WEBI,Virtual End Point,exotic
+WEBS,Web Services,exotic
+WFDL,WFF: LOIO for KW Connection,exotic
+WFDP,WFF: PHIO for KW Connection,exotic
+WFFL,WFF Data: LOIO for KW Connection,exotic
+WFFP,WFF Data: PHIO for KW Connection,exotic
+WGRP,Object Type Group (ABAP Workbench / R3TR),exotic
+WKSP,BPC: workspace,exotic
+WMPC,Workload Management Process Classes,exotic
+WSNO,Workspace Folder,exotic
+WSPT,APC WebSocket protocol type,exotic
+WSSC,Workflow Scenario,exotic
+WTAG,BSP Extension,exotic
+WTHM,O2: Topics for BSP Application,exotic
+WWIB,BW Web Item (BI-Runtime),exotic
+WWIT,Item in Web framework,exotic
+WWPA,BW Web Runtime:  Parameter (for Web Item or Command),exotic
+WXML,02: XML Descriptions,exotic
+X4WS,Workspace information for X4 Activation,exotic
+XCLA,Logical Transport Object for Conversion Class (XCLA),exotic
+XCLS,Xcelcius Dashboard,exotic
+XDPL,SAP KW: Logical IO for Area XML_DOKU,exotic
+XDPP,KW: Physical IO for Area XML_DOKU,exotic
+XDPS,KW: Structure Repository for Area XML_DOKU,exotic
+XDYN,Screens with field exit,exotic
+XINX,Ext. Index,exotic
+XLWB,Excel workbook,exotic
+XMLL,KW: Logical IO,exotic
+XMLP,KW: Physical IO,exotic
+XMLS,KW: Structure repository for objects,exotic
+XPRA,Program Run after Transport,exotic
+XSLT,Transformation,exotic
+XTRA,Transformation/Mapping Between XML and ABAP,exotic
+XWRD,Table of changed key words,exotic
