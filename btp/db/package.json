@@ -1,9 +1,9 @@
 {
   "name": "deploy",
   "dependencies": {
-    "@sap/hdi-deploy": "5.3.1",
-    "@sap/hana-client": "2.19.20",
-    "hdb": "0.19.3"
+    "@sap/hdi-deploy": "5.5.1",
+    "@sap/hana-client": "2.26.18",
+    "hdb": "2.26.1"
   },
   "scripts": {
     "start": "node node_modules/@sap/hdi-deploy/",
