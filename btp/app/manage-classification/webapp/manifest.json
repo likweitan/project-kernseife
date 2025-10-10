@@ -194,7 +194,7 @@
                     },
                     "downloadClassificationCustomLegacy": {
                       "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationCustomLegacy",
-                      "visible": true,
+                      "visible": false,
                       "enabled": true,
                       "text": "{i18n>downloadClassificationCustomLegacy}"
                     },
@@ -206,7 +206,7 @@
                     },
                     "downloadClassificationGithub": {
                       "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationGithub",
-                      "visible": true,
+                      "visible": false,
                       "enabled": true,
                       "text": "{i18n>downloadClassificationGithub}"
                     }
