@@ -151,13 +151,11 @@ export default (srv: Service) => {
       return req.error(400, `Missing mandatory parameter`);
     }
     const configUrl = req.data.configUrl;
-    const classificationUrl = req.data.classificationUrl;
     await createInitialData(
       contactPerson,
       prefix,
       customerTitle,
-      configUrl,
-      classificationUrl
+      configUrl
     );
   });
 

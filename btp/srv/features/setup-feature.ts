@@ -1,7 +1,6 @@
 import { Customers, Ratings, Frameworks } from '#cds-models/kernseife/db';
-import { entities, log, tx } from '@sap/cds';
+import { entities, log } from '@sap/cds';
 import axios from 'axios';
-import { importInitialClassification } from './classification-feature';
 import { loadReleaseState } from './releaseState-feature';
 
 const LOG = log('Setup');
@@ -10,8 +9,7 @@ export const createInitialData = async (
   contactPerson: string,
   prefix: string,
   customerTitle: string,
-  configUrl: string,
-  classificationUrl: string
+  configUrl: string
 ) => {
   if (configUrl) {
     const response = await axios.get<{
@@ -71,26 +69,6 @@ export const createInitialData = async (
     }
   }
 
-  if (classificationUrl) {
-
-    const releaseStateCount = await SELECT.from(entities.ReleaseStates).columns(
-      'IFNULL(COUNT( * ),0) as count'
-    );
-    if (releaseStateCount[0]['count'] === 0) {
-      await loadReleaseState();
-    }
-
-    const response = await axios.get(classificationUrl);
-    if (response.status != 200) {
-      throw new Error('Error fetching Data');
-    }
-
-    if (!response.data) {
-      throw new Error('No Data found');
-    }
-    // Check if data is string and parse it
-    const classificationData = response.data;
-    if (classificationData)
-      await importInitialClassification(classificationData);
-  }
+    // Load Release States
+  await loadReleaseState();
 };

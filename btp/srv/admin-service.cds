@@ -123,7 +123,6 @@ service AdminService @(requires: 'admin') {
         contactPerson     : String;
         prefix            : String(6);
         configUrl         : String;
-        classificationUrl : String;
     }
 
             @odata.draft.enabled
@@ -134,8 +133,7 @@ service AdminService @(requires: 'admin') {
             @mandatory contactPerson: inInitialData:contactPerson,
                                      @mandatory prefix: inInitialData:prefix,
                                      @mandatory customerTitle: inInitialData:customerTitle,
-                                     configUrl: inInitialData:configUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultSetup.json',
-                                     classificationUrl: inInitialData:classificationUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultClassification.csv'
+                                     configUrl: inInitialData:configUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultSetup.json'
 
             );
         };

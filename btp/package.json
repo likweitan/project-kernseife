@@ -16,7 +16,7 @@
     "prebuild": "npm run lint && npm run cleanup:build",
     "build": "cds build --production",
     "postbuild": "npm run cleanup:ts",
-    "build:bundle": "npm ci --omit=dev --prefix=gen/srv && npm i --omit=dev --prefix=gen/db",
+    "build:bundle": "npm i --omit=dev --prefix=gen/srv && npm ci --omit=dev --prefix=gen/db",
     "cleanup:build": "npx rimraf resources mta_archives app/**/dist",
     "cleanup:ts": "npx rimraf gen/**/*.ts",
     "generate-cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory @cds-models",
