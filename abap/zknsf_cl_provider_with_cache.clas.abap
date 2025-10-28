@@ -1,17 +1,17 @@
-class ZKNSF_CL_PROVIDER_WITH_CACHE definition
-  public
-  final
-  create public .
+CLASS zknsf_cl_provider_with_cache DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces IF_YCM_CC_PROVIDER_CLASSIC_API .
+    INTERFACES if_ycm_cc_provider_classic_api .
 
-  methods CONSTRUCTOR
-    raising
-      CX_YCM_CC_PROVIDER_ERROR .
+    METHODS constructor
+      RAISING
+        cx_ycm_cc_provider_error .
   PROTECTED SECTION.
-private section.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
@@ -30,10 +30,12 @@ CLASS ZKNSF_CL_PROVIDER_WITH_CACHE IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    SELECT * FROM zknsf_apis_c_scsr FOR ALL ENTRIES IN @apis WHERE  tadir_object   = @apis-trobjtype
-                                                              AND   tadir_obj_name = @apis-sobj_name
+    DATA api_with_successor_info TYPE STANDARD TABLE OF zknsf_apis_c_scsr.
+
+    SELECT * FROM zknsf_apis_c_scsr FOR ALL ENTRIES IN @apis WHERE (
+       ( tadir_object   = @apis-trobjtype AND tadir_obj_name = @apis-sobj_name ) OR ( tadir_object = 'FUGR' AND object_type = 'FUNC' ) )
                                                               AND   object_type    = @apis-object_type
-                                                              AND   object_key     = @apis-sub_key INTO TABLE @DATA(api_with_successor_info).
+                                                              AND   object_key     = @apis-sub_key INTO TABLE @api_with_successor_info.
 
     LOOP AT api_with_successor_info ASSIGNING FIELD-SYMBOL(<classic_api_bundle>) GROUP BY ( tadir_object   = <classic_api_bundle>-tadir_object
                                                                                             tadir_obj_name = <classic_api_bundle>-tadir_obj_name

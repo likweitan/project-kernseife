@@ -11,6 +11,7 @@ define view entity ZKNSF_I_ATC_FINDINGS
   as select from    satc_ac_resulth      as h
     inner join      satc_ac_fnd_v        as fnd_v                on h.check_run_ix = fnd_v.check_run_ix
     inner join      satc_ac_itm          as itm                  on itm.item_id = fnd_v.item_id   // item
+    and ( itm.status = '1' or itm.status = '2' )
     inner join      satc_ac_fnd          as fnd                  on fnd.item_id = fnd_v.item_id   // finding
     inner join      satc_ac_obj          as obj                  on obj.object_ix = fnd.object_ix // object
     inner join      satc_ac_osy          as osy // package and contact person

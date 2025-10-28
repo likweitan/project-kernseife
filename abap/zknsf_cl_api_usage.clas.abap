@@ -316,7 +316,7 @@ CLASS ZKNSF_CL_API_USAGE IMPLEMENTATION.
     ENDIF.
 
     " This is only supported in none-remote setups!
-    IF language_version = if_abap_language_version=>gc_version-standard_source_code
+    IF code = if_abap_language_version=>gc_version-standard_source_code
     AND zknsf_cl_key_user_util=>get_instance( )->is_key_user_generated( object_type = object_type object_name = object_name ) = abap_true.
       code = if_abap_language_version=>gc_version-key_user.
     ENDIF.
