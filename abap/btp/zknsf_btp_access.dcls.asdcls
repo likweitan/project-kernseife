@@ -1,0 +1,8 @@
+@EndUserText.label: 'Kernseife: BTP Access'
+@MappingRole: true
+define role ZKNSF_BTP_ACCESS {
+  grant select on ZKNSF_I_PROJECTS;
+  grant select on ZKNSF_I_DEVELOPMENT_OBJECTS;
+  grant select on ZKNSF_I_FINDINGS;
+  grant select on ZKNSF_I_METRICS;
+}

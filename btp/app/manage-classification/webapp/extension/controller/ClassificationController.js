@@ -164,6 +164,11 @@ sap.ui.define(
       downloadClassificationGithub: function () {
         const serviceUrl = this.getModel().getServiceUrl();
         window.open(serviceUrl + 'Downloads/classificationGithub', '_blank');
+      },
+      syncClassifications: function (oEvent) {
+        this.getEditFlow().invokeAction('AdminService.syncClassificationsToAllSystems', {
+          model: this.getModel()
+        });
       }
     };
   }

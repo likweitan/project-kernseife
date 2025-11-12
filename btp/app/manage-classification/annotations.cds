@@ -207,7 +207,7 @@ annotate service.Classifications with @(UI.LineItem: [
         Action: 'AdminService.assignSuccessor',
         Label : '{i18n>assignSuccessor}',
 
-    },
+    }
 ]);
 
 annotate service.Classifications with @(UI.Facets: [

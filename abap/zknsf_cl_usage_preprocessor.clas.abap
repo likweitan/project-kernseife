@@ -66,6 +66,11 @@ CLASS ZKNSF_CL_USAGE_PREPROCESSOR IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
+    " Filter out DevClasses, as we only use them for Scoring
+    IF object_type = 'DEVC'.
+      RETURN.
+    ENDIF.
+
     RETURN super->if_ycm_cc_usage_preprocessor~get_object_infos(
         usages                  = usages
         is_filtering_dlvunit    = is_filtering_dlvunit

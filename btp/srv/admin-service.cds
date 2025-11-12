@@ -68,9 +68,6 @@ service AdminService @(requires: 'admin') {
     entity Ratings                       as projection on db.Ratings;
 
     @Common.IsActionCritical: true
-    action syncRatingsToAllSystems();
-
-    @Common.IsActionCritical: true
     action syncClassificationsToAllSystems();
 
     entity LegacyRatings                 as projection on db.LegacyRatings;
@@ -98,7 +95,6 @@ service AdminService @(requires: 'admin') {
     @odata.draft.enabled
     entity Systems                       as projection on db.Systems
         actions {
-            action syncRatings();
             action syncClassifications();
         };
 

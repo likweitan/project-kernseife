@@ -68,24 +68,14 @@
 				<Property Name="refSoftwareComponent" Type="Edm.String" Nullable="false" MaxLength="80"/>
 				<Property Name="refDevClass" Type="Edm.String" Nullable="false" MaxLength="80"/>
 			</EntityType>
-			<EntityType Name="ZKNSF_I_API_HEADERType">
-				<Key>
-					<PropertyRef Name="file_id"/>
-				</Key>
-				<Property Name="file_id" Type="Edm.Guid" Nullable="false"/>
-				<Property Name="url" Type="Edm.String" Nullable="false" MaxLength="150"/>
-				<Property Name="created" Type="Edm.DateTimeOffset"/>
-				<Property Name="data_type" Type="Edm.String" Nullable="false" MaxLength="1"/>
-				<Property Name="source" Type="Edm.String" Nullable="false" MaxLength="5"/>
-				<Property Name="uploader" Type="Edm.String" Nullable="false" MaxLength="12"/>
-				<Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.SAP__Message)" Nullable="false"/>
-			</EntityType>
 			<EntityType Name="ZKNSF_I_DEVELOPMENT_OBJECTSType">
 				<Key>
+					<PropertyRef Name="projectId"/>
 					<PropertyRef Name="runId"/>
 					<PropertyRef Name="objectType"/>
 					<PropertyRef Name="objectName"/>
 				</Key>
+				<Property Name="projectId" Type="Edm.Guid" Nullable="false"/>
 				<Property Name="runId" Type="Edm.Guid" Nullable="false"/>
 				<Property Name="objectType" Type="Edm.String" Nullable="false" MaxLength="4"/>
 				<Property Name="objectName" Type="Edm.String" Nullable="false" MaxLength="40"/>
@@ -95,26 +85,41 @@
 				<Property Name="languageVersion" Type="Edm.String" Nullable="false" MaxLength="25"/>
 				<Property Name="contactPerson" Type="Edm.String" Nullable="false" MaxLength="12"/>
 				<NavigationProperty Name="_findings" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_FINDINGSType)"/>
+				<NavigationProperty Name="_metrics" Type="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_METRICSType"/>
 			</EntityType>
-			<EntityType Name="ZKNSF_I_RATINGSType">
+			<EntityType Name="ZKNSF_I_METRICSType">
 				<Key>
-					<PropertyRef Name="code"/>
+					<PropertyRef Name="projectId"/>
+					<PropertyRef Name="objectType"/>
+					<PropertyRef Name="objectName"/>
 				</Key>
-				<Property Name="code" Type="Edm.String" Nullable="false" MaxLength="10"/>
-				<Property Name="title" Type="Edm.String" Nullable="false" MaxLength="255"/>
-				<Property Name="criticality" Type="Edm.String" Nullable="false" MaxLength="1"/>
-				<Property Name="score" Type="Edm.Int32" Nullable="false"/>
-				<Property Name="__EntityControl" Type="com.sap.gateway.srvd.zknsf_btp_connector.v0001.EntityControl"/>
+				<Property Name="projectId" Type="Edm.Guid" Nullable="false"/>
+				<Property Name="objectType" Type="Edm.String" Nullable="false" MaxLength="4"/>
+				<Property Name="objectName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+				<Property Name="difficulty" Type="Edm.Int64" Nullable="false"/>
+				<Property Name="numberOfChanges" Type="Edm.Int64" Nullable="false"/>
+			</EntityType>
+			<EntityType Name="ZKNSF_I_PROJECTSType">
+				<Key>
+					<PropertyRef Name="projectId"/>
+				</Key>
+				<Property Name="projectId" Type="Edm.Guid" Nullable="false"/>
+				<Property Name="description" Type="Edm.String" Nullable="false" MaxLength="255"/>
+				<Property Name="displayId" Type="Edm.Guid"/>
+				<Property Name="status" Type="Edm.String" Nullable="false" MaxLength="10"/>
+				<Property Name="statusDescription" Type="Edm.String" Nullable="false" MaxLength="60"/>
+				<Property Name="statusCriticality" Type="Edm.Byte" Nullable="false"/>
+				<Property Name="runId" Type="Edm.String" Nullable="false" MaxLength="16"/>
+				<Property Name="runIdReferences" Type="Edm.String" Nullable="false" MaxLength="16"/>
+				<Property Name="totalObjectCount" Type="Edm.Int32" Nullable="false"/>
+				<Property Name="findingCount" Type="Edm.Int32" Nullable="false"/>
 				<Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.SAP__Message)" Nullable="false"/>
+				<NavigationProperty Name="_developmentObjects" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_DEVELOPMENT_OBJECTSType)"/>
 			</EntityType>
 			<ComplexType Name="ZKNSF_I_FILE_STREAM">
 				<Property Name="streamProperty" Type="Edm.Stream" Nullable="false"/>
 				<Property Name="mimeType" Type="Edm.String" Nullable="false" MaxLength="128"/>
 				<Property Name="fileName" Type="Edm.String" Nullable="false" MaxLength="128"/>
-			</ComplexType>
-			<ComplexType Name="EntityControl">
-				<Property Name="Deletable" Type="Edm.Boolean" Nullable="false"/>
-				<Property Name="Updatable" Type="Edm.Boolean" Nullable="false"/>
 			</ComplexType>
 			<ComplexType Name="SAP__Message">
 				<Property Name="code" Type="Edm.String" Nullable="false"/>
@@ -126,17 +131,23 @@
 				<Property Name="longtextUrl" Type="Edm.String"/>
 			</ComplexType>
 			<Action Name="UploadFile" IsBound="true">
-				<Parameter Name="_it" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_API_HEADERType)" Nullable="false"/>
+				<Parameter Name="_it" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_PROJECTSType)" Nullable="false"/>
 				<Parameter Name="dummy" Type="Edm.Boolean" Nullable="false"/>
 				<Parameter Name="_StreamProperties" Type="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_FILE_STREAM" Nullable="false"/>
 			</Action>
+			<Action Name="Setup" IsBound="true">
+				<Parameter Name="_it" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_PROJECTSType)" Nullable="false"/>
+			</Action>
 			<EntityContainer Name="Container">
-				<EntitySet Name="ZKNSF_I_API_HEADER" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_API_HEADERType"/>
 				<EntitySet Name="ZKNSF_I_DEVELOPMENT_OBJECTS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_DEVELOPMENT_OBJECTSType">
 					<NavigationPropertyBinding Path="_findings" Target="ZKNSF_I_FINDINGS"/>
+					<NavigationPropertyBinding Path="_metrics" Target="ZKNSF_I_METRICS"/>
 				</EntitySet>
 				<EntitySet Name="ZKNSF_I_FINDINGS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_FINDINGSType"/>
-				<EntitySet Name="ZKNSF_I_RATINGS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_RATINGSType"/>
+				<EntitySet Name="ZKNSF_I_METRICS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_METRICSType"/>
+				<EntitySet Name="ZKNSF_I_PROJECTS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_PROJECTSType">
+					<NavigationPropertyBinding Path="_developmentObjects" Target="ZKNSF_I_DEVELOPMENT_OBJECTS"/>
+				</EntitySet>
 			</EntityContainer>
 			<Annotations Target="SAP__self.ZKNSF_I_FILE_STREAM/streamProperty">
 				<Annotation Term="SAP__common.Label" String="Select file"/>
@@ -206,45 +217,6 @@
 					<Collection/>
 				</Annotation>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_API_HEADERType/uploader">
-				<Annotation Term="SAP__common.IsUpperCase"/>
-				<Annotation Term="SAP__common.Label" String="User Name"/>
-				<Annotation Term="SAP__common.Heading" String="User"/>
-			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_API_HEADERType">
-				<Annotation Term="SAP__common.Label" String="Kernseife: API Header File"/>
-				<Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
-			</Annotations>
-			<Annotations Target="SAP__self.Container/ZKNSF_I_API_HEADER">
-				<Annotation Term="SAP__capabilities.SearchRestrictions">
-					<Record>
-						<PropertyValue Property="Searchable" Bool="false"/>
-					</Record>
-				</Annotation>
-				<Annotation Term="SAP__capabilities.InsertRestrictions">
-					<Record>
-						<PropertyValue Property="Insertable" Bool="false"/>
-					</Record>
-				</Annotation>
-				<Annotation Term="SAP__capabilities.DeleteRestrictions">
-					<Record>
-						<PropertyValue Property="Deletable" Bool="false"/>
-					</Record>
-				</Annotation>
-				<Annotation Term="SAP__capabilities.UpdateRestrictions">
-					<Record>
-						<PropertyValue Property="Updatable" Bool="false"/>
-						<PropertyValue Property="QueryOptions">
-							<Record>
-								<PropertyValue Property="SelectSupported" Bool="true"/>
-							</Record>
-						</PropertyValue>
-					</Record>
-				</Annotation>
-				<Annotation Term="SAP__core.OptimisticConcurrency">
-					<Collection/>
-				</Annotation>
-			</Annotations>
 			<Annotations Target="SAP__self.ZKNSF_I_DEVELOPMENT_OBJECTSType/objectType">
 				<Annotation Term="SAP__common.IsUpperCase"/>
 				<Annotation Term="SAP__common.Label" String="Object Type"/>
@@ -273,6 +245,14 @@
 							<Collection>
 								<Record>
 									<PropertyValue Property="NavigationProperty" NavigationPropertyPath="_findings"/>
+									<PropertyValue Property="InsertRestrictions">
+										<Record>
+											<PropertyValue Property="Insertable" Bool="false"/>
+										</Record>
+									</PropertyValue>
+								</Record>
+								<Record>
+									<PropertyValue Property="NavigationProperty" NavigationPropertyPath="_metrics"/>
 									<PropertyValue Property="InsertRestrictions">
 										<Record>
 											<PropertyValue Property="Insertable" Bool="false"/>
@@ -342,58 +322,39 @@
 			<Annotations Target="SAP__self.ZKNSF_I_DEVELOPMENT_OBJECTSType">
 				<Annotation Term="SAP__common.Label" String="Kernseife: Development Objects"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_RATINGSType/code">
+			<Annotations Target="SAP__self.ZKNSF_I_METRICSType/objectType">
 				<Annotation Term="SAP__common.IsUpperCase"/>
-				<Annotation Term="SAP__common.Label" String="ratingCode"/>
-				<Annotation Term="SAP__common.QuickInfo" String="Kernseife: Rating Code"/>
+				<Annotation Term="SAP__common.Label" String="Object Type"/>
+				<Annotation Term="SAP__common.Heading" String="Obj."/>
+				<Annotation Term="SAP__common.QuickInfo" String="Object Type in Object Directory"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_RATINGSType/criticality">
+			<Annotations Target="SAP__self.ZKNSF_I_METRICSType/objectName">
 				<Annotation Term="SAP__common.IsUpperCase"/>
-				<Annotation Term="SAP__common.Label" String="Type (Default)"/>
-				<Annotation Term="SAP__common.Heading" String="Rating Type (Default)"/>
-				<Annotation Term="SAP__common.QuickInfo" String="Kernseife: Rating Code"/>
+				<Annotation Term="SAP__common.Label" String="Object Name"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Object Name in Object Directory"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_RATINGSType/__EntityControl">
-				<Annotation Term="SAP__core.Computed"/>
-				<Annotation Term="SAP__UI.HiddenFilter"/>
-				<Annotation Term="SAP__UI.Hidden"/>
+			<Annotations Target="SAP__self.ZKNSF_I_METRICSType">
+				<Annotation Term="SAP__common.Label" String="Kernseife: Development Objects"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_RATINGSType">
-				<Annotation Term="SAP__common.Label" String="Kernseife: Ratings"/>
-				<Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
-			</Annotations>
-			<Annotations Target="SAP__self.Container/ZKNSF_I_RATINGS">
+			<Annotations Target="SAP__self.Container/ZKNSF_I_METRICS">
 				<Annotation Term="SAP__capabilities.SearchRestrictions">
 					<Record>
 						<PropertyValue Property="Searchable" Bool="false"/>
 					</Record>
 				</Annotation>
-				<Annotation Term="SAP__capabilities.FilterRestrictions">
+				<Annotation Term="SAP__capabilities.InsertRestrictions">
 					<Record>
-						<PropertyValue Property="NonFilterableProperties">
-							<Collection>
-								<PropertyPath>__EntityControl</PropertyPath>
-							</Collection>
-						</PropertyValue>
-					</Record>
-				</Annotation>
-				<Annotation Term="SAP__capabilities.SortRestrictions">
-					<Record>
-						<PropertyValue Property="NonSortableProperties">
-							<Collection>
-								<PropertyPath>__EntityControl</PropertyPath>
-							</Collection>
-						</PropertyValue>
+						<PropertyValue Property="Insertable" Bool="false"/>
 					</Record>
 				</Annotation>
 				<Annotation Term="SAP__capabilities.DeleteRestrictions">
 					<Record>
-						<PropertyValue Property="Deletable" Path="__EntityControl/Deletable"/>
+						<PropertyValue Property="Deletable" Bool="false"/>
 					</Record>
 				</Annotation>
 				<Annotation Term="SAP__capabilities.UpdateRestrictions">
 					<Record>
-						<PropertyValue Property="Updatable" Path="__EntityControl/Updatable"/>
+						<PropertyValue Property="Updatable" Bool="false"/>
 						<PropertyValue Property="QueryOptions">
 							<Record>
 								<PropertyValue Property="SelectSupported" Bool="true"/>
@@ -404,6 +365,82 @@
 				<Annotation Term="SAP__core.OptimisticConcurrency">
 					<Collection/>
 				</Annotation>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/status">
+				<Annotation Term="SAP__common.IsUpperCase"/>
+				<Annotation Term="SAP__common.Label" String="Project State"/>
+			</Annotations>
+			<Annotations Target="SAP__self.Container/ZKNSF_I_PROJECTS">
+				<Annotation Term="SAP__capabilities.NavigationRestrictions">
+					<Record>
+						<PropertyValue Property="RestrictedProperties">
+							<Collection>
+								<Record>
+									<PropertyValue Property="NavigationProperty" NavigationPropertyPath="_developmentObjects"/>
+									<PropertyValue Property="InsertRestrictions">
+										<Record>
+											<PropertyValue Property="Insertable" Bool="false"/>
+										</Record>
+									</PropertyValue>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.SearchRestrictions">
+					<Record>
+						<PropertyValue Property="Searchable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.FilterRestrictions">
+					<Record>
+						<PropertyValue Property="Filterable" Bool="true"/>
+						<PropertyValue Property="FilterExpressionRestrictions">
+							<Collection>
+								<Record>
+									<PropertyValue Property="Property" PropertyPath="description"/>
+									<PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+								</Record>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.SortRestrictions">
+					<Record>
+						<PropertyValue Property="NonSortableProperties">
+							<Collection>
+								<PropertyPath>description</PropertyPath>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.InsertRestrictions">
+					<Record>
+						<PropertyValue Property="Insertable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.DeleteRestrictions">
+					<Record>
+						<PropertyValue Property="Deletable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.UpdateRestrictions">
+					<Record>
+						<PropertyValue Property="Updatable" Bool="false"/>
+						<PropertyValue Property="QueryOptions">
+							<Record>
+								<PropertyValue Property="SelectSupported" Bool="true"/>
+							</Record>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__core.OptimisticConcurrency">
+					<Collection/>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType">
+				<Annotation Term="SAP__common.Label" String="Kernseife: Project"/>
+				<Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
 			</Annotations>
 			<Annotations Target="SAP__self.Container">
 				<Annotation Term="SAP__aggregation.ApplySupported">
@@ -463,7 +500,7 @@
 				<Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
 				<Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
 			</Annotations>
-			<Annotations Target="SAP__self.UploadFile(Collection(SAP__self.ZKNSF_I_API_HEADERType))/dummy">
+			<Annotations Target="SAP__self.UploadFile(Collection(SAP__self.ZKNSF_I_PROJECTSType))/dummy">
 				<Annotation Term="SAP__UI.Hidden"/>
 				<Annotation Term="SAP__common.Label" String="Truth Value"/>
 				<Annotation Term="SAP__common.QuickInfo" String="Truth Value: True/False"/>
@@ -500,13 +537,9 @@
 				<Annotation Term="SAP__common.Label" String="refObjectName"/>
 				<Annotation Term="SAP__common.QuickInfo" String="Kernseife: Object Name"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_API_HEADERType/file_id">
-				<Annotation Term="SAP__common.Label" String="UUID"/>
-				<Annotation Term="SAP__common.QuickInfo" String="16 Byte UUID in 16 Bytes (Raw Format)"/>
-			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_API_HEADERType/created">
-				<Annotation Term="SAP__common.Label" String="Time Stamp"/>
-				<Annotation Term="SAP__common.QuickInfo" String="UTC Time Stamp in Short Form (YYYYMMDDhhmmss)"/>
+			<Annotations Target="SAP__self.ZKNSF_I_DEVELOPMENT_OBJECTSType/projectId">
+				<Annotation Term="SAP__common.Label" String="Project ID"/>
+				<Annotation Term="SAP__common.Heading" String="Conversion Project Identification"/>
 			</Annotations>
 			<Annotations Target="SAP__self.ZKNSF_I_DEVELOPMENT_OBJECTSType/runId">
 				<Annotation Term="SAP__common.Label" String="Display ID"/>
@@ -524,33 +557,28 @@
 				<Annotation Term="SAP__common.Label" String="Message Code"/>
 				<Annotation Term="SAP__common.QuickInfo" String="Check message code"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_RATINGSType/title">
-				<Annotation Term="SAP__common.Label" String="Rating Title"/>
-				<Annotation Term="SAP__common.QuickInfo" String="Kernseife: Rating Code"/>
+			<Annotations Target="SAP__self.ZKNSF_I_METRICSType/projectId">
+				<Annotation Term="SAP__common.Label" String="Project ID"/>
+				<Annotation Term="SAP__common.Heading" String="Conversion Project Identification"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_RATINGSType/score">
-				<Annotation Term="SAP__common.Label" String="score"/>
-				<Annotation Term="SAP__common.QuickInfo" String="Kernseife: Score"/>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/projectId">
+				<Annotation Term="SAP__common.Label" String="Project ID"/>
+				<Annotation Term="SAP__common.Heading" String="Conversion Project Identification"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_RATINGSType/__EntityControl/Deletable">
-				<Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
-				<Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
-				<Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/description">
+				<Annotation Term="SAP__common.Label" String="Project Description"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_RATINGSType/__EntityControl/Updatable">
-				<Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
-				<Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
-				<Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/displayId">
+				<Annotation Term="SAP__common.Label" String="Display ID"/>
+				<Annotation Term="SAP__common.QuickInfo" String="ID for 'Display Load' - overall result of 'ABAP Check Layer'"/>
 			</Annotations>
-			<Annotations Target="SAP__self.EntityControl/Deletable">
-				<Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
-				<Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
-				<Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/runId">
+				<Annotation Term="SAP__common.Label" String="Series Name"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Name of configuration for run series"/>
 			</Annotations>
-			<Annotations Target="SAP__self.EntityControl/Updatable">
-				<Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
-				<Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
-				<Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/runIdReferences">
+				<Annotation Term="SAP__common.Label" String="Series Name"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Name of configuration for run series"/>
 			</Annotations>
 		</Schema>
 	</edmx:DataServices>

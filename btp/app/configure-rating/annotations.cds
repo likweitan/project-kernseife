@@ -116,12 +116,7 @@ annotate service.Ratings with @(UI.LineItem: [
         Value            : level,
         Label            : '{i18n>cleanCoreLevel}',
         ![@UI.Importance]: #High,
-    },
-    {
-        $Type : 'UI.DataFieldForAction',
-        Action : 'AdminService.EntityContainer/syncRatingsToAllSystems',
-        Label : '{i18n>syncRatingsToAllSystems}',
-    },
+    }
 ]);
 
 annotate service.Ratings with @(UI.HeaderInfo: {

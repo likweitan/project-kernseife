@@ -1,0 +1,5 @@
+CLASS zknsf_cl_bp_projects DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zknsf_i_projects.
+ENDCLASS.
+
+CLASS zknsf_cl_bp_projects IMPLEMENTATION.
+ENDCLASS.

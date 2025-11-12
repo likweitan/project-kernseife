@@ -167,7 +167,7 @@
                       "column": true,
                       "filter": true
                     },
-                    "enableMassEdit": true
+                    "enableMassEdit": {}
                   },
                   "actions": {
                     "DataFieldForAction::AdminService.assignFramework": {
@@ -209,6 +209,13 @@
                       "visible": false,
                       "enabled": true,
                       "text": "{i18n>downloadClassificationGithub}"
+                    },
+                    "syncClassifications": {
+                      "press": "manageclassification.extension.controller.ClassificationController.syncClassifications",
+                      "visible": true,
+                      "enabled": true,
+                      "importance": "High",
+                      "text": "{i18n>syncClassifications}"
                     }
                   }
                 }

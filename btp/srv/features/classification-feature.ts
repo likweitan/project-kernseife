@@ -36,7 +36,6 @@ import JSZip from 'jszip';
 import { JobResult } from '../types/file';
 import { PassThrough } from 'node:stream';
 import { streamToBuffer } from '../lib/files';
-import kernseife_btp from '#cds-models/kernseife_btp';
 
 const LOG = log('ClassificationFeature');
 
@@ -1766,13 +1765,13 @@ const syncClassificationsToExternalSystem = async (
   );
   const response = await service.send(
     'POST',
-    '/ZKNSF_I_API_HEADER/com.sap.gateway.srvd.zknsf_btp_connector.v0001.UploadFile',
+    '/ZKNSF_I_PROJECTS/com.sap.gateway.srvd.zknsf_btp_connector.v0001.UploadFile',
     {
       dummy: true,
       _StreamProperties: {
         streamProperty: zipFile.toString('base64'),
         mimeType: 'application/zip',
-        fileName: 'test1.zip'
+        fileName: `classification_${dayjs().format('YYYY_MM_DD')}.zip`
       }
     }
   );

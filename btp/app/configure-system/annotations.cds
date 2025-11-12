@@ -63,11 +63,6 @@ annotate AdminService.Systems with @(UI: {
     UI.Identification : [
         {
             $Type : 'UI.DataFieldForAction',
-            Action : 'AdminService.syncRatings',
-            Label : '{i18n>syncRatings}',
-        },
-        {
-            $Type : 'UI.DataFieldForAction',
             Action : 'AdminService.syncClassifications',
             Label : '{i18n>syncClassifications}',
         },

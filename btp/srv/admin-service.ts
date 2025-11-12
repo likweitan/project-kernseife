@@ -37,10 +37,6 @@ import { createInitialData } from './features/setup-feature';
 import { uploadFile } from './features/upload-feature';
 import JSZip from 'jszip';
 import { updateDestinations } from './lib/connectivity';
-import {
-  syncRatingsToExternalSystemByRef,
-  syncRatingsToExternalSystems
-} from './features/ratings-feature';
 
 export default (srv: Service) => {
   const LOG = log('AdminService');
@@ -388,17 +384,6 @@ export default (srv: Service) => {
       );
     }
   );
-
-  srv.on('syncRatingsToAllSystems', async (req: any) => {
-    LOG.info('syncRatingsToAllSystems');
-    await syncRatingsToExternalSystems();
-    req.notify('SYNC_SUCCESSFUL');
-  });
-
-  srv.on('syncRatings', ['Systems', 'Systems.drafts'], async (req: any) => {
-    await syncRatingsToExternalSystemByRef(req.subject);
-    req.notify('SYNC_SUCCESSFUL');
-  });
 
   srv.on('syncClassificationsToAllSystems', async (req: any) => {
     LOG.info('syncRatingsToAllSystems');
