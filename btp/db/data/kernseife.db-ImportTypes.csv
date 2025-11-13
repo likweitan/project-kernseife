@@ -1,6 +1,6 @@
-code,title,reqSystemId,defaultRating,comment,fileEndings
-MISSING_CLASSIFICATION,"Missing Classification Import",false,true,true,csv
-FINDINGS,"Findings Import",true,false,false,csv
-ENHANCEMENT,"BADI Import",false,false,false,csv
-EXPLICIT,"Explicit Enhancement Spot Import",false,false,false,csv
-GITHUB_CLASSIFICATION,"Github Classification Import",false,false,true,zip
+code,title,reqSystemId,defaultRating,comment,fileEndings,hidden,order
+MISSING_CLASSIFICATION,"Missing Classifications Import",false,true,true,csv,false,1
+FINDINGS,"Findings Import",true,false,false,csv,false,2
+ENHANCEMENT,"BADI Import",false,false,false,csv,true,3
+EXPLICIT,"Explicit Enhancement Spot Import",false,false,false,csv,true,4
+GITHUB_CLASSIFICATION,"Classification Import",false,false,true,zip,false,5

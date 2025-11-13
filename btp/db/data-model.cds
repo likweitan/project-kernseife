@@ -1045,11 +1045,13 @@ entity Enhancements : cuid, managed {
 
 entity ImportTypes {
     key code          : String;
+        order         : Integer;
         title         : String;
         reqSystemId   : Boolean;
         defaultRating : Boolean;
         comment       : Boolean;
         fileEndings   : String;
+        hidden        : Boolean;
 }
 
 entity Destinations {

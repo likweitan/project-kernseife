@@ -24,7 +24,7 @@
                 forceSelection="false"
                 items="{
 						path: '/ImportTypes',
-						sorter: { path: 'title' }
+						sorter: { path: 'order' }
 					}"
             >
                 <core:Item

@@ -211,7 +211,10 @@ service AdminService @(requires: 'admin') {
 
     entity ObjectTypes                   as projection on db.ObjectTypes;
     entity Criticality                   as projection on db.Criticality;
-    entity ImportTypes                   as projection on db.ImportTypes;
+
+    entity ImportTypes                   as projection on db.ImportTypes
+                                            where
+                                                hidden == false;
 
 
     @cds.redirection.target: false
