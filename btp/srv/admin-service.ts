@@ -399,4 +399,43 @@ export default (srv: Service) => {
       req.notify('SYNC_SUCCESSFUL');
     }
   );
+
+  srv.on('READ', ['Projects', 'Projects.drafts'], async (req) => {
+    // Read Destination via System
+    const system = (await SELECT.one
+      .from({ ref: [req.subject.ref[0]] })
+      .columns('destination')) as any;
+
+    if (!system || !system.destination) {
+      // No Destination => no Project
+      return [];
+    }
+
+    const btp = await connect.to('kernseife_btp', {
+      credentials: {
+        destination: system.destination,
+        path: '/sap/opu/odata4/sap/zknsf_btp_connector/srvd/sap/zknsf_btp_connector/0001'
+      }
+    });
+    const projectList = await btp.run(SELECT('ZKNSF_I_PROJECTS'));
+    return projectList;
+  });
+
+  // Read Project via System
+  srv.after('READ', ['Systems', 'Systems.drafts'], async (Systems, req) => {
+    for (const system of Systems as any[]) {
+      if (system.destination) {
+        const btp = await connect.to('kernseife_btp', {
+          credentials: {
+            destination: system.destination,
+            path: '/sap/opu/odata4/sap/zknsf_btp_connector/srvd/sap/zknsf_btp_connector/0001'
+          }
+        });
+        const projectList = await btp.run(SELECT('ZKNSF_I_PROJECTS'));
+        if (projectList && projectList.length == 1) {
+          system.project = projectList[0];
+        }
+      }
+    }
+  });
 };

@@ -106,6 +106,7 @@
 				<Property Name="projectId" Type="Edm.Guid" Nullable="false"/>
 				<Property Name="description" Type="Edm.String" Nullable="false" MaxLength="255"/>
 				<Property Name="displayId" Type="Edm.Guid"/>
+				<Property Name="systemId" Type="Edm.String" Nullable="false" MaxLength="10"/>
 				<Property Name="status" Type="Edm.String" Nullable="false" MaxLength="10"/>
 				<Property Name="statusDescription" Type="Edm.String" Nullable="false" MaxLength="60"/>
 				<Property Name="statusCriticality" Type="Edm.Byte" Nullable="false"/>
@@ -365,6 +366,12 @@
 				<Annotation Term="SAP__core.OptimisticConcurrency">
 					<Collection/>
 				</Annotation>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/systemId">
+				<Annotation Term="SAP__common.IsUpperCase"/>
+				<Annotation Term="SAP__common.Label" String="Original System"/>
+				<Annotation Term="SAP__common.Heading" String="Original"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Original System of Object"/>
 			</Annotations>
 			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/status">
 				<Annotation Term="SAP__common.IsUpperCase"/>

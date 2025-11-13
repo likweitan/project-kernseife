@@ -1,4 +1,4 @@
-/* checksum : 5f5a8836d0565fb2c6518434243204e7 */
+/* checksum : 51d86dc20b6d09d658f155836df43bdb */
 @cds.external : true
 @Aggregation.ApplySupported.Transformations : [ 'aggregate', 'groupby', 'filter' ]
 @Aggregation.ApplySupported.Rollup : #None
@@ -222,6 +222,11 @@ service kernseife_btp {
     @Common.Label : 'Display ID'
     @Common.QuickInfo : 'ID for ''Display Load'' - overall result of ''ABAP Check Layer'''
     displayId : UUID;
+    @Common.IsUpperCase : true
+    @Common.Label : 'Original System'
+    @Common.Heading : 'Original'
+    @Common.QuickInfo : 'Original System of Object'
+    systemId : String(10) not null;
     @Common.IsUpperCase : true
     @Common.Label : 'Project State'
     status : String(10) not null;

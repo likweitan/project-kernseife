@@ -1,4 +1,5 @@
 using kernseife.db as db from '../db/data-model';
+using {kernseife_btp as btp} from './external/kernseife_btp';
 
 service AdminService @(requires: 'admin') {
 
@@ -92,11 +93,22 @@ service AdminService @(requires: 'admin') {
 
     entity Customers                     as projection on db.Customers;
 
+    entity Projects                      as
+        projection on btp.ZKNSF_I_PROJECTS {
+            *
+        };
+
     @odata.draft.enabled
-    entity Systems                       as projection on db.Systems
+    entity Systems                       as
+        projection on db.Systems {
+            *,
+            project : Association to Projects
+                              on project.systemId = $self.sid //Not exactly correct, but we need an ON condition here
+        }
         actions {
             action syncClassifications();
         };
+
 
     type inDevClass          : {
         devClass : String;

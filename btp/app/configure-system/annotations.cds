@@ -1,72 +1,92 @@
 using AdminService as service from '../../srv/admin-service';
 
 
-annotate AdminService.Systems with @(UI: {
-    Facets             : [
-        {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>generalInformation}',
-            Target: '@UI.FieldGroup#General'
-        },
-        {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>btp}',
-            Target: '@UI.FieldGroup#BTP'
-        },
-        {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>admin}',
-            Target: '@UI.FieldGroup#Admin'
-        },
-    ],
-    FieldGroup #General: {Data: [
-        {
-            Value: title,
-            Label: '{i18n>title}',
-        },
-        {
-            Value: sid,
-            Label: '{i18n>sid}',
-        },
-        {
-            Value: title,
-            Label: '{i18n>title}'
-        },
-        {
-            Value: customer_ID,
-            Label: '{i18n>customer}'
-        }
-    ]},
-    FieldGroup #BTP    : {Data: [{
-        Value: destination,
-        Label: '{i18n>destination}',
-    }]},
-    FieldGroup #Admin  : {Data: [
-        {
-            Value: createdBy,
-            Label: '{i18n>createdBy}',
-        },
-        {
-            Value: createdAt,
-            Label: '{i18n>createdAt}',
-        },
-        {
-            Value: modifiedBy,
-            Label: '{i18n>modifiedBy}',
-        },
-        {
-            Value: modifiedAt,
-            Label: '{i18n>modifiedAt}',
-        }
-    ]}
-},
-    UI.Identification : [
-        {
-            $Type : 'UI.DataFieldForAction',
-            Action : 'AdminService.syncClassifications',
-            Label : '{i18n>syncClassifications}',
-        },
-    ],);
+annotate AdminService.Systems with @(
+    UI               : {
+        Facets             : [
+            {
+                $Type : 'UI.ReferenceFacet',
+                Label : '{i18n>generalInformation}',
+                Target: '@UI.FieldGroup#General'
+            },
+            {
+                $Type : 'UI.ReferenceFacet',
+                Label : '{i18n>btp}',
+                Target: '@UI.FieldGroup#BTP'
+            },
+            {
+                $Type : 'UI.ReferenceFacet',
+                Label : '{i18n>admin}',
+                Target: '@UI.FieldGroup#Admin'
+            }
+        ],
+        FieldGroup #General: {Data: [
+            {
+                Value: title,
+                Label: '{i18n>title}',
+            },
+            {
+                Value: sid,
+                Label: '{i18n>sid}',
+            },
+            {
+                Value: title,
+                Label: '{i18n>title}'
+            },
+            {
+                Value: customer_ID,
+                Label: '{i18n>customer}'
+            }
+        ]},
+        FieldGroup #BTP    : {Data: [
+            {
+                Value: destination,
+                Label: '{i18n>destination}',
+            },
+            {
+                Value: project.description,
+                Label: '{i18n>project}',
+            },
+            {
+                Value: project.statusDescription,
+                Label: '{i18n>statusDescription}',
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: project.totalObjectCount,
+                Label: '{i18n>totalObjectCount}',
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: project.findingCount,
+                Label: '{i18n>findingCount}',
+            },
+        ]},
+        FieldGroup #Admin  : {Data: [
+            {
+                Value: createdBy,
+                Label: '{i18n>createdBy}',
+            },
+            {
+                Value: createdAt,
+                Label: '{i18n>createdAt}',
+            },
+            {
+                Value: modifiedBy,
+                Label: '{i18n>modifiedBy}',
+            },
+            {
+                Value: modifiedAt,
+                Label: '{i18n>modifiedAt}',
+            }
+        ]}
+    },
+    UI.Identification: [{
+        $Type : 'UI.DataFieldForAction',
+        Action: 'AdminService.syncClassifications',
+        Label : '{i18n>syncClassifications}',
+    }, ],
+);
 
 annotate service.Systems with @(UI.LineItem: [
     {
