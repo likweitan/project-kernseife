@@ -7,19 +7,19 @@ sap.ui.define(
   function (MessageBox, MessageToast, FileUploaderParameter) {
     'use strict';
 
-    const _createUploadController = (oExtensionAPI) => {
-      let oUploadDialog;
+    const _createImportController = (oExtensionAPI) => {
+      let oImportDialog;
 
       const setOkButtonEnabled = function (bOk) {
-        oUploadDialog && oUploadDialog.getBeginButton().setEnabled(bOk);
+        oImportDialog && oImportDialog.getBeginButton().setEnabled(bOk);
       };
 
       const setDialogBusy = function (bBusy) {
-        oUploadDialog.setBusy(bBusy);
+        oImportDialog.setBusy(bBusy);
       };
 
       const closeDialog = function () {
-        oUploadDialog && oUploadDialog.close();
+        oImportDialog && oImportDialog.close();
       };
 
       const showError = function (sMessage) {
@@ -27,7 +27,7 @@ sap.ui.define(
       };
 
       const byId = function (sId) {
-        return sap.ui.core.Fragment.byId('uploadDialog', sId);
+        return sap.ui.core.Fragment.byId('importDialog', sId);
       };
 
       const setFieldVisibility = function (id, visibility) {
@@ -85,13 +85,20 @@ sap.ui.define(
           .getBindingContext()
           .getObject().fileEndings;
         setFileEndings(fileEndings);
+
+        const description = oEvent
+          .getParameter('selectedItem')
+          .getBindingContext()
+          .getObject().description;
+        const oDesription = byId('importDescription');
+        oDesription.setText(description);
       };
 
       return {
         onChange,
         onBeforeOpen: function (oEvent) {
-          oUploadDialog = oEvent.getSource();
-          oExtensionAPI.addDependent(oUploadDialog);
+          oImportDialog = oEvent.getSource();
+          oExtensionAPI.addDependent(oImportDialog);
 
           setFieldVisibility('systemId', false);
           setFieldVisibility('defaultRating', false);
@@ -102,9 +109,9 @@ sap.ui.define(
         },
 
         onAfterClose: function (oEvent) {
-          oExtensionAPI.removeDependent(oUploadDialog);
-          oUploadDialog.destroy();
-          oUploadDialog = undefined;
+          oExtensionAPI.removeDependent(oImportDialog);
+          oImportDialog.destroy();
+          oImportDialog = undefined;
         },
 
         onOk: function (oEvent) {
@@ -216,12 +223,109 @@ sap.ui.define(
       };
     };
 
+    const _createExportController = (oExtensionAPI) => {
+      let oExportDialog;
+
+      const setOkButtonEnabled = function (bOk) {
+        oExportDialog && oExportDialog.getBeginButton().setEnabled(bOk);
+      };
+
+      const setDialogBusy = function (bBusy) {
+        oExportDialog.setBusy(bBusy);
+      };
+
+      const closeDialog = function () {
+        oExportDialog && oExportDialog.close();
+      };
+
+      const showError = function (sMessage) {
+        MessageBox.error(sMessage || 'Export failed');
+      };
+
+      const byId = function (sId) {
+        return sap.ui.core.Fragment.byId('exportDialog', sId);
+      };
+
+      const setFieldVisibility = function (id, visibility) {
+        const label = byId('label' + id.charAt(0).toUpperCase() + id.slice(1));
+        if (label) label.setVisible(visibility);
+
+        const field = byId(id);
+        field.setVisible(visibility);
+      };
+
+      const onChange = function (oEvent) {
+        // Get Value
+        const showLegacy = oEvent
+          .getParameter('selectedItem')
+          .getBindingContext()
+          .getObject().legacy;
+        setFieldVisibility('legacy', showLegacy);
+
+        const description = oEvent
+          .getParameter('selectedItem')
+          .getBindingContext()
+          .getObject().description;
+        const oDesription = byId('exportDescription');
+        oDesription.setText(description);
+
+        setOkButtonEnabled(true);
+      };
+
+      return {
+        onChange,
+        onBeforeOpen: function (oEvent) {
+          oExportDialog = oEvent.getSource();
+          oExtensionAPI.addDependent(oExportDialog);
+
+          setFieldVisibility('legacy', false);
+        },
+
+        onAfterClose: function (oEvent) {
+          oExtensionAPI.removeDependent(oExportDialog);
+          oExportDialog.destroy();
+          oExportDialog = undefined;
+        },
+
+        onOk: async function (oEvent) {
+          setDialogBusy(true);
+          await oExtensionAPI.getEditFlow().invokeAction('export', {
+            model: oExtensionAPI.getModel(),
+            parameterValues: [
+              {
+                name: 'exportType',
+                value: byId('exportType').getSelectedKey()
+              },
+              { name: 'legacy', value: byId('legacy').getSelected() }
+            ],
+            skipParameterDialog: true
+          });
+          oExtensionAPI.refresh();
+          setDialogBusy(false);
+          closeDialog();
+        },
+
+        onCancel: function (oEvent) {
+          closeDialog();
+        }
+      };
+    };
+
     return {
-      showUploadDialog: function (oEvent) {
+      showImportDialog: function (oEvent) {
         this.loadFragment({
-          id: 'uploadDialog',
-          name: 'importcenter.ext.fragment.UploadDialog',
-          controller: _createUploadController(this)
+          id: 'importDialog',
+          name: 'monitorjob.ext.fragment.ImportDialog',
+          controller: _createImportController(this)
+        }).then(function (oDialog) {
+          oDialog.open();
+        });
+      },
+      showExportDialog: function (oEvent) {
+        this.loadFragment({
+          id: 'exportDialog',
+          name: 'monitorjob.ext.fragment.ExportDialog',
+          controller: _createExportController(this)
         }).then(function (oDialog) {
           oDialog.open();
         });

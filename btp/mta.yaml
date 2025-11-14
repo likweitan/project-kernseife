@@ -112,10 +112,6 @@ modules:
           artifacts:
             - monitor-job.zip
           target-path: resources/
-        - name: import-center-app
-          artifacts:
-            - import-center.zip
-          target-path: resources/
         - name: analyze-score-app
           artifacts:
             - analyze-score.zip
@@ -224,18 +220,6 @@ modules:
     # ------------------------------------------------------------
     type: html5
     path: app/monitor-job
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm run build
-      supported-platforms: []
-
-  # ------------- APPLICATION: Import Center ----------------
-  - name: import-center-app
-    # ------------------------------------------------------------
-    type: html5
-    path: app/import-center
     build-parameters:
       build-result: dist
       builder: custom

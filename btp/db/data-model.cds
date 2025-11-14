@@ -485,7 +485,6 @@ entity ClassificationSuccessors : cuid {
 entity Imports : cuid, managed {
     type          : String;
     title         : String;
-    status        : String;
     systemId      : String;
     comment       : String;
     overwrite     : Boolean default false;
@@ -493,15 +492,32 @@ entity Imports : cuid, managed {
     system        : Association to Systems
                         on system.sid = $self.systemId;
 
-    job_ID        : type of Jobs : ID;
-    job           : Association to Jobs
-                        on job.ID = $self.job_ID;
-
     @Core.MediaType: fileType
     file          : LargeBinary;
 
     @Core.IsMediaType
     fileType      : String;
+    fileName      : String;
+
+    job_ID        : UUID;
+    job           : Association to Jobs
+                        on job.ID = $self.job_ID;
+}
+
+@cds.persistence.journal
+entity Exports : cuid, managed {
+    type     : String;
+
+    @Core.MediaType: fileType
+    file     : LargeBinary;
+
+    @Core.IsMediaType
+    fileType : String;
+    fileName : String;
+
+    job_ID   : UUID;
+    job      : Association to Jobs
+                   on job.ID = $self.job_ID;
 }
 
 @cds.persistence.journal
@@ -936,13 +952,10 @@ entity Jobs : cuid, managed {
     progressCurrent : Integer;
     progressTotal   : Integer;
 
-    @Core.MediaType                  : fileType
-    @Core.ContentDisposition.Filename: fileName
-    file            : LargeBinary;
-    fileName        : String;
-
-    @Core.IsMediaType
-    fileType        : String;
+    importList      : Association to many Imports
+                          on $self.ID = importList.job_ID;
+    exportList      : Association to many Exports
+                          on $self.ID = exportList.job_ID;
 }
 
 @assert.range
@@ -958,7 +971,9 @@ type JobType        : String enum {
     IMPORT_FINDINGS = 'IMPORT_FINDINGS';
     IMPORT_MISSING_CLASSIFICATION = 'IMPORT_MISSING_CLASSIFICATION';
     EXPORT_MISSING_CLASSIFICATION = 'EXPORT_MISSING_CLASSIFICATION';
-    IMPORT_GITHUB_CLASSIFICATION = 'IMPORT_GITHUB_CLASSIFICATION';
+    IMPORT_EXTERNAL_CLASSIFICATION = 'IMPORT_EXTERNAL_CLASSIFICATION';
+    EXPORT_EXTERNAL_CLASSIFICATION = 'EXPORT_EXTERNAL_CLASSIFICATION';
+    EXPORT_SYSTEM_CLASSIFICATION = 'EXPORT_SYSTEM_CLASSIFICATION';
     IMPORT_RELEASE_STATE = 'IMPORT_RELEASE_STATE';
     IMPORT_ENHANCEMENT = 'IMPORT_ENHANCEMENT';
     IMPORT_EXPLICIT = 'IMPORT_EXPLICIT';
@@ -1058,6 +1073,16 @@ entity ImportTypes {
         overwrite     : Boolean;
         fileEndings   : String;
         hidden        : Boolean;
+        description   : String;
+}
+
+entity ExportTypes {
+    key code        : String;
+        order       : Integer;
+        title       : String;
+        legacy      : Boolean;
+        hidden      : Boolean;
+        description : String;
 }
 
 entity Destinations {

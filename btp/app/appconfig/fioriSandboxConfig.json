@@ -87,14 +87,6 @@
                                     }
                                 },
                                 {
-                                    "id": "ImportCenter",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
-                                    "properties": {
-                                        "title": "Import Center",
-                                        "targetURL": "#Center-import"
-                                    }
-                                },
-                                {
                                     "id": "ConfigureSetting",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {

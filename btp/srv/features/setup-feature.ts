@@ -5,7 +5,7 @@ import {
   System,
   Rating
 } from '#cds-models/kernseife/db';
-import { entities, log, connect } from '@sap/cds';
+import { entities, log } from '@sap/cds';
 import axios from 'axios';
 import { loadReleaseState } from './releaseState-feature';
 import { remoteServiceCall } from '../lib/connectivity';

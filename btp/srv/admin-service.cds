@@ -26,6 +26,7 @@ service AdminService @(requires: 'admin') {
         }
 
     entity Imports                       as projection on db.Imports;
+    entity Exports                       as projection on db.Exports;
 
     entity FindingRecords                as
         projection on db.FindingRecords {
@@ -36,11 +37,11 @@ service AdminService @(requires: 'admin') {
     entity FindingsAggregated            as projection on db.FindingsAggregated;
     entity SimplificationItems           as projection on db.SimplificationItems;
 
-    type inFramework         : {
+    type inFramework                  : {
         code : String;
     }
 
-    type inSuccessor         : {
+    type inSuccessor                  : {
         tadirObjectType : String;
         tadirObjectName : String;
         objectType      : String;
@@ -61,9 +62,6 @@ service AdminService @(requires: 'admin') {
                                     @mandatory objectName: inSuccessor:objectName,
                                     @mandatory successorType: inSuccessor:successorType) returns Classifications;
         };
-
-    @Common.IsActionCritical: true
-    action syncClassificationsToAllSystems();
 
     entity FrameworkUsages               as projection on db.FrameworkUsages;
     entity ClassificationSuccessors      as projection on db.ClassificationSuccessors;
@@ -106,11 +104,11 @@ service AdminService @(requires: 'admin') {
         };
 
 
-    type inDevClass          : {
+    type inDevClass                   : {
         devClass : String;
     }
 
-    type inDevelopmentObject : {
+    type inDevelopmentObject          : {
         objectType : String;
         objectName : String;
         devClass   : String;
@@ -132,7 +130,7 @@ service AdminService @(requires: 'admin') {
                                         @mandatory devClass: inDevelopmentObject:devClass);
         }
 
-    type inInitialData       : {
+    type inInitialData                : {
         configUrl : String;
     }
 
@@ -153,38 +151,16 @@ service AdminService @(requires: 'admin') {
     action recalculateAllScores();
 
     action loadReleaseState();
-    action exportMissingClassification();
 
-    @odata.singleton
-    @cds.persistence.skip
-    entity Downloads {
-        @(Core.MediaType                 : 'application/json')
-        @Core.ContentDisposition.Filename: 'classificationStandard.json'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationStandard     : LargeBinary;
-
-        @(Core.MediaType                 : 'application/json')
-        @Core.ContentDisposition.Filename: 'classificationCustom.json'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationCustom       : LargeBinary;
-
-
-        @(Core.MediaType                 : 'application/json')
-        @Core.ContentDisposition.Filename: 'classificationCustomLegacy.json'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationCustomLegacy : LargeBinary;
-
-        @(Core.MediaType                 : 'application/json')
-        @Core.ContentDisposition.Filename: 'classificationCloud.json'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationCloud        : LargeBinary;
-
-        @(Core.MediaType                 : 'application/zip')
-        @Core.ContentDisposition.Filename: 'classification.zip'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationGithub       : LargeBinary;
+    type inExportSystemClassification : {
+        legacy : Boolean;
     }
 
+    @Common.IsActionCritical: true
+    action syncClassificationsToAllSystems();
+
+        // Actions
+    action export(exportType: String, legacy: Boolean);
 
     entity AdoptionEffort                as projection on db.AdoptionEffort;
 
@@ -216,6 +192,9 @@ service AdminService @(requires: 'admin') {
                                             where
                                                 hidden == false;
 
+    entity ExportTypes                   as projection on db.ExportTypes
+                                            where
+                                                hidden == false;
 
     @cds.redirection.target: false
     define view RatingsValueList as

@@ -1,15 +1,14 @@
 import { JobType } from '#cds-models/kernseife/db';
 import { connect, entities, log, Service, Transaction } from '@sap/cds';
-import { PassThrough, Readable } from 'stream';
+import { PassThrough } from 'stream';
 import dayjs from 'dayjs';
 import {
   assignFrameworkByRef,
   assignSuccessorByRef,
   getClassificationCount,
   getClassificationJsonAsZip,
-  getClassificationJsonCloud,
+  getClassificationJsonExternal,
   getClassificationJsonCustom,
-  getClassificationJsonStandard,
   importEnhancementObjectsById,
   importExpliticObjectsById,
   importGithubClassificationById,
@@ -28,13 +27,17 @@ import {
   addDevelopmentObjectsByDevClass,
   removeAllDevelopmentObjects
 } from './features/extension-feature';
-import { runAsJob } from './features/jobs-feature';
+import {
+  createExport,
+  runAsJob,
+  setJobIdForImport,
+  uploadFile
+} from './features/jobs-feature';
 import {
   loadReleaseState,
   updateClassificationsFromReleaseStates
 } from './features/releaseState-feature';
 import { createInitialData, setupSystem } from './features/setup-feature';
-import { setJobIdForImport, uploadFile } from './features/upload-feature';
 import JSZip from 'jszip';
 import { handleMessage, updateDestinations } from './lib/connectivity';
 
@@ -173,19 +176,19 @@ export default (srv: Service) => {
 
   srv.on('Imported', async (msg) => {
     const ID = msg.data.ID;
-    const type = msg.data.type;
-    LOG.info(`Imported ${ID} ${type}`);
+    const importType = msg.data.type;
+    LOG.info(`Imported ${ID} ${importType}`);
 
     const jobId = await runAsJob(
-      `Import ${type}`,
-      `IMPORT_${type}` as JobType,
+      `Import ${importType}`,
+      `IMPORT_${importType}` as JobType,
       100,
       async (
         tx: Transaction,
         updateProgress: (progress: number) => Promise<void>
       ) => {
-        LOG.info('type', type);
-        switch (type) {
+        LOG.info('importType', importType);
+        switch (importType) {
           case 'MISSING_CLASSIFICATION':
             return await importMissingClassificationsById(
               ID,
@@ -201,36 +204,8 @@ export default (srv: Service) => {
           case 'GITHUB_CLASSIFICATION':
             return await importGithubClassificationById(ID, tx, updateProgress);
           default:
-            LOG.error(`Unknown Import Type ${type}`);
-            throw new Error(`Unknown Import Type ${type}`);
-        }
-      },
-      async () => {
-        const db = await connect.to('db');
-        const tx = db.tx();
-        try {
-          await tx.run(
-            UPDATE(entities.Imports).set({ status: 'FAILED' }).where({ ID })
-          );
-          await tx.commit();
-        } catch (e) {
-          LOG.error(e);
-          await tx.rollback();
-        }
-      },
-      async () => {
-        const db = await connect.to('db');
-        const tx = db.tx();
-        try {
-          await tx.run(
-            UPDATE(entities.Imports)
-              .set({ status: 'IMPORTED', progress: 100 })
-              .where({ ID })
-          );
-          await tx.commit();
-        } catch (e) {
-          LOG.error(e);
-          await tx.rollback();
+            LOG.error(`Unknown Import Type ${importType}`);
+            throw new Error(`Unknown Import Type ${importType}`);
         }
       }
     );
@@ -269,82 +244,6 @@ export default (srv: Service) => {
       await updateDestinations();
     }
   );
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  srv.on('GET', 'Downloads', async (req: any) => {
-    const downloadType = req._.req.path.replace('/Downloads/', '');
-    let content;
-    switch (downloadType) {
-      case 'classificationStandard': {
-        const mimetype = 'application/zip';
-        const filename = `classification_${dayjs().format('YYYY_MM_DD')}.zip`;
-        const classificationJson = await getClassificationJsonStandard();
-        const file = await getClassificationJsonAsZip(classificationJson);
-        req.reply(Readable.from([file]), { mimetype, filename });
-        break;
-      }
-      case 'classificationCustom': {
-        const mimetype = 'application/zip';
-        const filename = `classification_${dayjs().format('YYYY_MM_DD')}.zip`;
-        const classificationJson = await getClassificationJsonCustom();
-        const file = await getClassificationJsonAsZip(classificationJson);
-        req.reply(Readable.from([file]), { mimetype, filename });
-        break;
-      }
-      case 'classificationCustomLegacy': {
-        const mimetype = 'application/zip';
-        const filename = `classification_${dayjs().format('YYYY_MM_DD')}_legacy.zip`;
-        const classificationJson = await getClassificationJsonCustom({
-          legacy: true
-        });
-        const file = await getClassificationJsonAsZip(classificationJson);
-        req.reply(Readable.from([file]), { mimetype, filename });
-        break;
-      }
-      case 'classificationCloud': {
-        const mimetype = 'application/zip';
-        const filename = `classification_${dayjs().format('YYYY_MM_DD')}.zip`;
-        const classificationJson = await getClassificationJsonCloud();
-        const file = await getClassificationJsonAsZip(classificationJson);
-        req.reply(Readable.from([file]), { mimetype, filename });
-        break;
-      }
-      case 'classificationGithub': {
-        const mimetype = 'application/zip';
-        const filename = downloadType + '.zip';
-        const classificationJson = await getClassificationJsonCloud();
-        // Wrap in ZIP
-        const zip = new JSZip();
-
-        for (const classification of classificationJson.objectClassifications) {
-          if (
-            classification.tadirObjectType === classification.objectType &&
-            classification.tadirObjectName === classification.objectName
-          ) {
-            zip.file(
-              `${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toLowerCase()}.json`,
-              JSON.stringify(classification, null, 2)
-            );
-          } else {
-            zip.file(
-              `${classification.tadirObjectName.replaceAll('/', '#').toLowerCase()}.${classification.tadirObjectType.toLowerCase()}.${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toLowerCase()}.json`,
-              JSON.stringify(classification, null, 2)
-            );
-          }
-        }
-        content = await zip.generateAsync({
-          type: 'nodebuffer',
-          compression: 'DEFLATE',
-          compressionOptions: { level: 7 }
-        });
-        req.reply(Readable.from([content]), { mimetype, filename });
-        break;
-      }
-      default: {
-        return req.error(400, `Download Type ${downloadType} not found`);
-      }
-    }
-  });
 
   srv.on(
     'assignFramework',
@@ -421,5 +320,88 @@ export default (srv: Service) => {
         }
       }
     }
+  });
+
+  srv.on('export', async (req: any) => {
+    LOG.info('Trigger Export', req.data);
+    const { exportType, legacy } = req.data;
+
+    await runAsJob(
+      `Export ${exportType}`,
+      `EXPORT_${exportType}` as JobType,
+      100,
+      async (
+        tx: Transaction,
+        updateProgress: (progress: number) => Promise<void>
+      ) => {
+        LOG.info('type', exportType);
+        switch (exportType) {
+          case 'SYSTEM_CLASSIFICATION': {
+            const fileType = 'application/zip';
+            const filename = `classification_${dayjs().format('YYYY_MM_DD')}.zip`;
+            const classificationJson = await getClassificationJsonCustom({
+              legacy
+            });
+            const file = await getClassificationJsonAsZip(classificationJson);
+            return [await createExport(exportType, filename, file, fileType)];
+          }
+          case 'EXTERNAL_CLASSIFICATION': {
+            // Wrap in ZIP
+            const zip = new JSZip();
+            const fileType = 'application/zip';
+            const filename = `classification_${dayjs().format('YYYY_MM_DD')}.zip`;
+            const count = await getClassificationCount();
+            let offset = 0;
+            const rowSize = 1000;
+            let classificationList;
+            do {
+              classificationList = await getClassificationJsonExternal(
+                rowSize,
+                offset
+              );
+              for (const classification of classificationList) {
+                if (
+                  classification.tadirObjectType ===
+                    classification.objectType &&
+                  classification.tadirObjectName === classification.objectName
+                ) {
+                  zip.file(
+                    `${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toLowerCase()}.json`,
+                    JSON.stringify(classification, null, 2)
+                  );
+                } else {
+                  zip.file(
+                    `${classification.tadirObjectName.replaceAll('/', '#').toLowerCase()}.${classification.tadirObjectType.toLowerCase()}.${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toLowerCase()}.json`,
+                    JSON.stringify(classification, null, 2)
+                  );
+                }
+              }
+              offset++;
+              const progress = (100 / count) * rowSize * offset;
+              LOG.info(`Export External Classifications (${progress}%)`);
+              await updateProgress(progress);
+            } while (classificationList.length == rowSize && offset < 3);
+
+            const file = await zip.generateAsync({
+              type: 'nodebuffer',
+              compression: 'DEFLATE',
+              compressionOptions: { level: 7 }
+            });
+
+            await updateProgress(100);
+
+            const result = [
+              await createExport(exportType, filename, file, fileType)
+            ];
+
+            if (tx) tx.commit();
+            return result;
+          }
+          default:
+            LOG.error(`Unknown Export Type ${exportType}`);
+            throw new Error(`Unknown Import Type ${exportType}`);
+        }
+      }
+    );
   });
 };

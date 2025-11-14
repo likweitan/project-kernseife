@@ -8,8 +8,9 @@
 						path: '/ImportTypes',
 						sorter: { path: 'order' }
 					}">
-                <core:Item id="uploadItem" key="{code}" text="{title}" tooltip="{reqSystemId} {defaultRating} {comment} {fileEndings} {overwrite}" />
+                <core:Item id="uploadItem" key="{code}" text="{title}" tooltip="{description} {reqSystemId} {defaultRating} {comment} {fileEndings} {overwrite}" />
             </Select>
+            <ExpandableText id="importDescription" text="{i18n>defaultDescription}" overflowMode="InPlace" />
             <Label id="labelSystemId" text="{i18n>systemId}" labelFor="systemId" />
             <Select id="systemId" forceSelection="true" autoAdjustWidth="false" width="100%" items="{
 						path: '/Systems',
@@ -31,10 +32,10 @@
             <u:FileUploader id="uploader" fileType="csv" multiple="false" fileAllowed=".onFileAllowed" fileEmpty=".onFileEmpty" uploadComplete=".onUploadComplete" typeMissmatch=".onTypeMismatch" sendXHR="true" useMultipart="false" placeholder="{i18n>importPlaceholder}" httpRequestMethod="Put" />
         </content>
         <beginButton>
-            <Button id="ok" text="{i18n>OK}" press=".onOk" type="Emphasized" enabled="false" />
+            <Button id="importOk" text="{i18n>OK}" press=".onOk" type="Emphasized" enabled="false" />
         </beginButton>
         <endButton>
-            <Button id="cancel" text="{i18n>cancel}" press=".onCancel" />
+            <Button id="importCancel" text="{i18n>cancel}" press=".onCancel" />
         </endButton>
     </Dialog>
 </core:FragmentDefinition>

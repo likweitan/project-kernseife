@@ -5,7 +5,7 @@ export type ClassificationKey = {
   objectName: string;
 };
 
-export type ClassificationImport = ClassificationKey & {
+export type ClassificationExternal = ClassificationKey & {
   applicationComponent: string;
   adoptionEffort: string;
   softwareComponent: string;

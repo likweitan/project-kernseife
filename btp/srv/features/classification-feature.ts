@@ -9,15 +9,7 @@ import {
   Systems
 } from '#cds-models/kernseife/db';
 import dayjs from 'dayjs';
-import {
-  Service,
-  Transaction,
-  connect,
-  db,
-  entities,
-  log,
-  utils
-} from '@sap/cds';
+import { Transaction, connect, db, entities, log, utils } from '@sap/cds';
 import { text } from 'node:stream/consumers';
 import papa from 'papaparse';
 import {
@@ -26,16 +18,16 @@ import {
   updateReleaseState
 } from './releaseState-feature';
 import {
-  ClassificationImport,
+  ClassificationExternal,
   ClassificationKey,
   ClassificationImportLog,
   EnhancementImport,
   ExplicitImport
 } from '../types/imports';
 import JSZip from 'jszip';
-import { JobResult } from '../types/file';
 import { PassThrough } from 'node:stream';
 import { streamToBuffer } from '../lib/files';
+import { createExport } from './jobs-feature';
 
 const LOG = log('ClassificationFeature');
 
@@ -713,12 +705,15 @@ export const importMissingClassifications = async (
     await updateProgress(100);
   }
   const file = papa.unparse(importLogList);
-  // Write to file
-  return {
-    file: Buffer.from(file, 'utf8'),
-    fileName: 'importLog.csv',
-    fileType: 'application/csv'
-  } as JobResult;
+  // Create Export
+  return [
+    await createExport(
+      'LOG',
+      'importLog.csv',
+      Buffer.from(file, 'utf8'),
+      'application/csv'
+    )
+  ];
 };
 
 const getCommentForEnhancementObjectType = (
@@ -772,7 +767,7 @@ export const importEnhancementObjects = async (
   enhancementImport: Import,
   tx?: Transaction,
   updateProgress?: (progress: number) => void
-): Promise<JobResult> => {
+): Promise<string[]> => {
   // Parse File
   if (!enhancementImport.file) throw new Error('File broken');
 
@@ -931,13 +926,14 @@ export const importEnhancementObjects = async (
   }
 
   const file = papa.unparse(importLog);
-
-  // Write to file
-  return {
-    file: Buffer.from(file, 'utf8'),
-    fileName: 'importLog.csv',
-    fileType: 'application/csv'
-  } as JobResult;
+  return [
+    await createExport(
+      'LOG',
+      'importLog.csv',
+      Buffer.from(file, 'utf8'),
+      'application/csv'
+    )
+  ];
 };
 
 const getCommentForExplicitObjectType = (
@@ -967,7 +963,7 @@ export const importExplicitObjects = async (
   explicitImport: Import,
   tx?: Transaction,
   updateProgress?: (progress: number) => void
-): Promise<JobResult> => {
+): Promise<string[]> => {
   // Parse File
   if (!explicitImport.file) throw new Error('File broken');
 
@@ -1119,13 +1115,15 @@ export const importExplicitObjects = async (
   }
 
   const file = papa.unparse(importLog);
-
-  // Write to file
-  return {
-    file: Buffer.from(file, 'utf8'),
-    fileName: 'importLog.csv',
-    fileType: 'application/csv'
-  } as JobResult;
+  // Write to Export
+  return [
+    await createExport(
+      'LOG',
+      'importLog.csv',
+      Buffer.from(file, 'utf8'),
+      'application/csv'
+    )
+  ];
 };
 
 export const importExpliticObjectsById = async (
@@ -1262,7 +1260,11 @@ export const getClassificationJsonCustom = async (
  * JSON to transfer Classifications between Kernseife BTP Tenants
  * @returns
  */
-export const getClassificationJsonCloud = async () => {
+export const getClassificationJsonExternal = async (
+  rows: number,
+  offset: number
+) => {
+  LOG.info(`Read ${rows} Classifications (Offset: ${offset})`);
   const classifications: Classifications = await SELECT.from(
     entities.Classifications,
     (c: any) => {
@@ -1283,49 +1285,50 @@ export const getClassificationJsonCloud = async () => {
         c.successorList(),
         c.noteList();
     }
-  );
-  //TODO Include Code Samples?
-  const classificationJson = {
-    formatVersion: '1',
-    objectClassifications: classifications.map(
-      (classification) =>
-        ({
-          tadirObjectType: classification.tadirObjectType,
-          tadirObjectName: classification.tadirObjectName,
-          objectType: classification.objectType,
-          objectName: classification.objectName,
-          subType: classification.subType,
-          comment: classification.comment,
-          adoptionEffort: classification.adoptionEffort_code,
-          softwareComponent: classification.softwareComponent,
-          applicationComponent: classification.applicationComponent,
-          rating: classification.rating_code,
-          numberOfSimplificationNotes:
-            classification.numberOfSimplificationNotes,
-          labels:
-            classification.releaseState && classification.releaseState.labelList
-              ? classification.releaseState.labelList
-              : [],
-          noteList: classification.noteList
-            ? classification.noteList.map((note) => ({
-                note: note.note,
-                title: note.title,
-                classification: note.noteClassification_code
-              }))
-            : [],
-          successorClassification: classification.successorClassification_code,
-          successorList: classification.successorList!.map((successor) => ({
-            tadirObjectType: successor.tadirObjectType,
-            tadirObjectName: successor.tadirObjectName,
-            objectType: successor.objectType,
-            objectName: successor.objectName,
-            successorType: successor.successorType_code
-          }))
-        }) as unknown as ClassificationImport
+  )
+    .orderBy(
+      'createdAt',
+      'tadirObjectType',
+      'tadirObjectName',
+      'objectType',
+      'objectName'
     )
-  };
-
-  return classificationJson;
+    .limit(rows, offset);
+  return classifications.map(
+    (classification) =>
+      ({
+        tadirObjectType: classification.tadirObjectType,
+        tadirObjectName: classification.tadirObjectName,
+        objectType: classification.objectType,
+        objectName: classification.objectName,
+        subType: classification.subType,
+        comment: classification.comment,
+        adoptionEffort: classification.adoptionEffort_code,
+        softwareComponent: classification.softwareComponent,
+        applicationComponent: classification.applicationComponent,
+        rating: classification.rating_code,
+        numberOfSimplificationNotes: classification.numberOfSimplificationNotes,
+        labels:
+          classification.releaseState && classification.releaseState.labelList
+            ? classification.releaseState.labelList
+            : [],
+        noteList: classification.noteList
+          ? classification.noteList.map((note) => ({
+              note: note.note,
+              title: note.title,
+              classification: note.noteClassification_code
+            }))
+          : [],
+        successorClassification: classification.successorClassification_code,
+        successorList: classification.successorList!.map((successor) => ({
+          tadirObjectType: successor.tadirObjectType,
+          tadirObjectName: successor.tadirObjectName,
+          objectType: successor.objectType,
+          objectName: successor.objectName,
+          successorType: successor.successorType_code
+        }))
+      }) as unknown as ClassificationExternal
+  );
 };
 
 const assignFramework = async (
@@ -1424,7 +1427,7 @@ export const assignSuccessorByRef = async (
 };
 
 const importClassification = async (
-  classificationImport: ClassificationImport,
+  classificationImport: ClassificationExternal,
   classificationSet: Set<string>,
   releaseStateMap: Map<string, ReleaseState>,
   overwite: boolean = false
@@ -1620,7 +1623,7 @@ export const importGithubClassificationById = async (
     for (const file of Object.keys(content.files)) {
       const classification = JSON.parse(
         await content.files[file].async('string')
-      ) as ClassificationImport;
+      ) as ClassificationExternal;
       LOG.info('Importing Classification', { classification });
       const importLog = await importClassification(
         classification,
@@ -1648,11 +1651,15 @@ export const importGithubClassificationById = async (
     const file = papa.unparse(importLogList);
     await updateProgress(100);
     // Write to file
-    return {
-      file: Buffer.from(file, 'utf8'),
-      fileName: 'importLog.csv',
-      fileType: 'application/csv'
-    } as JobResult;
+    // Write to Export
+    return [
+      await createExport(
+        'LOG',
+        'importLog.csv',
+        Buffer.from(file, 'utf8'),
+        'application/csv'
+      )
+    ];
   } catch (e) {
     LOG.error('Error loading ZIP file', { error: e });
     throw new Error('Invalid ZIP file format');

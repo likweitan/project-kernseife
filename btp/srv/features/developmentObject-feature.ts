@@ -401,7 +401,7 @@ export const importFindingsById = async (
 ) => {
   const findingsRunImport = await SELECT.one
     .from(entities.Imports, (d: Import) => {
-      d.ID, d.status, d.title, d.file, d.systemId;
+      d.ID, d.title, d.file, d.systemId;
     })
     .where({ ID: findingImportId });
   await importFinding(findingsRunImport, tx, updateProgress);
