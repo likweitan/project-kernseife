@@ -17,7 +17,7 @@
     "build": "cds build --production",
     "postbuild": "npm run cleanup:ts",
     "build:bundle": "npm i --omit=dev --prefix=gen/srv && npm ci --omit=dev --prefix=gen/db",
-    "cleanup:build": "npx rimraf resources mta_archives app/**/dist",
+    "cleanup:build": "npx rimraf resources mta_archives app/resources app/**/dist",
     "cleanup:ts": "npx rimraf gen/**/*.ts",
     "generate-cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory @cds-models",
     "test": "jest --silent",
