@@ -165,7 +165,7 @@ service AdminService @(requires: 'admin') {
     action syncClassificationsToAllSystems();
 
     // Actions
-    action export(exportType: String, legacy: Boolean);
+    action triggerExport(exportType: String, legacy: Boolean); // as "export" is not allowed due to TS type generation
 
     entity AdoptionEffort                as projection on db.AdoptionEffort;
 

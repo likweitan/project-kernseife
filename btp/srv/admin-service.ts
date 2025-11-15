@@ -334,7 +334,7 @@ export default (srv: Service) => {
     }
   });
 
-  srv.on('export', async (req: any) => {
+  srv.on('triggerExport', async (req: any) => {
     LOG.info('Trigger Export', req.data);
     const { exportType, legacy } = req.data;
 

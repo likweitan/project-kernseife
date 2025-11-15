@@ -289,7 +289,7 @@ sap.ui.define(
 
         onOk: async function (oEvent) {
           setDialogBusy(true);
-          await oExtensionAPI.getEditFlow().invokeAction('export', {
+          await oExtensionAPI.getEditFlow().invokeAction('triggerExport', {
             model: oExtensionAPI.getModel(),
             parameterValues: [
               {
