@@ -190,3 +190,17 @@ export const uploadFile = async (
     comment
   );
 };
+
+export const jobHasImports = async (jobId: string) => {
+  const result = await SELECT.from(entities.Imports)
+    .columns('COUNT( * ) as count')
+    .where({ job_ID: jobId });
+  return result && result[0] && result[0].count > 0;
+};
+
+export const jobHasExports = async (jobId: string) => {
+  const result = await SELECT.from(entities.Exports)
+    .columns('COUNT( * ) as count')
+    .where({ job_ID: jobId });
+  return result && result[0] && result[0].count > 0;
+};

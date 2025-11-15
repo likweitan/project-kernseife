@@ -492,7 +492,8 @@ entity Imports : cuid, managed {
     system        : Association to Systems
                         on system.sid = $self.systemId;
 
-    @Core.MediaType: fileType
+    @Core.MediaType                  : fileType
+    @Core.ContentDisposition.Filename: fileName
     file          : LargeBinary;
 
     @Core.IsMediaType
@@ -508,7 +509,8 @@ entity Imports : cuid, managed {
 entity Exports : cuid, managed {
     type     : String;
 
-    @Core.MediaType: fileType
+    @Core.MediaType                  : fileType
+    @Core.ContentDisposition.Filename: fileName
     file     : LargeBinary;
 
     @Core.IsMediaType

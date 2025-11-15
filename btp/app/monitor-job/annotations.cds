@@ -29,16 +29,18 @@ annotate service.Jobs with @(
             Target: '@UI.FieldGroup#GeneratedGroup',
         },
         {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>importList}',
-            ID    : 'importList',
-            Target: 'importList/@UI.LineItem#importList',
+            $Type        : 'UI.ReferenceFacet',
+            Label        : '{i18n>importList}',
+            ID           : 'importList',
+            Target       : 'importList/@UI.LineItem#importList',
+            ![@UI.Hidden]: hideImports
         },
         {
-            $Type : 'UI.ReferenceFacet',
-            Label : '{i18n>exportList}',
-            ID    : 'exportList',
-            Target: 'exportList/@UI.LineItem#exportList',
+            $Type        : 'UI.ReferenceFacet',
+            Label        : '{i18n>exportList}',
+            ID           : 'exportList',
+            Target       : 'exportList/@UI.LineItem#exportList',
+            ![@UI.Hidden]: hideExports
         },
     ],
     UI.LineItem                           : [
@@ -109,15 +111,19 @@ annotate service.Jobs with {
     type @Common.Label: '{i18n>type}';
 };
 
-annotate service.Imports with @(
-    UI.LineItem #importList: [{
-        $Type: 'UI.DataField',
-        Value: file,
-        Label: '{i18n>file}',
-    }, ],
-    UI.LineItem #exportList: [{
-        $Type: 'UI.DataField',
-        Value: file,
-        Label: '{i18n>file}',
-    }, ],
-);
+annotate service.Imports with @(UI.LineItem #importList: [{
+    $Type                : 'UI.DataField',
+    Value                : file,
+    Label                : '{i18n>file}',
+    ![@UI.Importance]    : #High,
+    ![@HTML5.CssDefaults]: {width: '50rem'},
+}, ]);
+
+
+annotate service.Exports with @(UI.LineItem #exportList: [{
+    $Type                : 'UI.DataField',
+    Value                : file,
+    Label                : '{i18n>file}',
+    ![@UI.Importance]    : #High,
+    ![@HTML5.CssDefaults]: {width: '50rem'},
+}, ]);

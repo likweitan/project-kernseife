@@ -143,7 +143,12 @@ service AdminService @(requires: 'admin') {
             );
         };
 
-    entity Jobs                          as projection on db.Jobs;
+    entity Jobs                          as
+        projection on db.Jobs {
+            *,
+            virtual hideImports : Boolean,
+            virtual hideExports    : Boolean,
+        };
 
     // Actions
     @Common.IsActionCritical: true
@@ -159,7 +164,7 @@ service AdminService @(requires: 'admin') {
     @Common.IsActionCritical: true
     action syncClassificationsToAllSystems();
 
-        // Actions
+    // Actions
     action export(exportType: String, legacy: Boolean);
 
     entity AdoptionEffort                as projection on db.AdoptionEffort;

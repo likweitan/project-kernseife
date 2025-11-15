@@ -1,4 +1,5 @@
 import { JobType } from '#cds-models/kernseife/db';
+import { Jobs } from '#cds-models/AdminService';
 import { connect, entities, log, Service, Transaction } from '@sap/cds';
 import { PassThrough } from 'stream';
 import dayjs from 'dayjs';
@@ -29,6 +30,8 @@ import {
 } from './features/extension-feature';
 import {
   createExport,
+  jobHasExports,
+  jobHasImports,
   runAsJob,
   setJobIdForImport,
   uploadFile
@@ -322,6 +325,15 @@ export default (srv: Service) => {
     }
   });
 
+  // Read Project via System
+  srv.after('READ', ['Jobs'], async (jobs, req) => {
+    for (const job of jobs as Jobs) {
+      // Check if Job has Imports
+      job.hideImports = !await jobHasImports(job.ID!);
+      job.hideExports = !await jobHasExports(job.ID!);
+    }
+  });
+
   srv.on('export', async (req: any) => {
     LOG.info('Trigger Export', req.data);
     const { exportType, legacy } = req.data;
@@ -366,12 +378,12 @@ export default (srv: Service) => {
                   classification.tadirObjectName === classification.objectName
                 ) {
                   zip.file(
-                    `${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toLowerCase()}.json`,
+                    `${classification.objectName.replaceAll('/', '#').toUpperCase()}.${classification.objectType.toUpperCase()}.json`,
                     JSON.stringify(classification, null, 2)
                   );
                 } else {
                   zip.file(
-                    `${classification.tadirObjectName.replaceAll('/', '#').toLowerCase()}.${classification.tadirObjectType.toLowerCase()}.${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toLowerCase()}.json`,
+                    `${classification.tadirObjectName.replaceAll('/', '#').toUpperCase()}.${classification.tadirObjectType.toUpperCase()}.${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toUpperCase()}.json`,
                     JSON.stringify(classification, null, 2)
                   );
                 }
@@ -380,7 +392,7 @@ export default (srv: Service) => {
               const progress = (100 / count) * rowSize * offset;
               LOG.info(`Export External Classifications (${progress}%)`);
               await updateProgress(progress);
-            } while (classificationList.length == rowSize && offset < 3);
+            } while (classificationList.length == rowSize);
 
             const file = await zip.generateAsync({
               type: 'nodebuffer',
