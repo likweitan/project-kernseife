@@ -34,8 +34,10 @@ export const createInitialData = async (configUrl: string) => {
     }
 
     LOG.info('Config Data', configData);
-    // Fix broken 
-    await UPDATE.entity(entities.Ratings).set({ setting_ID: '1' }).where({ not: { setting_ID: '1' } });
+    // Fix broken
+    await UPDATE.entity(entities.Ratings)
+      .set({ setting_ID: '1' })
+      .where({ not: { setting_ID: '1' } });
     const ratingCount: { count: number }[] = await SELECT.from(
       entities.Ratings
     ).columns('IFNULL(COUNT( * ),0) as count');
@@ -70,6 +72,7 @@ export const createInitialData = async (configUrl: string) => {
     if (customerCount[0]['count'] === 0) {
       await INSERT.into(entities.Customers).entries([
         {
+          setting_ID: '1',
           contact: '<Contact Person>',
           prefix: 'KNSF',
           title: 'Kernseife Customer'

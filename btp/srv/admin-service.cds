@@ -138,6 +138,11 @@ service AdminService @(requires: 'admin') {
     entity Settings                      as projection on db.Settings
         actions {
             @Common.IsActionCritical: true
+            @(Common.SideEffects: {TargetEntities: [
+                'in/customerList',
+                'in/systemList',
+                'in/ratingList',
+            ], })
             action createInitialData(configUrl: inInitialData:configUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultSetup.json'
 
             );
@@ -147,7 +152,7 @@ service AdminService @(requires: 'admin') {
         projection on db.Jobs {
             *,
             virtual hideImports : Boolean,
-            virtual hideExports    : Boolean,
+            virtual hideExports : Boolean,
         };
 
     // Actions
