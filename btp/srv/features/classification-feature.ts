@@ -28,6 +28,7 @@ import JSZip from 'jszip';
 import { PassThrough } from 'node:stream';
 import { streamToBuffer } from '../lib/files';
 import { createExport } from './jobs-feature';
+import { Note } from '#cds-models/AdminService';
 
 const LOG = log('ClassificationFeature');
 
@@ -224,22 +225,37 @@ export const updateSimplifications = async (classification: Classification) => {
     return false;
   }
 
-  const notes = simplificationItems.map((simplificationItem) => ({
-    ID: utils.uuid(),
-    note: simplificationItem.note,
-    title: simplificationItem.title,
-    noteClassification_code: 'SIMPLIFICATION_DB',
-    classification_objectType: classification.objectType,
-    classification_objectName: classification.objectName
-  }));
+  const notes = simplificationItems.map(
+    (simplificationItem) =>
+      ({
+        ID: utils.uuid(),
+        note: simplificationItem.note,
+        title: simplificationItem.title,
+        noteClassification_code: 'SIMPLIFICATION_DB',
+        classification_objectType: classification.objectType,
+        classification_objectName: classification.objectName,
+        classification_tadirObjectName: classification.tadirObjectName,
+        classification_tadirObjectType: classification.tadirObjectType
+      }) as Note
+  );
 
   await DELETE.from(entities.Notes).where({
     noteClassification_code: 'SIMPLIFICATION_DB',
     classification_objectName: classification.objectName,
-    classification_objectType: classification.objectType
+    classification_objectType: classification.objectType,
+    classification_tadirObjectName: classification.tadirObjectName,
+    classification_tadirObjectType: classification.tadirObjectType
   });
 
-  classification.noteList = notes;
+  // Merge Notes
+  classification.noteList = [
+    ...notes,
+    ...(classification.noteList
+      ? classification.noteList.filter(
+          (note) => note.noteClassification_code != 'SIMPLIFICATION_DB'
+        )
+      : [])
+  ];
   classification.numberOfSimplificationNotes = notes.length;
 
   return true;
@@ -1264,7 +1280,7 @@ export const getClassificationJsonExternal = async (
   rows: number,
   offset: number
 ) => {
-//  LOG.info(`Read ${rows} Classifications (Offset: ${offset})`);
+  //  LOG.info(`Read ${rows} Classifications (Offset: ${offset})`);
   const classifications: Classifications = await SELECT.from(
     entities.Classifications,
     (c: any) => {
@@ -1316,7 +1332,7 @@ export const getClassificationJsonExternal = async (
           ? classification.noteList.map((note) => ({
               note: note.note,
               title: note.title,
-              classification: note.noteClassification_code
+              noteClassification: note.noteClassification_code
             }))
           : [],
         successorClassification: classification.successorClassification_code,
@@ -1327,7 +1343,7 @@ export const getClassificationJsonExternal = async (
           objectName: successor.objectName,
           successorType: successor.successorType_code
         }))
-      }) as unknown as ClassificationExternal
+      }) as ClassificationExternal
   );
 };
 
@@ -1450,7 +1466,18 @@ const importClassification = async (
       adoptionEffort_code: classificationImport.adoptionEffort,
       comment: classificationImport.comment,
       rating_code: classificationImport.rating || NO_CLASS,
-      noteList: classificationImport.noteList,
+      noteList: classificationImport.noteList
+        ? classificationImport.noteList.map((note) =>     ({
+        ID: utils.uuid(),
+        note: note.note,
+        title: note.title,
+        noteClassification_code: note.noteClassification,
+        classification_objectType: classification.objectType,
+        classification_objectName: classification.objectName,
+        classification_tadirObjectName: classification.tadirObjectName,
+        classification_tadirObjectType: classification.tadirObjectType
+      }) as Note)
+        : [],
       numberOfSimplificationNotes:
         classificationImport.numberOfSimplificationNotes,
       successorClassification_code:
@@ -1624,7 +1651,7 @@ export const importExternalClassificationById = async (
       const classification = JSON.parse(
         await content.files[file].async('string')
       ) as ClassificationExternal;
-      LOG.info('Importing Classification', { classification });
+      //LOG.info('Importing Classification', { classification });
       const importLog = await importClassification(
         classification,
         classificationSet,

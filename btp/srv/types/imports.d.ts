@@ -14,7 +14,7 @@ export type ClassificationExternal = ClassificationKey & {
   numberOfSimplificationNotes: number;
   noteList: {
     note: string;
-    noteClassification_code: string;
+    noteClassification: string;
     title: string;
   }[];
   successorClassification?: string;
