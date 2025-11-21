@@ -10,14 +10,14 @@
   "scripts": {
     "start": "cds-serve",
     "dev": "cds-ts watch",
-
+    "hybrid": "cds-ts watch --profile hybrid",
     "format": "npx pretty-quick --pattern \"**/*.*(js|ts|json)\" && format-cds",
     "lint": "eslint . --fix",
     "prebuild": "npm run lint && npm run cleanup:build",
     "build": "cds build --production",
     "postbuild": "npm run cleanup:ts",
     "build:bundle": "npm i --omit=dev --prefix=gen/srv && npm ci --omit=dev --prefix=gen/db",
-    "cleanup:build": "npx rimraf resources mta_archives app/**/dist",
+    "cleanup:build": "npx rimraf resources mta_archives app/resources app/**/dist",
     "cleanup:ts": "npx rimraf gen/**/*.ts",
     "generate-cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory @cds-models",
     "test": "jest --silent",
@@ -107,14 +107,12 @@
           }
         }
       },
-      "API_OBJECT_METADATA": {
+      "kernseife_btp": {
         "kind": "odata-v4",
-        "model": "srv/external/API_OBJECT_METADATA",
-        "[production]": {
-          "credentials": {
-            "path": "/sap/opu/odata4/sap/zapi_ks_object_metadata/srvd_a2x/sap/zapi_ks_object_metadata/0001",
-            "destination": "kernseife"
-          }
+        "model": "srv/external/kernseife_btp",
+        "csrf": true,
+        "credentials": {
+          "path": "/sap/opu/odata4/sap/zknsf_btp_connector/srvd/sap/zknsf_btp_connector/0001"
         }
       }
     },
@@ -131,16 +129,12 @@
     "app/analyze-score",
     "app/analyze-overview",
     "app/import-center",
-    "app/configure-framework",
-    "app/configure-rating",
-    "app/configure-system",
-    "app/configure-default",
+    "app/configure-setting",
     "app/manage-development-object",
     "app/monitor-job",
     "app/manage-release-state",
     "app/manage-classification",
-    "app/manage-extension",
-    "app/configure-default"
+    "app/manage-extension"
   ],
   "workspaces": [
     "app/*",

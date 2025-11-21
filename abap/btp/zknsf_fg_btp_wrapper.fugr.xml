@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Kernseife: Wrapper Function Modules</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZKNSF_FG_BTP_WRAPPERTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZKNSF_FG_BTP_WRAPPER</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZKNSF_CREATE_PROJECT</FUNCNAME>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <SHORT_TEXT>Kernseife: Create Custom Code Project using BOPF</SHORT_TEXT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <TYP>STRING</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>E_ERROR</PARAMETER>
+       <TYP>ABAP_BOOLEAN</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>E_MESSAGE</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>E_ERROR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Truth Value: True/False</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

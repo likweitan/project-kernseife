@@ -9,7 +9,9 @@ CLASS zknsf_cl_classification_mangr DEFINITION
       BEGIN OF ENUM custom_file_type STRUCTURE ty_custom_file_type,
         kernseife_custom,
         kernseife_legacy,
-      END OF ENUM  custom_file_type STRUCTURE ty_custom_file_type.
+      END OF ENUM  custom_file_type STRUCTURE ty_custom_file_type .
+
+    CONSTANTS default_scoring_cv_name TYPE sci_chkv VALUE 'ZKNSF_SCORING' ##NO_TEXT.
 
     METHODS constructor
       IMPORTING
@@ -29,16 +31,17 @@ CLASS zknsf_cl_classification_mangr DEFINITION
         VALUE(result) TYPE string
       RAISING
         cx_ycm_cc_provider_error .
+    CLASS-METHODS create_scoring_check_variant RETURNING VALUE(check_variant) TYPE sycm_aps_check_variant.
 
     METHODS delete_all
         REDEFINITION .
     METHODS delete_file
         REDEFINITION .
+    METHODS get_apis
+        REDEFINITION .
     METHODS get_api_files
         REDEFINITION .
     METHODS get_data
-        REDEFINITION .
-    METHODS get_apis
         REDEFINITION .
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -61,7 +64,7 @@ ENDCLASS.
 
 
 
-CLASS ZKNSF_CL_CLASSIFICATION_MANGR IMPLEMENTATION.
+CLASS zknsf_cl_classification_mangr IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -192,5 +195,79 @@ CLASS ZKNSF_CL_CLASSIFICATION_MANGR IMPLEMENTATION.
       CATCH cx_aff_root INTO DATA(serialization_error).
         RAISE EXCEPTION NEW cx_ycm_cc_provider_error( previous = serialization_error ).
     ENDTRY.
+  ENDMETHOD.
+
+
+  METHOD create_scoring_check_variant.
+
+    CLEAR check_variant.
+
+    cl_ci_checkvariant=>create(
+      EXPORTING
+        p_user              = space
+        p_name              = default_scoring_cv_name
+      RECEIVING
+        p_ref               = DATA(new_variant)
+      EXCEPTIONS
+        chkv_already_exists = 1
+        locked              = 2
+        invalid_name        = 3
+        not_authorized      = 4
+        OTHERS              = 5 ).
+
+
+    IF sy-subrc EQ 1.
+      " Already Exists => Read it & overwrite
+      cl_ci_checkvariant=>get_ref(
+        EXPORTING
+          p_name = default_scoring_cv_name
+          p_user = space
+        RECEIVING
+          p_ref  = new_variant
+      ).
+    ELSEIF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    new_variant->enter_change(
+      EXCEPTIONS
+        locked         = 1
+        not_authorized = 2
+        OTHERS         = 3 ).
+
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    DATA: check_variant_entries TYPE sci_tstvar,
+          check_variant_entry   TYPE sci_tstval.
+
+
+    check_variant_entry-testname = 'ZKNSF_CL_API_USAGE'.
+    check_variant_entry-version  = 0.
+    EXPORT
+      track_language_version = abap_true
+    TO DATA BUFFER check_variant_entry-attributes.
+    INSERT check_variant_entry INTO TABLE check_variant_entries.
+
+
+    new_variant->save(
+      EXPORTING
+        p_variant      = check_variant_entries
+        p_hidden       = abap_false
+        p_text         = 'Generated check variant for Kernseife' "#EC NOTEXT
+      EXCEPTIONS
+        empty_variant  = 1
+        not_authorized = 2
+        OTHERS         = 3 ).
+
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    new_variant->leave_change( ).
+
+    RETURN default_scoring_cv_name.
+
   ENDMETHOD.
 ENDCLASS.

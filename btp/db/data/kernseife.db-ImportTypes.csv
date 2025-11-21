@@ -1,6 +1,6 @@
-code,title,reqSystemId,defaultRating,comment,fileEndings
-MISSING_CLASSIFICATION,"Missing Classification Import",false,true,true,csv
-FINDINGS,"Findings Import",true,false,false,csv
-ENHANCEMENT,"BADI Import",false,false,false,csv
-EXPLICIT,"Explicit Enhancement Spot Import",false,false,false,csv
-GITHUB_CLASSIFICATION,"Github Classification Import",false,false,true,zip
+code,title,reqSystemId,defaultRating,comment,overwrite,fileEndings,hidden,order,description
+MISSING_CLASSIFICATION,"Missing Classifications Import",false,true,true,false,csv,false,1,"Manual upload of the Missing Classifications. Upload the csv file which is created via SE16N Export of the CDS View ZKNSF_I_MISSING"
+FINDINGS,"Findings Import",true,false,false,false,csv,false,2,"Manual upload of the Scoring results. Upload the csv file which is created via SE16N Export of the CDS View ZKNSF_I_EXPORT"
+ENHANCEMENT,"BADI Import",false,false,false,false,csv,true,3,"Internal: BADI Import"
+EXPLICIT,"Explicit Enhancement Spot Import",false,false,false,false,csv,true,4,"Internal: Explicit Enhancement Spots"
+EXTERNAL_CLASSIFICATION,"Classification Import",false,false,false,true,zip,false,5,"Import of the Classifications, which were exported using the Classification (System Format) Export"

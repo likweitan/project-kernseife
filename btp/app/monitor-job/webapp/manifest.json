@@ -148,7 +148,24 @@
               },
               "controlConfiguration": {
                 "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "actions": {
+                    "import": {
+                      "press": "monitorjob.ext.controller.ActionController.showImportDialog",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "{i18n>import}"
+                    },
+                    "export": {
+                      "press": "monitorjob.ext.controller.ActionController.showExportDialog",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "{i18n>export}"
+                    }
+                  },
                   "tableSettings": {
+                    "enableExport": true,
                     "type": "ResponsiveTable"
                   }
                 }

@@ -10,7 +10,7 @@
       "skipFiles": ["<node_internals>/**"]
     },
     {
-      "command": "npm run dev",
+      "command": "npm run hybrid",
       "cwd": "${workspaceFolder}/btp",
       "name": "cds watch",
       "request": "launch",

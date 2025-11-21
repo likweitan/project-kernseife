@@ -21,12 +21,28 @@ annotate service.Jobs with @(
             }
         ],
     },
-    UI.Facets                             : [{
-        $Type : 'UI.ReferenceFacet',
-        ID    : 'GeneratedFacet1',
-        Label : 'General Information',
-        Target: '@UI.FieldGroup#GeneratedGroup',
-    }, ],
+    UI.Facets                             : [
+        {
+            $Type : 'UI.ReferenceFacet',
+            ID    : 'GeneratedFacet1',
+            Label : 'General Information',
+            Target: '@UI.FieldGroup#GeneratedGroup',
+        },
+        {
+            $Type        : 'UI.ReferenceFacet',
+            Label        : '{i18n>importList}',
+            ID           : 'importList',
+            Target       : 'importList/@UI.LineItem#importList',
+            ![@UI.Hidden]: hideImports
+        },
+        {
+            $Type        : 'UI.ReferenceFacet',
+            Label        : '{i18n>exportList}',
+            ID           : 'exportList',
+            Target       : 'exportList/@UI.LineItem#exportList',
+            ![@UI.Hidden]: hideExports
+        },
+    ],
     UI.LineItem                           : [
         {
             $Type            : 'UI.DataField',
@@ -62,13 +78,7 @@ annotate service.Jobs with @(
             $Type            : 'UI.DataField',
             Value            : createdBy,
             ![@UI.Importance]: #Low,
-        },
-          {
-            $Type            : 'UI.DataField',
-            Value            : file,
-            ![@UI.Importance]: #Medium,
-            ![@HTML5.CssDefaults]: {width: '8rem'},
-        },
+        }
     ],
     UI.DataPoint #progressCurrent         : {
         Value        : progressCurrent,
@@ -81,7 +91,8 @@ annotate service.Jobs with @(
         $Type              : 'UI.SelectionPresentationVariantType',
         PresentationVariant: {
             $Type         : 'UI.PresentationVariantType',
-            Visualizations: ['@UI.LineItem', ],
+            Visualizations: ['@UI.LineItem',
+            ],
             SortOrder     : [{
                 $Type     : 'Common.SortOrderType',
                 Property  : modifiedAt,
@@ -98,5 +109,21 @@ annotate service.Jobs with @(
 
 annotate service.Jobs with {
     type @Common.Label: '{i18n>type}';
-    file @Common.Label: '{i18n>file}';
 };
+
+annotate service.Imports with @(UI.LineItem #importList: [{
+    $Type                : 'UI.DataField',
+    Value                : file,
+    Label                : '{i18n>file}',
+    ![@UI.Importance]    : #High,
+    ![@HTML5.CssDefaults]: {width: '50rem'},
+}, ]);
+
+
+annotate service.Exports with @(UI.LineItem #exportList: [{
+    $Type                : 'UI.DataField',
+    Value                : file,
+    Label                : '{i18n>file}',
+    ![@UI.Importance]    : #High,
+    ![@HTML5.CssDefaults]: {width: '50rem'},
+}, ]);

@@ -1,0 +1,263 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "configuresetting",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "1.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.15.6",
+      "toolsId": "62a41765-14c6-4dd5-b261-ec788ecfb2c3"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "odata/v4/admin/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Settings-configure": {
+          "semanticObject": "Settings",
+          "action": "configure",
+          "title": "{{flpTitle}}",
+          "subTitle": "{{flpSubtitle}}",
+          "icon": "sap-icon://wrench",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.platform.cf": {
+    "ui5VersionNumber": "1.134.x"
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.134.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {},
+        "sap.f": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "configuresetting.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {
+        "flexibleColumnLayout": {
+          "defaultTwoColumnLayoutType": "TwoColumnsBeginExpanded",
+          "defaultThreeColumnLayoutType": "ThreeColumnsMidExpanded"
+        },
+        "routerClass": "sap.f.routing.Router"
+      },
+      "routes": [
+        {
+          "pattern": "Settings({key}):?query:",
+          "name": "SettingsObjectPage",
+          "target": [
+            "SettingsObjectPage"
+          ]
+        },
+        {
+          "name": "Settings_customerListObjectPage",
+          "pattern": "Settings({key})/customerList({customerListKey}):?query:",
+          "target": [
+            "SettingsObjectPage",
+            "Settings_customerListObjectPage"
+          ]
+        },
+        {
+          "pattern": "Settings({key})/systemList({key2}):?query:",
+          "name": "Settings_systemListObjectPage",
+          "target": [
+            "SettingsObjectPage",
+            "Settings_systemListObjectPage"
+          ]
+        },
+        {
+          "pattern": "Settings({key})/ratingList({key2}):?query:",
+          "name": "Settings_ratingListObjectPage",
+          "target": [
+            "SettingsObjectPage",
+            "Settings_ratingListObjectPage"
+          ]
+        },
+        {
+          "pattern": "Settings({key})/frameworkList({key2}):?query:",
+          "name": "Settings_frameworkListObjectPage",
+          "target": [
+            "SettingsObjectPage",
+            "Settings_frameworkListObjectPage"
+          ]
+        }
+      ],
+      "targets": {
+        "SettingsObjectPage": {
+          "type": "Component",
+          "id": "SettingsObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Settings",
+              "navigation": {
+                "customerList": {
+                  "detail": {
+                    "route": "Settings_customerListObjectPage"
+                  }
+                },
+                "systemList": {
+                  "detail": {
+                    "route": "Settings_systemListObjectPage"
+                  }
+                },
+                "ratingList": {
+                  "detail": {
+                    "route": "Settings_ratingListObjectPage"
+                  }
+                },
+                "frameworkList": {
+                  "detail": {
+                    "route": "Settings_frameworkListObjectPage"
+                  }
+                }
+              }
+            }
+          },
+          "controlAggregation": "beginColumnPages",
+          "contextPattern": "/Settings({key})"
+        },
+        "Settings_customerListObjectPage": {
+          "type": "Component",
+          "id": "Settings_customerListObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "navigation": {},
+              "contextPath": "/Settings/customerList"
+            }
+          },
+          "controlAggregation": "midColumnPages",
+          "contextPattern": "/Settings({key})/customerList({customerListKey})"
+        },
+        "Settings_systemListObjectPage": {
+          "type": "Component",
+          "id": "Settings_systemListObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "navigation": {},
+              "contextPath": "/Settings/systemList"
+            }
+          },
+          "controlAggregation": "midColumnPages",
+          "contextPattern": "/Settings({key})/systemList({key2})"
+        },
+        "Settings_ratingListObjectPage": {
+          "type": "Component",
+          "id": "Settings_ratingListObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "navigation": {},
+              "contextPath": "/Ratings"
+            }
+          },
+          "controlAggregation": "midColumnPages",
+          "contextPattern": "/Settings({key})/ratingList({key2})"
+        },
+        "Settings_frameworkListObjectPage": {
+          "type": "Component",
+          "id": "Settings_frameworkListObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "navigation": {},
+              "contextPath": "/Settings/frameworkList"
+            }
+          },
+          "controlAggregation": "midColumnPages",
+          "contextPattern": "/Settings({key})/frameworkList({key2})"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "sap.fe.templates.RootContainer.view.Fcl",
+      "type": "XML",
+      "async": true,
+      "id": "appRootView"
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "kernseife"
+  },
+  "sap.fe": {
+    "app": {
+      "hideDraft": {
+        "enabled": true
+      }
+    }
+  }
+}

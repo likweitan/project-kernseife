@@ -62,11 +62,11 @@ CLASS zknsf_cl_api_usage DEFINITION
         REDEFINITION .
     METHODS inform_atc
         REDEFINITION .
-private section.
+  PRIVATE SECTION.
 
-  data:
-    sw_component_list TYPE SORTED TABLE OF dlvunit WITH UNIQUE DEFAULT KEY .
-  data TRACK_LANGUAGE_VERSION_ATTR type ABAP_BOOLEAN .
+    DATA:
+      sw_component_list TYPE SORTED TABLE OF dlvunit WITH UNIQUE DEFAULT KEY .
+    DATA track_language_version_attr TYPE abap_boolean .
 ENDCLASS.
 
 
@@ -88,6 +88,9 @@ CLASS ZKNSF_CL_API_USAGE IMPLEMENTATION.
     check_scope_enabled = abap_true.
 
     INSERT LINES OF get_message_codes( ) INTO TABLE scimessages.
+
+    " Include Packages / DevClasses to have them tracked for Reporting
+    DELETE typelist WHERE sign = 'E' AND option = 'EQ' AND low = 'DEVC'.
 
 
     track_language_version_attr = abap_false.

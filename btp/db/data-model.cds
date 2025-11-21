@@ -485,18 +485,41 @@ entity ClassificationSuccessors : cuid {
 entity Imports : cuid, managed {
     type          : String;
     title         : String;
-    status        : String;
     systemId      : String;
     comment       : String;
+    overwrite     : Boolean default false;
     defaultRating : String(3);
     system        : Association to Systems
                         on system.sid = $self.systemId;
 
-    @Core.MediaType: fileType
+    @Core.MediaType                  : fileType
+    @Core.ContentDisposition.Filename: fileName
     file          : LargeBinary;
 
     @Core.IsMediaType
     fileType      : String;
+    fileName      : String;
+
+    job_ID        : UUID;
+    job           : Association to Jobs
+                        on job.ID = $self.job_ID;
+}
+
+@cds.persistence.journal
+entity Exports : cuid, managed {
+    type     : String;
+
+    @Core.MediaType                  : fileType
+    @Core.ContentDisposition.Filename: fileName
+    file     : LargeBinary;
+
+    @Core.IsMediaType
+    fileType : String;
+    fileName : String;
+
+    job_ID   : UUID;
+    job      : Association to Jobs
+                   on job.ID = $self.job_ID;
 }
 
 @cds.persistence.journal
@@ -609,6 +632,7 @@ define view AdoptionEffortValueList as
 
 @cds.persistence.journal
 entity Ratings : cuid, managed {
+    setting                : Association to Settings;
     @mandatory code        : String(20);
     @mandatory title       : String;
     @mandatory score       : Integer;
@@ -617,23 +641,14 @@ entity Ratings : cuid, managed {
 
     @Common.ValueListWithFixedValues: true
     @mandatory criticality : Association to Criticality;
-
-    legacyRatingList       : Composition of many LegacyRatings
-                                 on legacyRatingList.rating = $self;
-
-
 }
 
-@cds.persistence.journal
-entity LegacyRatings : cuid {
-    rating       : Association to Ratings;
-    legacyRating : String(10);
-}
 
 @cds.persistence.journal
 entity Frameworks : cuid, managed {
-    code               : String;
-    title              : String;
+    setting            : Association to Settings;
+    @mandatory code    : String;
+    @mandatory title   : String;
     criticality        : Association to Criticality;
 
     @Common.ValueListWithFixedValues: true
@@ -820,12 +835,42 @@ entity DevelopmentObjectsAggregated as
 
 @cds.persistence.journal
 entity Systems : cuid, managed {
+    setting     : Association to Settings;
+
     @mandatory
     sid         : String;
 
     @mandatory
     title       : String;
     comment     : String;
+
+    @Common.ValueListWithFixedValues: true
+    @(Common                        : {
+        Label    : '{i18n>destination}',
+        ValueList: {
+            CollectionPath: 'Destinations',
+            Parameters    : [
+                {
+                    $Type            : 'Common.ValueListParameterInOut',
+                    ValueListProperty: 'name',
+                    LocalDataProperty: destination,
+                },
+                {
+                    $Type            : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty: 'proxyType'
+                },
+                {
+                    $Type            : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty: 'type'
+                },
+                {
+                    $Type            : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty: 'authentication'
+                },
+            ]
+        }
+    })
+    destination : String;
 
     customer    : Association to Customers
                       on customer.ID = $self.customer_ID;
@@ -858,6 +903,8 @@ entity Systems : cuid, managed {
 
 @cds.persistence.journal
 entity Customers : cuid, managed {
+    setting    : Association to Settings;
+
     @mandatory
     title      : String;
     contact    : String;
@@ -885,7 +932,18 @@ entity Extensions : cuid, managed {
 
 @cds.persistence.journal
 entity Settings : managed {
-    key ID : String(36);
+    key ID            : String(36);
+        customerList  : Composition of many Customers
+                            on customerList.setting = $self;
+
+        systemList    : Composition of many Systems
+                            on systemList.setting = $self;
+
+        ratingList    : Composition of many Ratings
+                            on ratingList.setting = $self;
+
+        frameworkList : Composition of many Frameworks
+                            on frameworkList.setting = $self;
 }
 
 @cds.persistence.journal
@@ -896,13 +954,10 @@ entity Jobs : cuid, managed {
     progressCurrent : Integer;
     progressTotal   : Integer;
 
-    @Core.MediaType                  : fileType
-    @Core.ContentDisposition.Filename: fileName
-    file            : LargeBinary;
-    fileName        : String;
-
-    @Core.IsMediaType
-    fileType        : String;
+    importList      : Association to many Imports
+                          on $self.ID = importList.job_ID;
+    exportList      : Association to many Exports
+                          on $self.ID = exportList.job_ID;
 }
 
 @assert.range
@@ -918,7 +973,9 @@ type JobType        : String enum {
     IMPORT_FINDINGS = 'IMPORT_FINDINGS';
     IMPORT_MISSING_CLASSIFICATION = 'IMPORT_MISSING_CLASSIFICATION';
     EXPORT_MISSING_CLASSIFICATION = 'EXPORT_MISSING_CLASSIFICATION';
-    IMPORT_GITHUB_CLASSIFICATION = 'IMPORT_GITHUB_CLASSIFICATION';
+    IMPORT_EXTERNAL_CLASSIFICATION = 'IMPORT_EXTERNAL_CLASSIFICATION';
+    EXPORT_EXTERNAL_CLASSIFICATION = 'EXPORT_EXTERNAL_CLASSIFICATION';
+    EXPORT_SYSTEM_CLASSIFICATION = 'EXPORT_SYSTEM_CLASSIFICATION';
     IMPORT_RELEASE_STATE = 'IMPORT_RELEASE_STATE';
     IMPORT_ENHANCEMENT = 'IMPORT_ENHANCEMENT';
     IMPORT_EXPLICIT = 'IMPORT_EXPLICIT';
@@ -1010,9 +1067,29 @@ entity Enhancements : cuid, managed {
 
 entity ImportTypes {
     key code          : String;
+        order         : Integer;
         title         : String;
         reqSystemId   : Boolean;
         defaultRating : Boolean;
         comment       : Boolean;
+        overwrite     : Boolean;
         fileEndings   : String;
+        hidden        : Boolean;
+        description   : String;
+}
+
+entity ExportTypes {
+    key code        : String;
+        order       : Integer;
+        title       : String;
+        legacy      : Boolean;
+        hidden      : Boolean;
+        description : String;
+}
+
+entity Destinations {
+    key name           : String;
+        type           : String;
+        proxyType      : String;
+        authentication : String;
 }

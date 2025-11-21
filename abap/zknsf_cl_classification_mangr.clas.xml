@@ -49,6 +49,11 @@
      <LANGU>E</LANGU>
      <DESCRIPT>API for released objects</DESCRIPT>
     </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>DEFAULT_SCORING_CV_NAME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Code Inspector: Check Variants</DESCRIPT>
+    </SEOCOMPOTX>
    </DESCRIPTIONS>
    <DESCRIPTIONS_SUB>
     <SEOSUBCOTX>

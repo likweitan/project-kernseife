@@ -2,7 +2,8 @@ import {
   DevelopmentObject,
   Import,
   FindingRecord,
-  CleanCoreLevel
+  CleanCoreLevel,
+  DevelopmentObjects
 } from '#cds-models/kernseife/db';
 import { db, entities, log, Transaction } from '@sap/cds';
 import { text } from 'node:stream/consumers';
@@ -29,7 +30,7 @@ export const getTotalScore = async () => {
   return result[0]['score'];
 };
 
-export const determineNamespace = (developmentObject) => {
+export const determineNamespace = (developmentObject: DevelopmentObject) => {
   switch (developmentObject.objectName?.charAt(0)) {
     case '/':
       return '/' + developmentObject.objectName.split('/')[1] + '/';
@@ -41,12 +42,12 @@ export const determineNamespace = (developmentObject) => {
   }
 };
 
-export const calculateScoreByRef = async (ref) => {
+export const calculateScoreByRef = async (ref: any) => {
   // read Development Object
   const developmentObject = await SELECT.one.from(ref);
 
   // Get Latest Scoring Run
-  const findingRecordList = await SELECT.from(entities.FindingRecords)
+  const findingRecordList: (FindingRecord & { score: number; code: string })[] = await SELECT.from(entities.FindingRecords)
     .columns(
       'itemId',
       'messageId',
@@ -75,7 +76,7 @@ export const calculateScoreByRef = async (ref) => {
     if (findingRecord.messageId !== findingRecord.code) {
       await UPDATE.entity(entities.FindingRecords)
         .with({
-          messageId: findingRecord.code + findingRecord.messageId.substring(3)
+          messageId: findingRecord.code + findingRecord.messageId!.substring(3)
         })
         .where({
           import_ID: developmentObject.latestFindingImportId,
@@ -184,7 +185,9 @@ export const getDevelopmentObjectIdentifier = (
 };
 
 export const getDevelopmentObjectMap = async () => {
-  const developmentObjectDB = await SELECT.from(entities.DevelopmentObjects);
+  const developmentObjectDB: DevelopmentObjects = await SELECT.from(
+    entities.DevelopmentObjects
+  );
   return developmentObjectDB.reduce((map, developmentObject) => {
     return map.set(
       getDevelopmentObjectIdentifier(developmentObject),
@@ -392,13 +395,13 @@ export const importFinding = async (
 };
 
 export const importFindingsById = async (
-  findingImportId,
+  findingImportId: string,
   tx: Transaction,
   updateProgress?: (progress: number) => Promise<void>
 ) => {
   const findingsRunImport = await SELECT.one
-    .from(entities.Imports, (d) => {
-      d.ID, d.status, d.title, d.file, d.systemId;
+    .from(entities.Imports, (d: Import) => {
+      d.ID, d.title, d.file, d.systemId;
     })
     .where({ ID: findingImportId });
   await importFinding(findingsRunImport, tx, updateProgress);

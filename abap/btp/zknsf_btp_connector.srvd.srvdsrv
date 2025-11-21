@@ -1,0 +1,7 @@
+@EndUserText.label: 'Kernseife: BTP Service Definition'
+define service ZKNSF_BTP_CONNECTOR {
+  expose ZKNSF_I_PROJECTS;
+  expose ZKNSF_I_DEVELOPMENT_OBJECTS;
+  expose ZKNSF_I_FINDINGS;
+  expose ZKNSF_I_METRICS;
+}

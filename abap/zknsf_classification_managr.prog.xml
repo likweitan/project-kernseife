@@ -276,6 +276,15 @@
       <PATH>B</PATH>
      </RSMPE_FUNT>
      <RSMPE_FUNT>
+      <CODE>MISSING</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <TEXT_NAME>ICON_WORKFLOW_INBOX</TEXT_NAME>
+      <ICON_ID>@BP@</ICON_ID>
+      <FUN_TEXT>Export Missing Classification</FUN_TEXT>
+      <INFO_TEXT>Download CSV File of missing classifications</INFO_TEXT>
+     </RSMPE_FUNT>
+     <RSMPE_FUNT>
       <CODE>PICK</CODE>
       <TEXTNO>001</TEXTNO>
       <TEXT_TYPE>S</TEXT_TYPE>
@@ -533,6 +542,12 @@
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
      <RSMPE_PFK>
+      <CODE>000002</CODE>
+      <PFNO>29</PFNO>
+      <FUNCODE>MISSING</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
+     <RSMPE_PFK>
       <CODE>000003</CODE>
       <PFNO>03</PFNO>
       <FUNCODE>BACK</FUNCODE>
@@ -629,6 +644,10 @@
      <RSMPE_STAF>
       <STATUS>STATUS_100</STATUS>
       <FUNCTION>F3</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>STATUS_100</STATUS>
+      <FUNCTION>MISSING</FUNCTION>
      </RSMPE_STAF>
      <RSMPE_STAF>
       <STATUS>STATUS_100</STATUS>
@@ -780,7 +799,7 @@
     <TIT>
      <RSMPE_TITT>
       <CODE>TITLE_100</CODE>
-      <TEXT>Kernseifewewiebie: Manage Data Sources</TEXT>
+      <TEXT>Kernseife: Manage Data Sources</TEXT>
      </RSMPE_TITT>
      <RSMPE_TITT>
       <CODE>TITLE_200</CODE>

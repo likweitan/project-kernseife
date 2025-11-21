@@ -543,170 +543,170 @@ CLASS classification_manager IMPLEMENTATION.
             MESSAGE export_file_exception->get_text( ) TYPE 'E'.
             RETURN.
         ENDTRY.
-    ENDCASE.
-  ENDMETHOD.
+        ENDCASE.
+      ENDMETHOD.
 
-  METHOD user_command_in_api_overview.
-    DATA: answer        TYPE char01,
-          sel_row_index TYPE lvc_t_row.
+      METHOD user_command_in_api_overview.
+        DATA: answer        TYPE char01,
+              sel_row_index TYPE lvc_t_row.
 
-    CASE api_ucomm.
-      WHEN 'BACK'.
-        CLEAR selected_row.
-        alv_grid->set_selected_rows( it_index_rows = selected_row ).
-        CALL SCREEN 100.
+        CASE api_ucomm.
+          WHEN 'BACK'.
+            CLEAR selected_row.
+            alv_grid->set_selected_rows( it_index_rows = selected_row ).
+            CALL SCREEN 100.
 
-      WHEN 'RELOAD'.
-        api_data_files = get_apis( ).
-
-        api_alv_grid->set_table_for_first_display( EXPORTING is_layout       = VALUE lvc_s_layo( sel_mode = 'A' )
-                                                   CHANGING  it_outtab       = api_data_files
-                                                             it_fieldcatalog = api_columns ).
-        api_alv_grid->refresh_table_display( ).
-
-      WHEN 'DELETE'.
-        CLEAR sel_row_index.
-        api_alv_grid->get_selected_rows( IMPORTING et_index_rows = sel_row_index ).
-
-        IF sel_row_index IS INITIAL.
-          MESSAGE 'No entry selected'(009) TYPE 'E'.
-        ELSE.
-          CALL FUNCTION 'POPUP_TO_CONFIRM'
-            EXPORTING
-              titlebar              = 'Delete confirmation'(007)
-              text_question         = 'Confirm deletion of the selected api(s)'(023)
-              default_button        = '2'
-              display_cancel_button = abap_false
-            IMPORTING
-              answer                = answer
-            EXCEPTIONS
-              text_not_found        = 1
-              OTHERS                = 2.
-
-          IF sy-subrc <> 0.
-            MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
-            WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
-          ENDIF.
-
-          IF answer = '1'.
-            TRY.
-                DATA(apis) = class_program->get_apis( selected_file-file_id ).
-
-                LOOP AT sel_row_index ASSIGNING FIELD-SYMBOL(<api_row>).
-                  DATA(selected_api) = apis[ <api_row>-index ].
-                  class_program->delete_api( selected_api-api_id ).
-                ENDLOOP.
-
-              CATCH cx_ycm_cc_provider_error INTO DATA(delete_api_exception).
-                MESSAGE delete_api_exception->get_text( ) TYPE 'E'.
-            ENDTRY.
-
+          WHEN 'RELOAD'.
             api_data_files = get_apis( ).
+
             api_alv_grid->set_table_for_first_display( EXPORTING is_layout       = VALUE lvc_s_layo( sel_mode = 'A' )
                                                        CHANGING  it_outtab       = api_data_files
                                                                  it_fieldcatalog = api_columns ).
+            api_alv_grid->refresh_table_display( ).
 
-          ENDIF.
-        ENDIF.
+          WHEN 'DELETE'.
+            CLEAR sel_row_index.
+            api_alv_grid->get_selected_rows( IMPORTING et_index_rows = sel_row_index ).
 
-      WHEN 'DETAIL_API'.
-        api_alv_grid->get_selected_rows( IMPORTING et_index_rows = selected_row_api ).
+            IF sel_row_index IS INITIAL.
+              MESSAGE 'No entry selected'(009) TYPE 'E'.
+            ELSE.
+              CALL FUNCTION 'POPUP_TO_CONFIRM'
+                EXPORTING
+                  titlebar              = 'Delete confirmation'(007)
+                  text_question         = 'Confirm deletion of the selected api(s)'(023)
+                  default_button        = '2'
+                  display_cancel_button = abap_false
+                IMPORTING
+                  answer                = answer
+                EXCEPTIONS
+                  text_not_found        = 1
+                  OTHERS                = 2.
 
-        IF selected_row_api IS INITIAL.
-          MESSAGE 'No entry selected'(009) TYPE 'E'.
-        ELSEIF lines( selected_row_api ) > 1.
-          MESSAGE 'More than one entry selected'(012) TYPE 'E'.
-        ELSE.
-          CALL SCREEN 500.
-        ENDIF.
-      WHEN 'EXPORT'.
-        SELECT SINGLE data_type, source FROM zknsf_api_header INTO @DATA(api_db) WHERE file_id = @selected_file-file_id.
+              IF sy-subrc <> 0.
+                MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+                WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+              ENDIF.
 
-        IF api_db-data_type <> zknsf_cl_cache_write_api=>co_data_type_custom.
-          MESSAGE TEXT-032 TYPE 'E'.
-          RETURN.
-        ENDIF.
+              IF answer = '1'.
+                TRY.
+                    DATA(apis) = class_program->get_apis( selected_file-file_id ).
 
-        TRY.
-            DATA(content_as_json) = class_program->get_custom_api_file_as_json( selected_file-file_id ).
-            export_json( content_as_json = content_as_json file_name = CONV #( selected_file-url ) ).
-          CATCH cx_ycm_cc_provider_error INTO DATA(exception).
-            MESSAGE exception->get_text( ) TYPE 'E'.
+                    LOOP AT sel_row_index ASSIGNING FIELD-SYMBOL(<api_row>).
+                      DATA(selected_api) = apis[ <api_row>-index ].
+                      class_program->delete_api( selected_api-api_id ).
+                    ENDLOOP.
+
+                  CATCH cx_ycm_cc_provider_error INTO DATA(delete_api_exception).
+                    MESSAGE delete_api_exception->get_text( ) TYPE 'E'.
+                ENDTRY.
+
+                api_data_files = get_apis( ).
+                api_alv_grid->set_table_for_first_display( EXPORTING is_layout       = VALUE lvc_s_layo( sel_mode = 'A' )
+                                                           CHANGING  it_outtab       = api_data_files
+                                                                     it_fieldcatalog = api_columns ).
+
+              ENDIF.
+            ENDIF.
+
+          WHEN 'DETAIL_API'.
+            api_alv_grid->get_selected_rows( IMPORTING et_index_rows = selected_row_api ).
+
+            IF selected_row_api IS INITIAL.
+              MESSAGE 'No entry selected'(009) TYPE 'E'.
+            ELSEIF lines( selected_row_api ) > 1.
+              MESSAGE 'More than one entry selected'(012) TYPE 'E'.
+            ELSE.
+              CALL SCREEN 500.
+            ENDIF.
+          WHEN 'EXPORT'.
+            SELECT SINGLE data_type, source FROM zknsf_api_header INTO @DATA(api_db) WHERE file_id = @selected_file-file_id.
+
+              IF api_db-data_type <> zknsf_cl_cache_write_api=>co_data_type_custom.
+                MESSAGE TEXT-032 TYPE 'E'.
+                RETURN.
+              ENDIF.
+
+              TRY.
+                  DATA(content_as_json) = class_program->get_custom_api_file_as_json( selected_file-file_id ).
+                  export_json( content_as_json = content_as_json file_name = CONV #( selected_file-url ) ).
+                CATCH cx_ycm_cc_provider_error INTO DATA(exception).
+                  MESSAGE exception->get_text( ) TYPE 'E'.
+                  RETURN.
+              ENDTRY.
+          ENDCASE.
+        ENDMETHOD.
+
+        METHOD export_json.
+          DATA user_input_filename TYPE string.
+          DATA file_path TYPE string.
+          DATA fullpath TYPE string.
+          DATA user_action TYPE i.
+          DATA content_as_table TYPE string_table.
+
+          SPLIT content_as_json AT cl_abap_char_utilities=>newline INTO TABLE content_as_table.
+
+          cl_gui_frontend_services=>file_save_dialog(
+            EXPORTING
+              default_extension = `json` ##NO_TEXT
+              default_file_name = substring_before( val = file_name sub = '.' occ = -1 )
+            CHANGING
+              filename          = user_input_filename
+              path              = file_path
+              fullpath          = fullpath
+              user_action       = user_action
+            EXCEPTIONS
+              OTHERS            = 1 ) ##SUBRC_OK.
+
+          IF sy-subrc <> 0.
+            MESSAGE 'Error when exporting file'(031) TYPE 'E'.
             RETURN.
-        ENDTRY.
-    ENDCASE.
-  ENDMETHOD.
-
-  METHOD export_json.
-    DATA user_input_filename TYPE string.
-    DATA file_path TYPE string.
-    DATA fullpath TYPE string.
-    DATA user_action TYPE i.
-    DATA content_as_table TYPE string_table.
-
-    SPLIT content_as_json AT cl_abap_char_utilities=>newline INTO TABLE content_as_table.
-
-    cl_gui_frontend_services=>file_save_dialog(
-      EXPORTING
-        default_extension = `json` ##NO_TEXT
-        default_file_name = substring_before( val = file_name sub = '.' occ = -1 )
-      CHANGING
-        filename          = user_input_filename
-        path              = file_path
-        fullpath          = fullpath
-        user_action       = user_action
-      EXCEPTIONS
-        OTHERS            = 1 ) ##SUBRC_OK.
-
-    IF sy-subrc <> 0.
-      MESSAGE 'Error when exporting file'(031) TYPE 'E'.
-      RETURN.
-    ENDIF.
+          ENDIF.
 *     on mac computers file_save_dialog( ) does not add ".json" at the file_name ending.
-    IF user_input_filename NP '*.json'.
-      user_input_filename = |{ user_input_filename }.json| ##NO_TEXT.
-      fullpath = |{ fullpath }.json| ##NO_TEXT.
-    ENDIF.
+          IF user_input_filename NP '*.json'.
+            user_input_filename = |{ user_input_filename }.json| ##NO_TEXT.
+            fullpath = |{ fullpath }.json| ##NO_TEXT.
+          ENDIF.
 
-    cl_gui_frontend_services=>gui_download(
-      EXPORTING
-        filename = user_input_filename
-        write_lf = 'X'
-      CHANGING
-        data_tab = content_as_table
-      EXCEPTIONS
-        OTHERS   = 1 ) ##SUBRC_OK.
-    IF sy-subrc <> 0.
-      MESSAGE 'Error when exporting file'(031) TYPE 'E'.
-      RETURN.
-    ENDIF.
-  ENDMETHOD.
+          cl_gui_frontend_services=>gui_download(
+            EXPORTING
+              filename = user_input_filename
+              write_lf = 'X'
+            CHANGING
+              data_tab = content_as_table
+            EXCEPTIONS
+              OTHERS   = 1 ) ##SUBRC_OK.
+          IF sy-subrc <> 0.
+            MESSAGE 'Error when exporting file'(031) TYPE 'E'.
+            RETURN.
+          ENDIF.
+        ENDMETHOD.
 
-  METHOD handle_double_click_in_100.
-    CLEAR selected_row.
-    APPEND e_row TO selected_row.
-    CALL SCREEN 200.
-  ENDMETHOD.
+        METHOD handle_double_click_in_100.
+          CLEAR selected_row.
+          APPEND e_row TO selected_row.
+          CALL SCREEN 200.
+        ENDMETHOD.
 
-  METHOD handle_double_click_in_200.
-    APPEND e_row TO selected_row_api.
-    CALL SCREEN 500.
-  ENDMETHOD.
+        METHOD handle_double_click_in_200.
+          APPEND e_row TO selected_row_api.
+          CALL SCREEN 500.
+        ENDMETHOD.
 
-  METHOD user_command_in_scsr_overview.
-    DATA: answer        TYPE char01,
-          sel_row_index TYPE lvc_t_row.
+        METHOD user_command_in_scsr_overview.
+          DATA: answer        TYPE char01,
+                sel_row_index TYPE lvc_t_row.
 
-    CASE scsr_ucomm.
-      WHEN 'BACK'.
-        CLEAR selected_row_api.
-        alv_grid->set_selected_rows( it_index_rows = selected_row_api ).
-        CALL SCREEN 200.
+          CASE scsr_ucomm.
+            WHEN 'BACK'.
+              CLEAR selected_row_api.
+              alv_grid->set_selected_rows( it_index_rows = selected_row_api ).
+              CALL SCREEN 200.
 
-      WHEN 'RELOAD'.
-        CALL SCREEN 500.
-    ENDCASE.
-  ENDMETHOD.
+            WHEN 'RELOAD'.
+              CALL SCREEN 500.
+          ENDCASE.
+        ENDMETHOD.
 
 
 ENDCLASS.
@@ -728,16 +728,16 @@ MODULE pbo_screen_200 OUTPUT.
     selected_file = data_files[ <sel_row_title>-index ].
     selected_file = data_files_full_names[ file_id = selected_file-file_id ].
     SELECT SINGLE data_type, source FROM zknsf_api_header INTO @DATA(api_db) WHERE file_id = @selected_file-file_id.
-    IF api_db-data_type <> zknsf_cl_cache_write_api=>co_data_type_custom.
-      DATA(hidden_buttons) = VALUE syucomm_t(
-                                              ( 'DELETE' )
-                                              ( 'EXPORT' ) ).
-      SET PF-STATUS 'STATUS_200' EXCLUDING hidden_buttons.
-    ELSE.
-      SET PF-STATUS 'STATUS_200'.
-    ENDIF.
-  ENDLOOP.
-  classification_manager->display_detail_alv( ).
+      IF api_db-data_type <> zknsf_cl_cache_write_api=>co_data_type_custom.
+        DATA(hidden_buttons) = VALUE syucomm_t(
+                                                ( 'DELETE' )
+                                                ( 'EXPORT' ) ).
+        SET PF-STATUS 'STATUS_200' EXCLUDING hidden_buttons.
+      ELSE.
+        SET PF-STATUS 'STATUS_200'.
+      ENDIF.
+    ENDLOOP.
+    classification_manager->display_detail_alv( ).
 ENDMODULE.
 
 MODULE pbo_screen_500 OUTPUT.

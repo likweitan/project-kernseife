@@ -12,23 +12,24 @@ define view entity ZKNSF_I_EXPORT
     left outer join ZKNSF_I_FUNCTION_MODULES as functionModules on functionModules.functionModule = fnd.refObjectName
     left outer join ALL_CDS_STOB_VIEWS       as cds_stob        on cds_stob.DDLSourceName = fnd.refObjectName
     left outer join ALL_CDS_SQL_VIEWS        as cds_sql         on cds_sql.DDLSourceName = fnd.refObjectName
+    inner join      tdevc                    as devClass        on fnd.devClass = devClass.devclass
 
 {
-  key     cast( fnd.displayId  as zknsf_run_id)                       as runId,
-  key     cast( fnd.itemId as zknsf_item_id preserving type )         as itemId,
-          cast( fnd.objectType as zknsf_object_type )                 as objectType,
-          cast( fnd.objectName as zknsf_object_name preserving type ) as objectName,
-          cast( fnd.devClass as zknsf_dev_class )                     as devClass,
-          cast( fnd.softwareComponent as zknsf_sw_comp )              as softwareComponent,
-          cast( fnd.messageId as zknsf_message_id )                   as messageId,
+  key     cast( fnd.displayId  as zknsf_run_id)                                                                  as runId,
+  key     cast( fnd.itemId as zknsf_item_id preserving type )                                                    as itemId,
+          cast( fnd.objectType as zknsf_object_type )                                                            as objectType,
+          cast( fnd.objectName as zknsf_object_name preserving type )                                            as objectName,
+          cast(case fnd.objectType when 'DEVC' then devClass.parentcl else fnd.devClass end as zknsf_dev_class ) as devClass,
+          cast( fnd.softwareComponent as zknsf_sw_comp )                                                         as softwareComponent,
+          cast( fnd.messageId as zknsf_message_id )                                                              as messageId,
           cast(  case fnd.refObjectType
           when 'STOB' then 'CDS_STOB'
           when 'DDLS' then
           case when cds_sql.SQLViewName is not null then 'CDS_SQL_VIEW'  else 'CDS_STOB' end
-          else fnd.refObjectType end   as zknsf_ref_object_type  )    as refObjectType,
+          else fnd.refObjectType end   as zknsf_ref_object_type  )                                               as refObjectType,
           cast( case when fnd.refObjectType = 'DDLS' and cds_sql.SQLViewName is not null then
           cds_sql.SQLViewName
-          else  fnd.refObjectName end as zknsf_ref_object_name )      as refObjectName
+          else  fnd.refObjectName end as zknsf_ref_object_name )                                                 as refObjectName
 
 
 }

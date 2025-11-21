@@ -167,7 +167,7 @@
                       "column": true,
                       "filter": true
                     },
-                    "enableMassEdit": true
+                    "enableMassEdit": {}
                   },
                   "actions": {
                     "DataFieldForAction::AdminService.assignFramework": {
@@ -176,43 +176,7 @@
                   }
                 }
               },
-              "defaultTemplateAnnotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#table",
-              "content": {
-                "header": {
-                  "actions": {
-                    "downloadClassificationStandard": {
-                      "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationStandard",
-                      "visible": false,
-                      "enabled": true,
-                      "text": "{i18n>downloadClassificationStandard}"
-                    },
-                    "downloadClassificationCustom": {
-                      "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationCustom",
-                      "visible": true,
-                      "enabled": true,
-                      "text": "{i18n>downloadClassificationCustom}"
-                    },
-                    "downloadClassificationCustomLegacy": {
-                      "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationCustomLegacy",
-                      "visible": false,
-                      "enabled": true,
-                      "text": "{i18n>downloadClassificationCustomLegacy}"
-                    },
-                    "downloadClassificationCloud": {
-                      "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationCloud",
-                      "visible": false,
-                      "enabled": true,
-                      "text": "{i18n>downloadClassificationCloud}"
-                    },
-                    "downloadClassificationGithub": {
-                      "press": "manageclassification.extension.controller.ClassificationController.downloadClassificationGithub",
-                      "visible": false,
-                      "enabled": true,
-                      "text": "{i18n>downloadClassificationGithub}"
-                    }
-                  }
-                }
-              }
+              "defaultTemplateAnnotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#table"
             }
           },
           "controlAggregation": "beginColumnPages",

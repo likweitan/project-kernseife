@@ -1,9 +1,11 @@
 import {
   Classification,
+  Classifications,
   ClassificationSuccessor,
-  ReleaseState
+  ReleaseState,
+  ReleaseStates
 } from '#cds-models/kernseife/db';
-import cds from '@sap/cds';
+import cds, { Transaction } from '@sap/cds';
 import axios from 'axios';
 import { CUSTOM, STANDARD } from './classification-feature';
 import { EnhancementImport } from '../types/imports';
@@ -31,7 +33,7 @@ export const getReleaseStateCount = async () => {
 export const getReleaseStateMap = async (): Promise<
   Map<string, ReleaseState>
 > => {
-  const releaseStates = await SELECT.from(cds.entities.ReleaseStates, (r) => {
+  const releaseStates: ReleaseStates = await SELECT.from(cds.entities.ReleaseStates, (r: any) => {
       r.tadirObjectType,
       r.tadirObjectName,
       r.objectType,
@@ -49,7 +51,7 @@ export const getReleaseStateMap = async (): Promise<
   }, new Map());
 };
 
-export const determineReleaseLevel = (releaseState) => {
+export const determineReleaseLevel = (releaseState: ReleaseState) => {
   if (releaseState.releaseInfo_code === 'released') {
     return 'RELEASED';
   } else if (releaseState.releaseInfo_code === 'deprecated') {
@@ -193,7 +195,7 @@ export const loadReleaseState = async () => {
     'SAP/abap-atc-cr-cv-s4hc/main/src/objectReleaseInfo_PCELatest.json'
   );
 
-  responseReleaseInfo.data.objectReleaseInfo.forEach((releaseInfo) => {
+  responseReleaseInfo.data.objectReleaseInfo.forEach((releaseInfo: any) => {
     // Cleanup Object Types
 
     // Check if the object is already in the map releaseStateMap
@@ -212,7 +214,7 @@ export const loadReleaseState = async () => {
         tadirObjectName: releaseInfo.tadirObjName,
         softwareComponent: releaseInfo.softwareComponent,
         applicationComponent: releaseInfo.applicationComponent,
-        successorList: releaseInfo.successors?.map((successor) => {
+        successorList: releaseInfo.successors?.map((successor: any) => {
           // Map Successor
           return {
             objectType: successor.objectType,
@@ -243,7 +245,7 @@ export const loadReleaseState = async () => {
   );
 
   responseClassicInfo.data.objectClassifications.forEach(
-    (objectClassification) => {
+    (objectClassification: any) => {
       // Cleanup Object Types
 
       // Check if the object is already in the map releaseStateMap
@@ -262,7 +264,7 @@ export const loadReleaseState = async () => {
           tadirObjectName: objectClassification.tadirObjName,
           softwareComponent: objectClassification.softwareComponent,
           applicationComponent: objectClassification.applicationComponent,
-          successorList: objectClassification.successors?.map((successor) => {
+          successorList: objectClassification.successors?.map((successor: any) => {
             // Map Successor
             return {
               objectType: successor.objectType,
@@ -300,12 +302,12 @@ export const loadReleaseState = async () => {
 };
 
 export const updateClassificationsFromReleaseStates = async (
-  tx,
-  updateProgress
+  tx: Transaction,
+  updateProgress: (progressCount: number) => Promise<void>
 ) => {
-  const classifications = await SELECT.from(
+  const classifications: Classifications = await SELECT.from(
     cds.entities.Classifications,
-    (c) => {
+    (c: any) => {
       c.tadirObjectType,
         c.tadirObjectName,
         c.objectType,

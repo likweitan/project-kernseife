@@ -1,0 +1,26 @@
+{
+  "name": "configure-setting",
+  "version": "1.0.1",
+  "description": "Configure Settings App",
+  "keywords": [
+    "ui5",
+    "openui5",
+    "sapui5"
+  ],
+  "main": "webapp/index.html",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "ui5 build preload --clean-dest --include-task=generateCachebusterInfo",
+    "start": "ui5 serve"
+  },
+  "devDependencies": {
+    "@sap/eslint-plugin-ui5-jsdocs": "2.0.8",
+    "@sap/ux-specification": "^1.136.7",
+    "@sap/ux-ui5-tooling": "1.19.0",
+    "@ui5/cli": "^4.0.30",
+    "eslint": "9.25.1",
+    "ui5-task-zipper": "^3.4.4"
+  }
+}

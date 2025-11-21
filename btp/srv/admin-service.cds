@@ -1,4 +1,5 @@
 using kernseife.db as db from '../db/data-model';
+using {kernseife_btp as btp} from './external/kernseife_btp';
 
 service AdminService @(requires: 'admin') {
 
@@ -25,6 +26,7 @@ service AdminService @(requires: 'admin') {
         }
 
     entity Imports                       as projection on db.Imports;
+    entity Exports                       as projection on db.Exports;
 
     entity FindingRecords                as
         projection on db.FindingRecords {
@@ -35,11 +37,11 @@ service AdminService @(requires: 'admin') {
     entity FindingsAggregated            as projection on db.FindingsAggregated;
     entity SimplificationItems           as projection on db.SimplificationItems;
 
-    type inFramework         : {
+    type inFramework                  : {
         code : String;
     }
 
-    type inSuccessor         : {
+    type inSuccessor                  : {
         tadirObjectType : String;
         tadirObjectName : String;
         objectType      : String;
@@ -64,12 +66,7 @@ service AdminService @(requires: 'admin') {
     entity FrameworkUsages               as projection on db.FrameworkUsages;
     entity ClassificationSuccessors      as projection on db.ClassificationSuccessors;
 
-    @odata.draft.enabled
     entity Ratings                       as projection on db.Ratings;
-
-    entity LegacyRatings                 as projection on db.LegacyRatings;
-
-    @odata.draft.enabled
     entity Frameworks                    as projection on db.Frameworks;
 
     entity FrameworkTypes                as projection on db.FrameworkTypes;
@@ -89,14 +86,29 @@ service AdminService @(requires: 'admin') {
 
     entity Customers                     as projection on db.Customers;
 
-    @odata.draft.enabled
-    entity Systems                       as projection on db.Systems;
+    entity Projects                      as
+        projection on btp.ZKNSF_I_PROJECTS {
+            *
+        };
 
-    type inDevClass          : {
+    entity Systems                       as
+        projection on db.Systems {
+            *,
+            virtual setupDone : Boolean,
+            project           : Association to Projects
+                                    on project.systemId = $self.sid //Not exactly correct, but we need an ON condition here
+        }
+        actions {
+            action syncClassifications();
+            action setupSystem();
+        };
+
+
+    type inDevClass                   : {
         devClass : String;
     }
 
-    type inDevelopmentObject : {
+    type inDevelopmentObject          : {
         objectType : String;
         objectName : String;
         devClass   : String;
@@ -118,27 +130,30 @@ service AdminService @(requires: 'admin') {
                                         @mandatory devClass: inDevelopmentObject:devClass);
         }
 
-    type inInitialData       : {
-        customerTitle     : String(30);
-        contactPerson     : String;
-        prefix            : String(6);
-        configUrl         : String;
+    type inInitialData                : {
+        configUrl : String;
     }
 
             @odata.draft.enabled
     entity Settings                      as projection on db.Settings
         actions {
             @Common.IsActionCritical: true
-            action createInitialData(
-            @mandatory contactPerson: inInitialData:contactPerson,
-                                     @mandatory prefix: inInitialData:prefix,
-                                     @mandatory customerTitle: inInitialData:customerTitle,
-                                     configUrl: inInitialData:configUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultSetup.json'
+            @(Common.SideEffects: {TargetEntities: [
+                'in/customerList',
+                'in/systemList',
+                'in/ratingList',
+            ], })
+            action createInitialData(configUrl: inInitialData:configUrl @UI.ParameterDefaultValue: 'https://raw.githubusercontent.com/SAP/project-kernseife/refs/heads/main/defaultSetup.json'
 
             );
         };
 
-    entity Jobs                          as projection on db.Jobs;
+    entity Jobs                          as
+        projection on db.Jobs {
+            *,
+            virtual hideImports : Boolean,
+            virtual hideExports : Boolean,
+        };
 
     // Actions
     @Common.IsActionCritical: true
@@ -146,38 +161,16 @@ service AdminService @(requires: 'admin') {
     action recalculateAllScores();
 
     action loadReleaseState();
-    action exportMissingClassification();
 
-    @odata.singleton
-    @cds.persistence.skip
-    entity Downloads {
-        @(Core.MediaType                 : 'application/json')
-        @Core.ContentDisposition.Filename: 'classificationStandard.json'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationStandard     : LargeBinary;
-
-        @(Core.MediaType                 : 'application/json')
-        @Core.ContentDisposition.Filename: 'classificationCustom.json'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationCustom       : LargeBinary;
-
-
-        @(Core.MediaType                 : 'application/json')
-        @Core.ContentDisposition.Filename: 'classificationCustomLegacy.json'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationCustomLegacy : LargeBinary;
-
-        @(Core.MediaType                 : 'application/json')
-        @Core.ContentDisposition.Filename: 'classificationCloud.json'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationCloud        : LargeBinary;
-
-        @(Core.MediaType                 : 'application/zip')
-        @Core.ContentDisposition.Filename: 'classification.zip'
-        @Core.ContentDisposition.Type    : 'inline'
-        classificationGithub       : LargeBinary;
+    type inExportSystemClassification : {
+        legacy : Boolean;
     }
 
+    @Common.IsActionCritical: true
+    action syncClassificationsToAllSystems();
+
+    // Actions
+    action triggerExport(exportType: String, legacy: Boolean); // as "export" is not allowed due to TS type generation
 
     entity AdoptionEffort                as projection on db.AdoptionEffort;
 
@@ -204,8 +197,14 @@ service AdminService @(requires: 'admin') {
 
     entity ObjectTypes                   as projection on db.ObjectTypes;
     entity Criticality                   as projection on db.Criticality;
-    entity ImportTypes                   as projection on db.ImportTypes;
 
+    entity ImportTypes                   as projection on db.ImportTypes
+                                            where
+                                                hidden == false;
+
+    entity ExportTypes                   as projection on db.ExportTypes
+                                            where
+                                                hidden == false;
 
     @cds.redirection.target: false
     define view RatingsValueList as
@@ -235,5 +234,7 @@ service AdminService @(requires: 'admin') {
     }
 
     entity FileUpload                    as projection on db.FileUpload;
+
+    entity Destinations                  as projection on db.Destinations;
 
 }

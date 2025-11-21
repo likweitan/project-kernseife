@@ -373,6 +373,12 @@
           "length": 255,
           "@cds.persistence.name": "MODIFIEDBY"
         },
+        "setting_ID": {
+          "type": "cds.String",
+          "length": 36,
+          "@odata.foreignKey4": "setting",
+          "@cds.persistence.name": "SETTING_ID"
+        },
         "sid": {
           "type": "cds.String",
           "length": 5000,
@@ -388,6 +394,11 @@
           "length": 5000,
           "@cds.persistence.name": "COMMENT"
         },
+        "destination": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "DESTINATION"
+        },
         "customer_ID": {
           "type": "cds.String",
           "length": 36,
@@ -395,6 +406,37 @@
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_SYSTEMS"
+    },
+    "kernseife.db.Settings": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "createdAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "CREATEDAT"
+        },
+        "createdBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "CREATEDBY"
+        },
+        "modifiedAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "MODIFIEDAT"
+        },
+        "modifiedBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "MODIFIEDBY"
+        },
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "ID"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_SETTINGS"
     },
     "kernseife.db.Customers": {
       "kind": "entity",
@@ -424,6 +466,12 @@
           "length": 255,
           "@cds.persistence.name": "MODIFIEDBY"
         },
+        "setting_ID": {
+          "type": "cds.String",
+          "length": 36,
+          "@odata.foreignKey4": "setting",
+          "@cds.persistence.name": "SETTING_ID"
+        },
         "title": {
           "type": "cds.String",
           "length": 5000,
@@ -441,6 +489,130 @@
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_CUSTOMERS"
+    },
+    "kernseife.db.Ratings": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "ID"
+        },
+        "createdAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "CREATEDAT"
+        },
+        "createdBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "CREATEDBY"
+        },
+        "modifiedAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "MODIFIEDAT"
+        },
+        "modifiedBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "MODIFIEDBY"
+        },
+        "setting_ID": {
+          "type": "cds.String",
+          "length": 36,
+          "@odata.foreignKey4": "setting",
+          "@cds.persistence.name": "SETTING_ID"
+        },
+        "code": {
+          "type": "cds.String",
+          "length": 20,
+          "@cds.persistence.name": "CODE"
+        },
+        "title": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "TITLE"
+        },
+        "score": {
+          "type": "cds.Integer",
+          "@cds.persistence.name": "SCORE"
+        },
+        "level": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "LEVEL"
+        },
+        "usableInClassification": {
+          "type": "cds.Boolean",
+          "@cds.persistence.name": "USABLEINCLASSIFICATION"
+        },
+        "criticality_code": {
+          "type": "cds.String",
+          "length": 5000,
+          "@odata.foreignKey4": "criticality",
+          "@cds.persistence.name": "CRITICALITY_CODE"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_RATINGS"
+    },
+    "kernseife.db.Frameworks": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "ID"
+        },
+        "createdAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "CREATEDAT"
+        },
+        "createdBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "CREATEDBY"
+        },
+        "modifiedAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "MODIFIEDAT"
+        },
+        "modifiedBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "MODIFIEDBY"
+        },
+        "setting_ID": {
+          "type": "cds.String",
+          "length": 36,
+          "@odata.foreignKey4": "setting",
+          "@cds.persistence.name": "SETTING_ID"
+        },
+        "code": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "CODE"
+        },
+        "title": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "TITLE"
+        },
+        "criticality_code": {
+          "type": "cds.String",
+          "length": 5000,
+          "@odata.foreignKey4": "criticality",
+          "@cds.persistence.name": "CRITICALITY_CODE"
+        },
+        "frameworkType_code": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "FRAMEWORKTYPE_CODE"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_FRAMEWORKS"
     },
     "kernseife.db.Extensions": {
       "kind": "entity",
@@ -587,11 +759,6 @@
           "length": 5000,
           "@cds.persistence.name": "TITLE"
         },
-        "status": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "STATUS"
-        },
         "systemId": {
           "type": "cds.String",
           "length": 5000,
@@ -601,6 +768,13 @@
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "COMMENT"
+        },
+        "overwrite": {
+          "type": "cds.Boolean",
+          "default": {
+            "val": false
+          },
+          "@cds.persistence.name": "OVERWRITE"
         },
         "defaultRating": {
           "type": "cds.String",
@@ -615,11 +789,21 @@
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "FILETYPE"
+        },
+        "fileName": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "FILENAME"
+        },
+        "job_ID": {
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "JOB_ID"
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_IMPORTS"
     },
-    "kernseife.db.Ratings": {
+    "kernseife.db.Jobs": {
       "kind": "entity",
       "@cds.persistence.journal": true,
       "elements": {
@@ -647,39 +831,33 @@
           "length": 255,
           "@cds.persistence.name": "MODIFIEDBY"
         },
-        "code": {
-          "type": "cds.String",
-          "length": 20,
-          "@cds.persistence.name": "CODE"
-        },
         "title": {
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "TITLE"
         },
-        "score": {
+        "status": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "STATUS"
+        },
+        "type": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "TYPE"
+        },
+        "progressCurrent": {
           "type": "cds.Integer",
-          "@cds.persistence.name": "SCORE"
+          "@cds.persistence.name": "PROGRESSCURRENT"
         },
-        "level": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "LEVEL"
-        },
-        "usableInClassification": {
-          "type": "cds.Boolean",
-          "@cds.persistence.name": "USABLEINCLASSIFICATION"
-        },
-        "criticality_code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "criticality",
-          "@cds.persistence.name": "CRITICALITY_CODE"
+        "progressTotal": {
+          "type": "cds.Integer",
+          "@cds.persistence.name": "PROGRESSTOTAL"
         }
       },
-      "@cds.persistence.name": "KERNSEIFE_DB_RATINGS"
+      "@cds.persistence.name": "KERNSEIFE_DB_JOBS"
     },
-    "kernseife.db.LegacyRatings": {
+    "kernseife.db.Exports": {
       "kind": "entity",
       "@cds.persistence.journal": true,
       "elements": {
@@ -689,19 +867,50 @@
           "length": 36,
           "@cds.persistence.name": "ID"
         },
-        "rating_ID": {
+        "createdAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "CREATEDAT"
+        },
+        "createdBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "CREATEDBY"
+        },
+        "modifiedAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "MODIFIEDAT"
+        },
+        "modifiedBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "MODIFIEDBY"
+        },
+        "type": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "TYPE"
+        },
+        "file": {
+          "type": "cds.LargeBinary",
+          "@cds.persistence.name": "FILE"
+        },
+        "fileType": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "FILETYPE"
+        },
+        "fileName": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "FILENAME"
+        },
+        "job_ID": {
           "type": "cds.String",
           "length": 36,
-          "@odata.foreignKey4": "rating",
-          "@cds.persistence.name": "RATING_ID"
-        },
-        "legacyRating": {
-          "type": "cds.String",
-          "length": 10,
-          "@cds.persistence.name": "LEGACYRATING"
+          "@cds.persistence.name": "JOB_ID"
         }
       },
-      "@cds.persistence.name": "KERNSEIFE_DB_LEGACYRATINGS"
+      "@cds.persistence.name": "KERNSEIFE_DB_EXPORTS"
     },
     "kernseife.db.Classifications": {
       "kind": "entity",
@@ -850,58 +1059,6 @@
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_FRAMEWORKUSAGES"
-    },
-    "kernseife.db.Frameworks": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "ID"
-        },
-        "createdAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "CREATEDAT"
-        },
-        "createdBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "CREATEDBY"
-        },
-        "modifiedAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "MODIFIEDAT"
-        },
-        "modifiedBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "MODIFIEDBY"
-        },
-        "code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "CODE"
-        },
-        "title": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "TITLE"
-        },
-        "criticality_code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "criticality",
-          "@cds.persistence.name": "CRITICALITY_CODE"
-        },
-        "frameworkType_code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "FRAMEWORKTYPE_CODE"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_FRAMEWORKS"
     },
     "kernseife.db.AdoptionEffort": {
       "kind": "entity",
@@ -1156,105 +1313,6 @@
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_SIMPLIFICATIONITEMS"
-    },
-    "kernseife.db.Settings": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "createdAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "CREATEDAT"
-        },
-        "createdBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "CREATEDBY"
-        },
-        "modifiedAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "MODIFIEDAT"
-        },
-        "modifiedBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "MODIFIEDBY"
-        },
-        "ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "ID"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_SETTINGS"
-    },
-    "kernseife.db.Jobs": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "ID"
-        },
-        "createdAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "CREATEDAT"
-        },
-        "createdBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "CREATEDBY"
-        },
-        "modifiedAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "MODIFIEDAT"
-        },
-        "modifiedBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "MODIFIEDBY"
-        },
-        "title": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "TITLE"
-        },
-        "status": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "STATUS"
-        },
-        "type": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "TYPE"
-        },
-        "progressCurrent": {
-          "type": "cds.Integer",
-          "@cds.persistence.name": "PROGRESSCURRENT"
-        },
-        "progressTotal": {
-          "type": "cds.Integer",
-          "@cds.persistence.name": "PROGRESSTOTAL"
-        },
-        "file": {
-          "type": "cds.LargeBinary",
-          "@cds.persistence.name": "FILE"
-        },
-        "fileName": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "FILENAME"
-        },
-        "fileType": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "FILETYPE"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_JOBS"
     },
     "kernseife.db.ObjectTypes": {
       "kind": "entity",

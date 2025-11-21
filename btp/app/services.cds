@@ -1,10 +1,6 @@
 using from './analyze-score/annotations';
 using from './analyze-overview/annotations';
-using from './import-center/annotations';
-using from './configure-default/annotations';
-using from './configure-framework/annotations';
-using from './configure-rating/annotations';
-using from './configure-system/annotations';
+using from './configure-setting/annotations';
 using from './manage-release-state/annotations';
 using from './manage-classification/annotations';
 using from './manage-development-object/annotations';
