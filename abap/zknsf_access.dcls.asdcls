@@ -7,6 +7,7 @@ define role ZKNSF_ACCESS {
   grant select on ZKNSF_I_FUNCTION_MODULES;      
   grant select on ZKNSF_I_SCORING;
   grant select on ZKNSF_I_DEV_OBJECTS_SCORE;         
+  grant select on ZKNSF_I_DEVELOPMENT_OBJECTS;         
   grant select on ZKNSF_I_EXPORT;
   grant select on ZKNSF_I_OBJECT_USAGE;
 }
