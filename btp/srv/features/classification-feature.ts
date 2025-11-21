@@ -1472,10 +1472,10 @@ const importClassification = async (
         note: note.note,
         title: note.title,
         noteClassification_code: note.noteClassification,
-        classification_objectType: classification.objectType,
-        classification_objectName: classification.objectName,
-        classification_tadirObjectName: classification.tadirObjectName,
-        classification_tadirObjectType: classification.tadirObjectType
+        classification_objectType: classificationImport.objectType,
+        classification_objectName: classificationImport.objectName,
+        classification_tadirObjectName: classificationImport.tadirObjectName,
+        classification_tadirObjectType: classificationImport.tadirObjectType
       }) as Note)
         : [],
       numberOfSimplificationNotes:
