@@ -10,3 +10,6 @@ resources:
   - name: kernseife-db
     parameters:
       service-name: kernseife-prod-db
+  - name: kernseife-cloud-logging
+    parameters:
+      service-plan: standard
