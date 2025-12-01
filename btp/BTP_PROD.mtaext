@@ -3,9 +3,6 @@ ID: kernseife-prod
 
 extends: kernseife
 
-parameters:
-  landscape: prod
-
 resources:
   - name: kernseife-db
     parameters:

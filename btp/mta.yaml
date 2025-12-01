@@ -5,7 +5,6 @@ description: 'Kernseife Project'
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
-  landscape: dev
 build-parameters:
   before-all:
     - builder: custom

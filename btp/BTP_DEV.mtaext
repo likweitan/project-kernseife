@@ -3,9 +3,6 @@ ID: kernseife-dev
 
 extends: kernseife
 
-parameters:
-  landscape: dev
-
 resources:
   - name: kernseife-db
     parameters:

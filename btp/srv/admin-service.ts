@@ -375,7 +375,7 @@ export default (srv: Service) => {
 
             const count = await getClassificationCount();
             let offset = 0;
-            const rowSize = 50000;
+            const rowSize = 100000;
             let classificationList;
             const exportList: string[] = [];
             do {
