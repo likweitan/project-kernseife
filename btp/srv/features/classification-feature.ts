@@ -90,10 +90,10 @@ export const getClassificationState = (classification: Classification) => {
   }
 };
 
-export const getClassificationCount = async () => {
+export const getClassificationCount = async (dateFrom?: string) => {
   const result = await SELECT.from(entities.Classifications).columns(
     'COUNT( * ) as count'
-  );
+  ).where(dateFrom ? { modifiedAt: { '>=': dateFrom } } : {});
   return result[0]['count'];
 };
 

@@ -373,7 +373,7 @@ export default (srv: Service) => {
           case 'EXTERNAL_CLASSIFICATION': {
             // Wrap in ZIP
 
-            const count = await getClassificationCount();
+            const count = await getClassificationCount(dateFrom);
             let offset = 0;
             const rowSize = 100000;
             let classificationList;
