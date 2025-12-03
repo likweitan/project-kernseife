@@ -155,11 +155,17 @@ annotate service.DevelopmentObjects with @(
             Value            : objectType
         },
         {
-            $Type            : 'UI.DataField',
-            Label            : '{i18n>objectName}',
-            ![@UI.Importance]: #High,
-            Value            : objectName,
-
+            Value                               : objectName,
+            Label                               : '{i18n>objectName}',
+            UI.DataFieldForIntentBasedNavigation: {
+                SemanticObject: 'DevelopmentObjects',
+                Action        : 'manage',
+                Label         : '{i18n>manage}',
+                Parameters    : [
+                    {$PropertyPath: 'objectName'},
+                    {$PropertyPath: 'objectType'}
+                ]
+            }
         },
         {
             $Type            : 'UI.DataField',

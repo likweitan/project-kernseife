@@ -341,7 +341,7 @@ export default (srv: Service) => {
 
   srv.on('triggerExport', async (req: any) => {
     LOG.info('Trigger Export', req.data);
-    const { exportType, legacy } = req.data;
+    const { exportType, legacy, dateFrom } = req.data;
 
     await runAsJob(
       `Export ${exportType}`,
@@ -373,7 +373,7 @@ export default (srv: Service) => {
           case 'EXTERNAL_CLASSIFICATION': {
             // Wrap in ZIP
 
-            const count = await getClassificationCount();
+            const count = await getClassificationCount(dateFrom);
             let offset = 0;
             const rowSize = 100000;
             let classificationList;
@@ -385,7 +385,8 @@ export default (srv: Service) => {
               const progress = Math.round((100 / count) * rowSize * offset);
               classificationList = await getClassificationJsonExternal(
                 rowSize,
-                offset * rowSize
+                offset * rowSize,
+                dateFrom
               );
               if (tx) tx.commit(); // Commit Read
               for (const classification of classificationList) {

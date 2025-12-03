@@ -22,7 +22,7 @@
                                 },
                                 {
                                     "id": "AnalyzeOverview",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "tileType": "sapF.ushell.ui.tile.StaticTile",
                                     "properties": {
                                         "title": "Analyze Overview",
                                         "targetURL": "#Overview-analyze"
@@ -83,6 +83,7 @@
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
                                         "title": "Monitor Jobs",
+                                        "subtitle": "Import/Export",
                                         "targetURL": "#Jobs-monitor"
                                     }
                                 },

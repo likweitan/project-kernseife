@@ -8,11 +8,13 @@
 						path: '/ExportTypes',
 						sorter: { path: 'order' }
 					}">
-                <core:Item id="exportItem" key="{code}" text="{title}" tooltip="{description} {legacy}" />
+                <core:Item id="exportItem" key="{code}" text="{title}" tooltip="{description} {legacy} {dateFrom}" />
             </Select>
             <ExpandableText id="exportDescription" text="{i18n>defaultDescription}" overflowMode="InPlace" />
             <Label id="labelLegacy" text="{i18n>labelLegacy}" labelFor="legacy" />
             <CheckBox id="legacy" text="{i18n>legacy}" />
+            <Label id="labelDateFrom" text="{i18n>labelDateFrom}" labelFor="dateFrom"/>
+            <DatePicker id="dateFrom" placeholder="{i18n>placeholderDateFrom}"/>
         </content>
         <beginButton>
             <Button id="exportOk" text="{i18n>OK}" press=".onOk" type="Emphasized" enabled="false" />

@@ -170,7 +170,7 @@ service AdminService @(requires: 'admin') {
     action syncClassificationsToAllSystems();
 
     // Actions
-    action triggerExport(exportType: String, legacy: Boolean); // as "export" is not allowed due to TS type generation
+    action triggerExport(exportType: String, legacy: Boolean, dateFrom: Timestamp); // as "export" is not allowed due to TS type generation
 
     entity AdoptionEffort                as projection on db.AdoptionEffort;
 

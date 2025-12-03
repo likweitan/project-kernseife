@@ -1106,6 +1106,7 @@ entity ExportTypes {
         title       : String;
         legacy      : Boolean;
         hidden      : Boolean;
+        dateFrom    : Boolean;
         description : String;
 }
 

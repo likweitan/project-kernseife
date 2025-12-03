@@ -203,7 +203,7 @@ export const importFinding = async (
   findingImport: Import,
   tx?: Transaction,
   updateProgress?: (progress: number) => Promise<void>
-) : Promise<JobResult> => {
+): Promise<JobResult> => {
   if (!findingImport.file) throw new Error('File broken');
 
   const csv = await text(findingImport.file);

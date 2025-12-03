@@ -269,6 +269,12 @@ sap.ui.define(
         const oDesription = byId('exportDescription');
         oDesription.setText(description);
 
+        const showDateFrom = oEvent
+          .getParameter('selectedItem')
+          .getBindingContext()
+          .getObject().dateFrom;
+        setFieldVisibility('dateFrom', showDateFrom);
+
         setOkButtonEnabled(true);
       };
 
@@ -279,6 +285,7 @@ sap.ui.define(
           oExtensionAPI.addDependent(oExportDialog);
 
           setFieldVisibility('legacy', false);
+          setFieldVisibility('dateFrom', false);
         },
 
         onAfterClose: function (oEvent) {
@@ -289,6 +296,11 @@ sap.ui.define(
 
         onOk: async function (oEvent) {
           setDialogBusy(true);
+          let dateValue = byId('dateFrom').getDateValue();
+          if (!dateValue) {
+            dateValue = null;
+          }
+
           await oExtensionAPI.getEditFlow().invokeAction('triggerExport', {
             model: oExtensionAPI.getModel(),
             parameterValues: [
@@ -296,7 +308,8 @@ sap.ui.define(
                 name: 'exportType',
                 value: byId('exportType').getSelectedKey()
               },
-              { name: 'legacy', value: byId('legacy').getSelected() }
+              { name: 'legacy', value: byId('legacy').getSelected() },
+              { name: 'dateFrom', value: dateValue }
             ],
             skipParameterDialog: true
           });

@@ -90,10 +90,10 @@ export const getClassificationState = (classification: Classification) => {
   }
 };
 
-export const getClassificationCount = async () => {
+export const getClassificationCount = async (dateFrom?: string) => {
   const result = await SELECT.from(entities.Classifications).columns(
     'COUNT( * ) as count'
-  );
+  ).where(dateFrom ? { modifiedAt: { '>=': dateFrom } } : {});
   return result[0]['count'];
 };
 
@@ -1221,18 +1221,20 @@ export const getClassificationJsonStandard = async () => {
 };
 
 export const getClassificationJsonCustom = async (
-  options: { legacy: boolean } = { legacy: false }
+  options: { legacy: boolean } = {
+    legacy: false
+  }
 ) => {
   let ratings: Ratings = [];
+  let whereClause: any = {};
+
   if (options.legacy) {
-    ratings = await SELECT.from(entities.Ratings, (r: any) => {
-      r.code, r.title, r.criticality_code.as('criticality'), r.score;
-    }).where({ usableInClassification: true });
-  } else {
-    ratings = await SELECT.from(entities.Ratings, (r: any) => {
-      r.code, r.title, r.criticality_code.as('criticality'), r.score;
-    });
+    whereClause = { usableInClassification: true };
   }
+
+  ratings = await SELECT.from(entities.Ratings, (r: any) => {
+    r.code, r.title, r.criticality_code.as('criticality'), r.score;
+  }).where(whereClause);
 
   const classifications: Classifications = await SELECT.from(
     entities.Classifications,
@@ -1285,9 +1287,14 @@ export const getClassificationJsonCustom = async (
  */
 export const getClassificationJsonExternal = async (
   rows: number,
-  offset: number
+  offset: number,
+  dateFrom?: string
 ) => {
   //  LOG.info(`Read ${rows} Classifications (Offset: ${offset})`);
+  const whereClause: any = {};
+  if (dateFrom) {
+    whereClause.modifiedAt = { '>=': dateFrom };
+  }
   const classifications: Classifications = await SELECT.from(
     entities.Classifications,
     (c: any) => {
@@ -1316,7 +1323,8 @@ export const getClassificationJsonExternal = async (
       'objectType',
       'objectName'
     )
-    .limit(rows, offset);
+    .limit(rows, offset)
+    .where(whereClause);
   return classifications.map(
     (classification) =>
       ({

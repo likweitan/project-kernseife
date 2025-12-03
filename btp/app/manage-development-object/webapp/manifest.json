@@ -39,7 +39,14 @@
             "refresh": 1000
           },
           "signature": {
-            "parameters": {},
+            "parameters": {
+              "objectName": {
+                "required": false
+              },
+              "objectType": {
+                "required": false
+              }
+            },
             "additionalParameters": "allowed"
           }
         }
