@@ -17,6 +17,7 @@ import { JobResult } from '../types/jobs';
 import {
   getDestinationBySystemId,
   getDevelopmentObjects,
+  getDevelopmentObjectsCount,
   getFindings,
   getFindingsCount,
   getProject
@@ -432,7 +433,7 @@ export const importDevelopmentObjectsBTP = async (
   // Get Project Id
   const project = await getProject(destination);
 
-  const top = 100;
+  let top = 1000;
   let skip = 0;
 
   // Process Findings
@@ -442,6 +443,8 @@ export const importDevelopmentObjectsBTP = async (
     project.runId
   );
   LOG.info(`Found ${findingsCount} Findings for Project ${project.projectId}`);
+
+  const successorMap = await getSuccessorRatingMap();
 
   let findingsCounter = 0;
   skip = 0;
@@ -459,7 +462,7 @@ export const importDevelopmentObjectsBTP = async (
     }
     // Insert Findings
     const findingRecordList = findingsImportList.map((finding) => {
-      return {
+      const findingRecord = {
         // Map Attribues
         import_ID: developmentObjectsImport.ID,
         systemId: systemId,
@@ -472,6 +475,21 @@ export const importDevelopmentObjectsBTP = async (
         refObjectName: finding.refObjectName,
         messageId: finding.messageId
       } as FindingRecord;
+
+      if (findingRecord.messageId!.endsWith('_SUC')) {
+        // Find Successors
+        const successorKey = getSuccessorKey(
+          findingRecord.refObjectType!,
+          findingRecord.refObjectName!
+        );
+        findingRecord.potentialMessageId = successorMap.get(successorKey);
+      }
+      if (!findingRecord.potentialMessageId) {
+        // No Successor, so use the same as messageId
+        findingRecord.potentialMessageId = findingRecord.messageId;
+      }
+
+      return findingRecord;
     });
 
     await INSERT.into(entities.FindingRecords).entries(findingRecordList);
@@ -496,7 +514,13 @@ export const importDevelopmentObjectsBTP = async (
 
   const map = new Map<string, string>();
 
-  while (skip < project.totalObjectCount) {
+  const developmentObjectCount = await getDevelopmentObjectsCount(
+    destination,
+    project.projectId
+  );
+  top = 100;
+  skip = 0;
+  while (skip < developmentObjectCount) {
     const developmentObjectImportList = await getDevelopmentObjects(
       destination,
       project.projectId,
