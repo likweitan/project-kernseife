@@ -4,3 +4,4 @@ FINDINGS,"Findings Import",true,false,false,false,csv,false,2,"Manual upload of 
 ENHANCEMENT,"BADI Import",false,false,false,false,csv,true,3,"Internal: BADI Import"
 EXPLICIT,"Explicit Enhancement Spot Import",false,false,false,false,csv,true,4,"Internal: Explicit Enhancement Spots"
 EXTERNAL_CLASSIFICATION,"Classification Import",false,false,false,true,zip,false,5,"Import of the Classifications, which were exported using the Classification (External Format) Export"
+BTP_DEVELOPMENT_OBJECTS,"BTP Import",true,false,false,false,,false,6,"Import of Development Objects via BTP Connector"

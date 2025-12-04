@@ -19,7 +19,8 @@ import {
 import {
   calculateScores,
   calculateScoreByRef,
-  importFindingsById
+  importFindingsById,
+  importDevelopmentObjectsBTP
 } from './features/developmentObject-feature';
 import {
   addAllUnassignedDevelopmentObjects,
@@ -29,6 +30,7 @@ import {
 } from './features/extension-feature';
 import {
   createExport,
+  createImport,
   jobHasExports,
   jobHasImports,
   runAsJob,
@@ -39,11 +41,12 @@ import {
   loadReleaseState,
   updateClassificationsFromReleaseStates
 } from './features/releaseState-feature';
-import { createInitialData, setupSystem } from './features/setup-feature';
+import { createInitialData } from './features/setup-feature';
 import JSZip from 'jszip';
 import { handleMessage, updateDestinations } from './lib/connectivity';
-import { timeStamp } from 'console';
 import { JobResult } from './types/jobs';
+import { setupProject } from './features/btp-connector-feature';
+import { System } from '#cds-models/kernseife/db';
 
 export default (srv: Service) => {
   const LOG = log('AdminService');
@@ -211,6 +214,8 @@ export default (srv: Service) => {
               tx,
               updateProgress
             );
+          case 'BTP_DEVELOPMENT_OBJECTS':
+            return await importDevelopmentObjectsBTP(ID, tx, updateProgress);
           default:
             LOG.error(`Unknown Import Type ${importType}`);
             throw new Error(`Unknown Import Type ${importType}`);
@@ -306,7 +311,15 @@ export default (srv: Service) => {
   );
 
   srv.on('setupSystem', ['Systems', 'Systems.drafts'], async (req: any) => {
-    const message = await setupSystem(req.subject);
+    const system: System = await SELECT.one.from(req.subject);
+    if (!system || !system.destination) {
+      return {
+        message: 'SYSTEM_NO_DESTINATION',
+        numericSeverity: 3
+      };
+    }
+
+    const message = await setupProject(system.destination);
     handleMessage(req, message);
   });
 
@@ -336,6 +349,35 @@ export default (srv: Service) => {
       // Check if Job has Imports
       job.hideImports = !(await jobHasImports(job.ID!));
       job.hideExports = !(await jobHasExports(job.ID!));
+    }
+  });
+
+  srv.on('triggerImport', async (req: any) => {
+    LOG.info('Trigger Import', req.data);
+    const { importType, systemId } = req.data;
+    const importId = await createImport(
+      importType,
+      '',
+      null,
+      '',
+      systemId,
+      '',
+      false,
+      ''
+    );
+
+    if (importId) {
+      await srv.emit('Imported', {
+        ID: importId,
+        type: importType
+      });
+
+      req.notify({
+        message: 'Import started',
+        status: 200
+      });
+    } else {
+      req.error(400);
     }
   });
 

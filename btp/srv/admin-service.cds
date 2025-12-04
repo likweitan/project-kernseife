@@ -171,6 +171,7 @@ service AdminService @(requires: 'admin') {
 
     // Actions
     action triggerExport(exportType: String, legacy: Boolean, dateFrom: Timestamp); // as "export" is not allowed due to TS type generation
+    action triggerImport(importType: String, systemId: String);
 
     entity AdoptionEffort                as projection on db.AdoptionEffort;
 

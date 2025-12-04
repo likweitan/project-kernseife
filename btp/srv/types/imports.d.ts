@@ -37,16 +37,68 @@ export type ClassificationImportLog = ClassificationKey & {
   status: 'NEW' | 'CONFLICT' | 'UPDATED' | 'UNCHANGED';
 };
 
-export type EnhancementImport =  ClassificationKey & {
+export type EnhancementImport = ClassificationKey & {
   applicationComponent: string;
   softwareComponent: string;
   internalUse: boolean;
   singleUse: boolean;
 };
 
-export type ExplicitImport =  ClassificationKey & {
+export type ExplicitImport = ClassificationKey & {
   applicationComponent: string;
   softwareComponent: string;
   internalUse: boolean;
   singleUse: boolean;
 };
+
+export type ProjectImport = {
+  projectId: string;
+  description: string;
+  runId: string;
+  systemId: string;
+  status: string;
+  statusDescription: string;
+  statusCriticality: number;
+  runSeries: string;
+  runSeriesReferences: string;
+  totalObjectCount: number;
+  findingCount: number;
+};
+
+export interface DevelopmentObjectImport {
+  projectId: string;
+  runId: string;
+  objectType: string;
+  objectName: string;
+  subType: string;
+  devClass: string;
+  softwareComponent: string;
+  languageVersion: string;
+  contactPerson: string;
+  _findings: FindingImport[];
+  _metrics: MetricsImport[];
+}
+
+export interface FindingImport {
+  projectId: string;
+  runId: string;
+  itemId: string;
+  objectType: string;
+  objectName: string;
+  devClass: string;
+  softwareComponent: string;
+  messageId: string;
+  refObjectType: string;
+  refObjectName: string;
+  refApplicationComponent: string;
+  refSoftwareComponent: string;
+  refDevClass: string;
+}
+
+export interface MetricsImport {
+  projectId: string;
+  objectType: string;
+  objectName: string;
+  difficulty: number;
+  numberOfChanges: number;
+}

@@ -9,6 +9,7 @@ sap.ui.define(
 
     const _createImportController = (oExtensionAPI) => {
       let oImportDialog;
+      let isFileUploadRequired = false;
 
       const setOkButtonEnabled = function (bOk) {
         oImportDialog && oImportDialog.getBeginButton().setEnabled(bOk);
@@ -78,13 +79,17 @@ sap.ui.define(
           .getObject().overwrite;
         setFieldVisibility('overwrite', showOverwrite);
 
-        setFieldVisibility('uploader', true);
-
         const fileEndings = oEvent
           .getParameter('selectedItem')
           .getBindingContext()
           .getObject().fileEndings;
         setFileEndings(fileEndings);
+
+        isFileUploadRequired = !!fileEndings;
+
+        // If no file endings are defined => No File Uplaod required (e.g. BTP Connector)
+        setFieldVisibility('uploader', isFileUploadRequired);
+        setOkButtonEnabled(!isFileUploadRequired);
 
         const description = oEvent
           .getParameter('selectedItem')
@@ -114,9 +119,26 @@ sap.ui.define(
           oImportDialog = undefined;
         },
 
-        onOk: function (oEvent) {
+        onOk: async function (oEvent) {
           setDialogBusy(true);
 
+          if (!isFileUploadRequired) {
+            await oExtensionAPI.getEditFlow().invokeAction('triggerImport', {
+              model: oExtensionAPI.getModel(),
+              parameterValues: [
+                {
+                  name: 'importType',
+                  value: byId('importType').getSelectedKey()
+                },
+                { name: 'systemId', value: byId('systemId').getSelectedKey() }
+              ],
+              skipParameterDialog: true
+            });
+            oExtensionAPI.refresh();
+            setDialogBusy(false);
+            closeDialog();
+            return;
+          }
           const oFileUploader = byId('uploader');
           const serviceUrl =
             oExtensionAPI.getModel().getServiceUrl() + 'FileUpload/file';

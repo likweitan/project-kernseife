@@ -125,7 +125,7 @@ export const createExport = async (
   return exportObject.ID as string;
 };
 
-const createImport = async (
+export const createImport = async (
   importType: string,
   fileName: string,
   file: any,

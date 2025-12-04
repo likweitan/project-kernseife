@@ -2,13 +2,11 @@ import {
   Customers,
   Ratings,
   Frameworks,
-  System,
   Rating
 } from '#cds-models/kernseife/db';
 import { entities, log } from '@sap/cds';
 import axios from 'axios';
 import { loadReleaseState } from './releaseState-feature';
-import { remoteServiceCall } from '../lib/connectivity';
 
 const LOG = log('Setup');
 
@@ -83,22 +81,4 @@ export const createInitialData = async (configUrl: string) => {
 
   // Load Release States
   await loadReleaseState();
-};
-export const setupSystem = async (ref: any) => {
-  const system: System = await SELECT.one.from(ref);
-  if (!system || !system.destination) {
-    return {
-      message: 'SYSTEM_NO_DESTINATION',
-      numericSeverity: 3
-    };
-  }
-
-  const result = await remoteServiceCall({
-    destinationName: system.destination,
-    method: 'POST',
-    url: '/sap/opu/odata4/sap/zknsf_btp_connector/srvd/sap/zknsf_btp_connector/0001/ZKNSF_I_PROJECTS/com.sap.gateway.srvd.zknsf_btp_connector.v0001.Setup',
-    data: {}
-  });
-  LOG.info(`Received response from System ${system.sid}: ${result.message}`);
-  return result.message;
 };

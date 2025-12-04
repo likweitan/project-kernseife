@@ -5,7 +5,7 @@ import {
   CleanCoreLevel,
   DevelopmentObjects
 } from '#cds-models/kernseife/db';
-import { db, entities, log, Transaction } from '@sap/cds';
+import { db, entities, log, Transaction, utils } from '@sap/cds';
 import { text } from 'node:stream/consumers';
 import papa from 'papaparse';
 import {
@@ -14,7 +14,14 @@ import {
 } from './classification-feature';
 import { supportslanguageVersions } from '../lib/languageVersions';
 import { JobResult } from '../types/jobs';
-import { Job } from '#cds-models/AdminService';
+import {
+  getDestinationBySystemId,
+  getDevelopmentObjects,
+  getFindings,
+  getFindingsCount,
+  getProject
+} from './btp-connector-feature';
+import { FindingImport } from '../types/imports';
 
 const LOG = log('DevelopmentObjectFeature');
 
@@ -267,9 +274,6 @@ export const importFinding = async (
         // No Successor, so use the same as messageId
         findingRecord.potentialMessageId = findingRecord.messageId;
       }
-      if (findingRecord.objectName == '0COORDER_0103_HIER') {
-        LOG.info('Importing Finding Record', { findingRecord });
-      }
       return findingRecord;
     })
     .filter((finding) => {
@@ -407,4 +411,169 @@ export const importFindingsById = async (
     })
     .where({ ID: findingImportId });
   return await importFinding(findingsRunImport, tx, updateProgress);
+};
+
+export const importDevelopmentObjectsBTP = async (
+  importId: string,
+  tx: Transaction,
+  updateProgress?: (progress: number) => Promise<void>
+): Promise<JobResult> => {
+  const developmentObjectsImport = await SELECT.one
+    .from(entities.Imports, (d: Import) => {
+      d.ID, d.title, d.systemId;
+    })
+    .where({ ID: importId });
+
+  const systemId = developmentObjectsImport.systemId;
+
+  // Get Destination from System
+  const destination = await getDestinationBySystemId(systemId);
+
+  // Get Project Id
+  const project = await getProject(destination);
+
+  const top = 100;
+  let skip = 0;
+
+  // Process Findings
+  const findingsCount = await getFindingsCount(
+    destination,
+    project.projectId,
+    project.runId
+  );
+  LOG.info(`Found ${findingsCount} Findings for Project ${project.projectId}`);
+
+  let findingsCounter = 0;
+  skip = 0;
+  while (findingsCount > findingsCounter) {
+    const findingsImportList = await getFindings(
+      destination,
+      project.projectId,
+      project.runId,
+      top,
+      skip
+    );
+
+    if (!findingsImportList || findingsImportList.length == 0) {
+      findingsCounter = findingsCount;
+    }
+    // Insert Findings
+    const findingRecordList = findingsImportList.map((finding) => {
+      return {
+        // Map Attribues
+        import_ID: developmentObjectsImport.ID,
+        systemId: systemId,
+        itemId: finding.itemId,
+        objectType: finding.objectType,
+        objectName: finding.objectName,
+        devClass: finding.devClass,
+        softwareComponent: finding.softwareComponent,
+        refObjectType: finding.refObjectType,
+        refObjectName: finding.refObjectName,
+        messageId: finding.messageId
+      } as FindingRecord;
+    });
+
+    await INSERT.into(entities.FindingRecords).entries(findingRecordList);
+    if (tx) {
+      await tx.commit();
+    }
+
+    findingsCounter += findingsImportList.length;
+    skip += top;
+    if (updateProgress)
+      await updateProgress(Math.round((50 / findingsCount) * findingsCounter));
+  }
+
+  // Remove all Development Objects for this System
+  // may be in the future we do a versioning per Run
+  await DELETE(entities.DevelopmentObjects).where({
+    systemId: systemId
+  });
+
+  // Get Development Objects
+  let insertCount = 0;
+
+  const map = new Map<string, string>();
+
+  while (skip < project.totalObjectCount) {
+    const developmentObjectImportList = await getDevelopmentObjects(
+      destination,
+      project.projectId,
+      top,
+      skip
+    );
+
+    const developmentObjectInsert = [] as Partial<DevelopmentObject>[];
+    for (const developmentObjectImport of developmentObjectImportList) {
+      const id = getDevelopmentObjectIdentifier(developmentObjectImport);
+      if (map.has(id)) {
+        LOG.error(`Development Object exists multiple times: ${id}`);
+        continue;
+      }
+      map.set(id, developmentObjectImport.languageVersion);
+      // Create a new Development Object
+      const developmentObject = {
+        objectType: developmentObjectImport.objectType,
+        objectName: developmentObjectImport.objectName,
+        systemId: systemId,
+        devClass: developmentObjectImport.devClass,
+        softwareComponent: developmentObjectImport.softwareComponent,
+        latestFindingImportId: developmentObjectsImport.ID,
+        languageVersion_code: developmentObjectImport.languageVersion,
+        namespace: ''
+      } as DevelopmentObject;
+
+      const { score, potentialScore, level, potentialLevel } =
+        await calculateScoreAndLevel(developmentObject);
+      developmentObject.potentialScore = potentialScore;
+      developmentObject.score = score;
+
+      developmentObject.level =
+        level == CleanCoreLevel.A &&
+        developmentObjectImport.languageVersion != '5' &&
+        developmentObjectImport.languageVersion != '2' // Key-User is also Part of ABAP Cloud => Level A as well
+          ? CleanCoreLevel.B
+          : level;
+
+      const supportsABAPCloud = supportslanguageVersions(
+        developmentObject.objectType!
+      );
+      developmentObject.potentialLevel =
+        !supportsABAPCloud && potentialLevel == CleanCoreLevel.A
+          ? CleanCoreLevel.B
+          : potentialLevel; // As if all findings are level A, the object could have Language Version 5
+      //TODO We might need to define the list of object types which can have Language Version 5
+      developmentObject.namespace = determineNamespace(developmentObject);
+
+      if (
+        !developmentObject.devClass ||
+        !developmentObject.objectName ||
+        !developmentObject.objectType ||
+        !developmentObject.systemId
+      ) {
+        LOG.error('Invalid Development Object', { developmentObject });
+      }
+      developmentObjectInsert.push(developmentObject);
+
+      insertCount++;
+    }
+    if (developmentObjectInsert.length > 0) {
+      await INSERT.into(entities.DevelopmentObjects).entries(
+        developmentObjectInsert
+      );
+      if (tx) {
+        await tx.commit();
+      }
+    }
+    if (updateProgress)
+      await updateProgress(
+        50 + Math.round((50 / project.totalObjectCount) * insertCount)
+      );
+    skip += top;
+  }
+  return {
+    message: `Inserted ${insertCount} DevelopmentObject(s)`,
+    exportIdList: []
+  } as JobResult;
 };
