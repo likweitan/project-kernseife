@@ -290,6 +290,10 @@ resources:
             description: Kernseife Admin
             role-template-references:
               - $XSAPPNAME.admin
+          - name: 'kernseife-analyst-${space}'
+            description: Kernseife Analyst
+            role-template-references:
+              - $XSAPPNAME.analyst
           - name: 'kernseife-viewer-${space}'
             description: Kernseife Viewer
             role-template-references:

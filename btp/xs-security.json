@@ -7,6 +7,10 @@
     {
       "name": "$XSAPPNAME.viewer",
       "description": "viewer"
+    },
+    {
+      "name": "$XSAPPNAME.analyst",
+      "description": "analyst"
     }
   ],
   "attributes": [],
@@ -16,6 +20,14 @@
       "description": "Kernseife Administrator",
       "scope-references": [
         "$XSAPPNAME.admin"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "analyst",
+      "description": "Kernseife Analyst",
+      "scope-references": [
+        "$XSAPPNAME.analyst"
       ],
       "attribute-references": []
     },

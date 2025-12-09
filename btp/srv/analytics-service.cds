@@ -1,7 +1,7 @@
 using kernseife.db as db from '../db/data-model';
 
 service AnalyticsService @(requires: [
-    'viewer',
+    'analyst',
     'admin'
 ]) {
 
