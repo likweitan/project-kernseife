@@ -63,7 +63,22 @@ export type ProjectImport = {
   runSeriesReferences: string;
   totalObjectCount: number;
   findingCount: number;
+  _runState?: RunStateImport;
 };
+
+export interface RunStateImport {
+  projectId: string;
+  runSeries: string;
+  projectStatus: string;
+  runState: string;
+  runStateText: string;
+  startedOn: string;
+  startedBy: string;
+  total: number;
+  failed: number;
+  processed: number;
+  criticalIndicator: number;
+}
 
 export type DevelopmentObjectImport = {
   projectId: string;

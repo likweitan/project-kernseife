@@ -50,6 +50,38 @@
 	<edmx:DataServices>
 		<Schema Namespace="com.sap.gateway.srvd.zknsf_btp_connector.v0001" Alias="SAP__self">
 			<Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
+			<EntityType Name="ZKNSF_I_RUN_STATEType">
+				<Key>
+					<PropertyRef Name="projectId"/>
+				</Key>
+				<Property Name="projectId" Type="Edm.Guid" Nullable="false"/>
+				<Property Name="runSeries" Type="Edm.String" Nullable="false" MaxLength="16"/>
+				<Property Name="projectStatus" Type="Edm.String" Nullable="false" MaxLength="10"/>
+				<Property Name="runState" Type="Edm.String" Nullable="false" MaxLength="10"/>
+				<Property Name="runStateText" Type="Edm.String" Nullable="false" MaxLength="64"/>
+				<Property Name="startedOn" Type="Edm.DateTimeOffset"/>
+				<Property Name="startedBy" Type="Edm.String" Nullable="false" MaxLength="80"/>
+				<Property Name="total" Type="Edm.Int32" Nullable="false"/>
+				<Property Name="failed" Type="Edm.Int32" Nullable="false"/>
+				<Property Name="processed" Type="Edm.Int32" Nullable="false"/>
+				<Property Name="criticalIndicator" Type="Edm.Byte" Nullable="false"/>
+			</EntityType>
+			<EntityType Name="sycm_aps_i_usageType">
+				<Key>
+					<PropertyRef Name="project_id"/>
+					<PropertyRef Name="entry_point_type"/>
+					<PropertyRef Name="entry_point_name"/>
+					<PropertyRef Name="obj_type"/>
+					<PropertyRef Name="obj_name"/>
+				</Key>
+				<Property Name="project_id" Type="Edm.Guid" Nullable="false"/>
+				<Property Name="entry_point_type" Type="Edm.String" Nullable="false" MaxLength="1"/>
+				<Property Name="entry_point_name" Type="Edm.String" Nullable="false" MaxLength="60"/>
+				<Property Name="obj_type" Type="Edm.String" Nullable="false" MaxLength="4"/>
+				<Property Name="obj_name" Type="Edm.String" Nullable="false" MaxLength="40"/>
+				<Property Name="counter" Type="Edm.Decimal" Nullable="false" Precision="20"/>
+				<Property Name="last_used" Type="Edm.Date"/>
+			</EntityType>
 			<EntityType Name="ZKNSF_I_FINDINGSType">
 				<Key>
 					<PropertyRef Name="projectId"/>
@@ -61,6 +93,8 @@
 				<Property Name="itemId" Type="Edm.Guid" Nullable="false"/>
 				<Property Name="objectType" Type="Edm.String" Nullable="false" MaxLength="16"/>
 				<Property Name="objectName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+				<Property Name="devClass" Type="Edm.String" Nullable="false" MaxLength="30"/>
+				<Property Name="softwareComponent" Type="Edm.String" Nullable="false" MaxLength="30"/>
 				<Property Name="messageId" Type="Edm.String" Nullable="false" MaxLength="25"/>
 				<Property Name="refObjectType" Type="Edm.String" Nullable="false" MaxLength="16"/>
 				<Property Name="refObjectName" Type="Edm.String" Nullable="false" MaxLength="40"/>
@@ -86,6 +120,7 @@
 				<Property Name="contactPerson" Type="Edm.String" Nullable="false" MaxLength="12"/>
 				<NavigationProperty Name="_findings" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_FINDINGSType)"/>
 				<NavigationProperty Name="_metrics" Type="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_METRICSType"/>
+				<NavigationProperty Name="_usages" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.sycm_aps_i_usageType)"/>
 			</EntityType>
 			<EntityType Name="ZKNSF_I_METRICSType">
 				<Key>
@@ -105,13 +140,21 @@
 				</Key>
 				<Property Name="projectId" Type="Edm.Guid" Nullable="false"/>
 				<Property Name="description" Type="Edm.String" Nullable="false" MaxLength="255"/>
-				<Property Name="displayId" Type="Edm.Guid"/>
+				<Property Name="runId" Type="Edm.Guid"/>
 				<Property Name="systemId" Type="Edm.String" Nullable="false" MaxLength="10"/>
 				<Property Name="status" Type="Edm.String" Nullable="false" MaxLength="10"/>
 				<Property Name="statusDescription" Type="Edm.String" Nullable="false" MaxLength="60"/>
 				<Property Name="statusCriticality" Type="Edm.Byte" Nullable="false"/>
-				<Property Name="runId" Type="Edm.String" Nullable="false" MaxLength="16"/>
-				<Property Name="runIdReferences" Type="Edm.String" Nullable="false" MaxLength="16"/>
+				<Property Name="runSeries" Type="Edm.String" Nullable="false" MaxLength="16"/>
+				<Property Name="runSeriesReferences" Type="Edm.String" Nullable="false" MaxLength="16"/>
+				<Property Name="runState" Type="Edm.String" Nullable="false" MaxLength="10"/>
+				<Property Name="runStateText" Type="Edm.String" Nullable="false" MaxLength="64"/>
+				<Property Name="startedOn" Type="Edm.DateTimeOffset"/>
+				<Property Name="startedBy" Type="Edm.String" Nullable="false" MaxLength="80"/>
+				<Property Name="total" Type="Edm.Int32" Nullable="false"/>
+				<Property Name="failed" Type="Edm.Int32" Nullable="false"/>
+				<Property Name="processed" Type="Edm.Int32" Nullable="false"/>
+				<Property Name="criticalIndicator" Type="Edm.Byte" Nullable="false"/>
 				<Property Name="totalObjectCount" Type="Edm.Int32" Nullable="false"/>
 				<Property Name="findingCount" Type="Edm.Int32" Nullable="false"/>
 				<Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.SAP__Message)" Nullable="false"/>
@@ -139,19 +182,178 @@
 			<Action Name="Setup" IsBound="true">
 				<Parameter Name="_it" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_PROJECTSType)" Nullable="false"/>
 			</Action>
+			<Action Name="RunATC" IsBound="true">
+				<Parameter Name="_it" Type="Collection(com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_PROJECTSType)" Nullable="false"/>
+			</Action>
 			<EntityContainer Name="Container">
+				<EntitySet Name="sycm_aps_i_usage" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.sycm_aps_i_usageType"/>
 				<EntitySet Name="ZKNSF_I_DEVELOPMENT_OBJECTS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_DEVELOPMENT_OBJECTSType">
 					<NavigationPropertyBinding Path="_findings" Target="ZKNSF_I_FINDINGS"/>
 					<NavigationPropertyBinding Path="_metrics" Target="ZKNSF_I_METRICS"/>
+					<NavigationPropertyBinding Path="_usages" Target="sycm_aps_i_usage"/>
 				</EntitySet>
 				<EntitySet Name="ZKNSF_I_FINDINGS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_FINDINGSType"/>
 				<EntitySet Name="ZKNSF_I_METRICS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_METRICSType"/>
 				<EntitySet Name="ZKNSF_I_PROJECTS" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_PROJECTSType">
 					<NavigationPropertyBinding Path="_developmentObjects" Target="ZKNSF_I_DEVELOPMENT_OBJECTS"/>
 				</EntitySet>
+				<EntitySet Name="ZKNSF_I_RUN_STATE" EntityType="com.sap.gateway.srvd.zknsf_btp_connector.v0001.ZKNSF_I_RUN_STATEType"/>
 			</EntityContainer>
 			<Annotations Target="SAP__self.ZKNSF_I_FILE_STREAM/streamProperty">
 				<Annotation Term="SAP__common.Label" String="Select file"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/projectStatus">
+				<Annotation Term="SAP__common.IsUpperCase"/>
+				<Annotation Term="SAP__common.Label" String="Project State"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/runState">
+				<Annotation Term="SAP__core.Computed"/>
+				<Annotation Term="SAP__common.IsUpperCase"/>
+				<Annotation Term="SAP__common.Label" String="Analysis State"/>
+				<Annotation Term="SAP__common.Heading" String="State of the Analysis"/>
+				<Annotation Term="SAP__common.QuickInfo" String="State of the analysis"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/runStateText">
+				<Annotation Term="SAP__core.Computed"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/startedOn">
+				<Annotation Term="SAP__core.Computed"/>
+				<Annotation Term="SAP__common.Label" String="Started On"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Analysis started on"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/startedBy">
+				<Annotation Term="SAP__core.Computed"/>
+				<Annotation Term="SAP__common.Label" String="Created By"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Created By User Description"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/total">
+				<Annotation Term="SAP__core.Computed"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/failed">
+				<Annotation Term="SAP__core.Computed"/>
+				<Annotation Term="SAP__common.Label" String="Analysis Failures"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Analysis failures"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/processed">
+				<Annotation Term="SAP__core.Computed"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/criticalIndicator">
+				<Annotation Term="SAP__core.Computed"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType">
+				<Annotation Term="SAP__common.Label" String="Kernseife: ATC Run State"/>
+			</Annotations>
+			<Annotations Target="SAP__self.Container/ZKNSF_I_RUN_STATE">
+				<Annotation Term="SAP__capabilities.SearchRestrictions">
+					<Record>
+						<PropertyValue Property="Searchable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.FilterRestrictions">
+					<Record>
+						<PropertyValue Property="NonFilterableProperties">
+							<Collection>
+								<PropertyPath>runState</PropertyPath>
+								<PropertyPath>runStateText</PropertyPath>
+								<PropertyPath>startedOn</PropertyPath>
+								<PropertyPath>startedBy</PropertyPath>
+								<PropertyPath>total</PropertyPath>
+								<PropertyPath>failed</PropertyPath>
+								<PropertyPath>processed</PropertyPath>
+								<PropertyPath>criticalIndicator</PropertyPath>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.SortRestrictions">
+					<Record>
+						<PropertyValue Property="NonSortableProperties">
+							<Collection>
+								<PropertyPath>runState</PropertyPath>
+								<PropertyPath>runStateText</PropertyPath>
+								<PropertyPath>startedOn</PropertyPath>
+								<PropertyPath>startedBy</PropertyPath>
+								<PropertyPath>total</PropertyPath>
+								<PropertyPath>failed</PropertyPath>
+								<PropertyPath>processed</PropertyPath>
+								<PropertyPath>criticalIndicator</PropertyPath>
+							</Collection>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.InsertRestrictions">
+					<Record>
+						<PropertyValue Property="Insertable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.DeleteRestrictions">
+					<Record>
+						<PropertyValue Property="Deletable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.UpdateRestrictions">
+					<Record>
+						<PropertyValue Property="Updatable" Bool="false"/>
+						<PropertyValue Property="QueryOptions">
+							<Record>
+								<PropertyValue Property="SelectSupported" Bool="true"/>
+							</Record>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__core.OptimisticConcurrency">
+					<Collection/>
+				</Annotation>
+			</Annotations>
+			<Annotations Target="SAP__self.sycm_aps_i_usageType/entry_point_type">
+				<Annotation Term="SAP__common.IsUpperCase"/>
+				<Annotation Term="SAP__common.Label" String="Entry Point Category"/>
+				<Annotation Term="SAP__common.Heading" String="Request Entry Point Category"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Request Entry Point Category"/>
+			</Annotations>
+			<Annotations Target="SAP__self.sycm_aps_i_usageType/obj_type">
+				<Annotation Term="SAP__common.IsUpperCase"/>
+				<Annotation Term="SAP__common.Label" String="Object Type"/>
+				<Annotation Term="SAP__common.Heading" String="Obj."/>
+				<Annotation Term="SAP__common.QuickInfo" String="Object Type in Object Directory"/>
+			</Annotations>
+			<Annotations Target="SAP__self.sycm_aps_i_usageType/obj_name">
+				<Annotation Term="SAP__common.IsUpperCase"/>
+				<Annotation Term="SAP__common.Label" String="Object Name"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Object Name in Object Directory"/>
+			</Annotations>
+			<Annotations Target="SAP__self.sycm_aps_i_usageType">
+				<Annotation Term="SAP__common.Label" String="Usage aggregated for project"/>
+			</Annotations>
+			<Annotations Target="SAP__self.Container/sycm_aps_i_usage">
+				<Annotation Term="SAP__capabilities.SearchRestrictions">
+					<Record>
+						<PropertyValue Property="Searchable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.InsertRestrictions">
+					<Record>
+						<PropertyValue Property="Insertable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.DeleteRestrictions">
+					<Record>
+						<PropertyValue Property="Deletable" Bool="false"/>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__capabilities.UpdateRestrictions">
+					<Record>
+						<PropertyValue Property="Updatable" Bool="false"/>
+						<PropertyValue Property="QueryOptions">
+							<Record>
+								<PropertyValue Property="SelectSupported" Bool="true"/>
+							</Record>
+						</PropertyValue>
+					</Record>
+				</Annotation>
+				<Annotation Term="SAP__core.OptimisticConcurrency">
+					<Collection/>
+				</Annotation>
 			</Annotations>
 			<Annotations Target="SAP__self.ZKNSF_I_FINDINGSType">
 				<Annotation Term="SAP__common.Label" String="Kernseife: Findings for BTP Extraction"/>
@@ -254,6 +456,14 @@
 								</Record>
 								<Record>
 									<PropertyValue Property="NavigationProperty" NavigationPropertyPath="_metrics"/>
+									<PropertyValue Property="InsertRestrictions">
+										<Record>
+											<PropertyValue Property="Insertable" Bool="false"/>
+										</Record>
+									</PropertyValue>
+								</Record>
+								<Record>
+									<PropertyValue Property="NavigationProperty" NavigationPropertyPath="_usages"/>
 									<PropertyValue Property="InsertRestrictions">
 										<Record>
 											<PropertyValue Property="Insertable" Bool="false"/>
@@ -377,6 +587,12 @@
 				<Annotation Term="SAP__common.IsUpperCase"/>
 				<Annotation Term="SAP__common.Label" String="Project State"/>
 			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/runState">
+				<Annotation Term="SAP__common.IsUpperCase"/>
+				<Annotation Term="SAP__common.Label" String="Analysis State"/>
+				<Annotation Term="SAP__common.Heading" String="State of the Analysis"/>
+				<Annotation Term="SAP__common.QuickInfo" String="State of the analysis"/>
+			</Annotations>
 			<Annotations Target="SAP__self.Container/ZKNSF_I_PROJECTS">
 				<Annotation Term="SAP__capabilities.NavigationRestrictions">
 					<Record>
@@ -410,6 +626,18 @@
 								</Record>
 							</Collection>
 						</PropertyValue>
+						<PropertyValue Property="NonFilterableProperties">
+							<Collection>
+								<PropertyPath>runState</PropertyPath>
+								<PropertyPath>runStateText</PropertyPath>
+								<PropertyPath>startedOn</PropertyPath>
+								<PropertyPath>startedBy</PropertyPath>
+								<PropertyPath>total</PropertyPath>
+								<PropertyPath>failed</PropertyPath>
+								<PropertyPath>processed</PropertyPath>
+								<PropertyPath>criticalIndicator</PropertyPath>
+							</Collection>
+						</PropertyValue>
 					</Record>
 				</Annotation>
 				<Annotation Term="SAP__capabilities.SortRestrictions">
@@ -417,6 +645,14 @@
 						<PropertyValue Property="NonSortableProperties">
 							<Collection>
 								<PropertyPath>description</PropertyPath>
+								<PropertyPath>runState</PropertyPath>
+								<PropertyPath>runStateText</PropertyPath>
+								<PropertyPath>startedOn</PropertyPath>
+								<PropertyPath>startedBy</PropertyPath>
+								<PropertyPath>total</PropertyPath>
+								<PropertyPath>failed</PropertyPath>
+								<PropertyPath>processed</PropertyPath>
+								<PropertyPath>criticalIndicator</PropertyPath>
 							</Collection>
 						</PropertyValue>
 					</Record>
@@ -512,6 +748,23 @@
 				<Annotation Term="SAP__common.Label" String="Truth Value"/>
 				<Annotation Term="SAP__common.QuickInfo" String="Truth Value: True/False"/>
 			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/projectId">
+				<Annotation Term="SAP__common.Label" String="Project ID"/>
+				<Annotation Term="SAP__common.Heading" String="Conversion Project Identification"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_RUN_STATEType/runSeries">
+				<Annotation Term="SAP__common.Label" String="Series Name"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Name of configuration for run series"/>
+			</Annotations>
+			<Annotations Target="SAP__self.sycm_aps_i_usageType/project_id">
+				<Annotation Term="SAP__common.Label" String="Project ID"/>
+				<Annotation Term="SAP__common.Heading" String="Conversion Project Identification"/>
+			</Annotations>
+			<Annotations Target="SAP__self.sycm_aps_i_usageType/entry_point_name">
+				<Annotation Term="SAP__common.Label" String="Request Entry Point"/>
+				<Annotation Term="SAP__common.Heading" String="Request Entry Point Name"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Request Entry Point Name"/>
+			</Annotations>
 			<Annotations Target="SAP__self.ZKNSF_I_FINDINGSType/projectId">
 				<Annotation Term="SAP__common.Label" String="Project ID"/>
 				<Annotation Term="SAP__common.Heading" String="Conversion Project Identification"/>
@@ -531,6 +784,14 @@
 			<Annotations Target="SAP__self.ZKNSF_I_FINDINGSType/objectName">
 				<Annotation Term="SAP__common.Label" String="objectName"/>
 				<Annotation Term="SAP__common.QuickInfo" String="Kernseife: Object Name"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_FINDINGSType/devClass">
+				<Annotation Term="SAP__common.Label" String="devClass"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Kernseife: Object Type"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_FINDINGSType/softwareComponent">
+				<Annotation Term="SAP__common.Label" String="softwareComponent"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Kernseife: Object Type"/>
 			</Annotations>
 			<Annotations Target="SAP__self.ZKNSF_I_FINDINGSType/messageId">
 				<Annotation Term="SAP__common.Label" String="messageId"/>
@@ -575,17 +836,29 @@
 			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/description">
 				<Annotation Term="SAP__common.Label" String="Project Description"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/displayId">
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/runId">
 				<Annotation Term="SAP__common.Label" String="Display ID"/>
 				<Annotation Term="SAP__common.QuickInfo" String="ID for 'Display Load' - overall result of 'ABAP Check Layer'"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/runId">
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/runSeries">
 				<Annotation Term="SAP__common.Label" String="Series Name"/>
 				<Annotation Term="SAP__common.QuickInfo" String="Name of configuration for run series"/>
 			</Annotations>
-			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/runIdReferences">
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/runSeriesReferences">
 				<Annotation Term="SAP__common.Label" String="Series Name"/>
 				<Annotation Term="SAP__common.QuickInfo" String="Name of configuration for run series"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/startedOn">
+				<Annotation Term="SAP__common.Label" String="Started On"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Analysis started on"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/startedBy">
+				<Annotation Term="SAP__common.Label" String="Created By"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Created By User Description"/>
+			</Annotations>
+			<Annotations Target="SAP__self.ZKNSF_I_PROJECTSType/failed">
+				<Annotation Term="SAP__common.Label" String="Analysis Failures"/>
+				<Annotation Term="SAP__common.QuickInfo" String="Analysis failures"/>
 			</Annotations>
 		</Schema>
 	</edmx:DataServices>

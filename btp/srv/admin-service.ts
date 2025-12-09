@@ -45,7 +45,11 @@ import { createInitialData } from './features/setup-feature';
 import JSZip from 'jszip';
 import { handleMessage, updateDestinations } from './lib/connectivity';
 import { JobResult } from './types/jobs';
-import { setupProject } from './features/btp-connector-feature';
+import {
+  getProject,
+  setupProject,
+  triggerAtcRun
+} from './features/btp-connector-feature';
 import { System } from '#cds-models/kernseife/db';
 
 export default (srv: Service) => {
@@ -323,22 +327,30 @@ export default (srv: Service) => {
     handleMessage(req, message);
   });
 
+  srv.on('triggerATCRun', ['Systems', 'Systems.drafts'], async (req: any) => {
+    const system: System = await SELECT.one.from(req.subject);
+    if (!system || !system.destination) {
+      return {
+        message: 'SYSTEM_NO_DESTINATION',
+        numericSeverity: 3
+      };
+    }
+
+    const message = await triggerAtcRun(system.destination);
+    handleMessage(req, message);
+  });
+
   // Read Project via System
   srv.after('READ', ['Systems', 'Systems.drafts'], async (Systems, req) => {
     for (const system of Systems as any[]) {
       system.setupDone = false;
+      system.setupNotDone = true;
       if (system.destination) {
-        const btp = await connect.to('kernseife_btp', {
-          credentials: {
-            destination: system.destination,
-            path: '/sap/opu/odata4/sap/zknsf_btp_connector/srvd/sap/zknsf_btp_connector/0001'
-          }
-        });
-        const projectList = await btp.run(SELECT('ZKNSF_I_PROJECTS'));
-        if (projectList && projectList.length == 1) {
-          system.project = projectList[0];
-          system.setupDone = true;
-        }
+        const project = await getProject(system.destination);
+        //LOG.info('Project for System', { project });
+        system.project = project;
+        system.setupDone = true;
+        system.setupNotDone = false; // As UI Bindings cannot handle negation
       }
     }
   });

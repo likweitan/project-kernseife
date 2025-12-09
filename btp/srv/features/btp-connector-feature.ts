@@ -42,6 +42,22 @@ export const getProject = async (
   return response.result.value[0] as ProjectImport;
 };
 
+export const triggerAtcRun = async (destination: string) => {
+  const response = await remoteServiceCall({
+    destinationName: destination,
+    method: 'POST',
+    url:
+      BTP_CONNECTOR_PATH +
+      'ZKNSF_I_PROJECTS/com.sap.gateway.srvd.zknsf_btp_connector.v0001.RunATC',
+    data: {}
+  });
+  LOG.info(
+    `Received response from Destination ${destination}: ${response.message}`
+  );
+  return response.message;
+};
+
+
 export const getDevelopmentObjects = async (
   destination: string,
   projectId: string,

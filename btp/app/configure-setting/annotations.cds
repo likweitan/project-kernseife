@@ -207,6 +207,10 @@ annotate AdminService.Systems with @(
                 Label: '{i18n>statusDescription}',
             },
             {
+                Value: project.runStateText,
+                Label: '{i18n>runStatusDescription}',
+            },
+            {
                 $Type: 'UI.DataField',
                 Value: project.totalObjectCount,
                 Label: '{i18n>totalObjectCount}',
@@ -247,6 +251,12 @@ annotate AdminService.Systems with @(
             Action       : 'AdminService.setupSystem',
             Label        : '{i18n>setupSystem}',
             ![@UI.Hidden]: setupDone
+        },
+        {
+            $Type        : 'UI.DataFieldForAction',
+            Action       : 'AdminService.triggerATCRun',
+            Label        : '{i18n>triggerATCRun}',
+            ![@UI.Hidden]: setupNotDone
         },
     ],
 );

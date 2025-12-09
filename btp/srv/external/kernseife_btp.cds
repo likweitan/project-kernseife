@@ -1,4 +1,4 @@
-/* checksum : 51d86dc20b6d09d658f155836df43bdb */
+/* checksum : 3947eb1c7c5bcf67fe32a6df945daca9 */
 @cds.external : true
 @Aggregation.ApplySupported.Transformations : [ 'aggregate', 'groupby', 'filter' ]
 @Aggregation.ApplySupported.Rollup : #None
@@ -60,6 +60,40 @@ service kernseife_btp {
 
   @cds.external : true
   @cds.persistence.skip : true
+  @Common.Label : 'Usage aggregated for project'
+  @Capabilities.SearchRestrictions.Searchable : false
+  @Capabilities.InsertRestrictions.Insertable : false
+  @Capabilities.DeleteRestrictions.Deletable : false
+  @Capabilities.UpdateRestrictions.Updatable : false
+  @Capabilities.UpdateRestrictions.QueryOptions.SelectSupported : true
+  entity sycm_aps_i_usage {
+    @Common.Label : 'Project ID'
+    @Common.Heading : 'Conversion Project Identification'
+    key project_id : UUID not null;
+    @Common.IsUpperCase : true
+    @Common.Label : 'Entry Point Category'
+    @Common.Heading : 'Request Entry Point Category'
+    @Common.QuickInfo : 'Request Entry Point Category'
+    key entry_point_type : String(1) not null;
+    @Common.Label : 'Request Entry Point'
+    @Common.Heading : 'Request Entry Point Name'
+    @Common.QuickInfo : 'Request Entry Point Name'
+    key entry_point_name : String(60) not null;
+    @Common.IsUpperCase : true
+    @Common.Label : 'Object Type'
+    @Common.Heading : 'Obj.'
+    @Common.QuickInfo : 'Object Type in Object Directory'
+    key obj_type : String(4) not null;
+    @Common.IsUpperCase : true
+    @Common.Label : 'Object Name'
+    @Common.QuickInfo : 'Object Name in Object Directory'
+    key obj_name : String(40) not null;
+    counter : Decimal(precision: 20) not null;
+    last_used : Date;
+  };
+
+  @cds.external : true
+  @cds.persistence.skip : true
   @Common.Label : 'Kernseife: Development Objects'
   @Capabilities.NavigationRestrictions.RestrictedProperties : [
     {
@@ -68,6 +102,10 @@ service kernseife_btp {
     },
     {
       NavigationProperty: _metrics,
+      InsertRestrictions: { Insertable: false }
+    },
+    {
+      NavigationProperty: _usages,
       InsertRestrictions: { Insertable: false }
     }
   ]
@@ -117,6 +155,7 @@ service kernseife_btp {
     contactPerson : String(12) not null;
     _findings : Association to many ZKNSF_I_FINDINGS {  };
     _metrics : Association to one ZKNSF_I_METRICS {  };
+    _usages : Association to many sycm_aps_i_usage {  };
   };
 
   @cds.external : true
@@ -156,6 +195,12 @@ service kernseife_btp {
     @Common.Label : 'objectName'
     @Common.QuickInfo : 'Kernseife: Object Name'
     objectName : String(40) not null;
+    @Common.Label : 'devClass'
+    @Common.QuickInfo : 'Kernseife: Object Type'
+    devClass : String(30) not null;
+    @Common.Label : 'softwareComponent'
+    @Common.QuickInfo : 'Kernseife: Object Type'
+    softwareComponent : String(30) not null;
     @Common.Label : 'messageId'
     @Common.QuickInfo : 'Kernseife: Message ID'
     messageId : String(25) not null;
@@ -198,6 +243,7 @@ service kernseife_btp {
   @cds.external : true
   @cds.persistence.skip : true
   @Common.Label : 'Kernseife: Project'
+  @Common.Messages : SAP__Messages
   @Capabilities.NavigationRestrictions.RestrictedProperties : [
     {
       NavigationProperty: _developmentObjects,
@@ -207,7 +253,27 @@ service kernseife_btp {
   @Capabilities.SearchRestrictions.Searchable : false
   @Capabilities.FilterRestrictions.Filterable : true
   @Capabilities.FilterRestrictions.FilterExpressionRestrictions : [ { Property: description, AllowedExpressions: 'SearchExpression' } ]
-  @Capabilities.SortRestrictions.NonSortableProperties : [ 'description' ]
+  @Capabilities.FilterRestrictions.NonFilterableProperties : [
+    'runState',
+    'runStateText',
+    'startedOn',
+    'startedBy',
+    'total',
+    'failed',
+    'processed',
+    'criticalIndicator'
+  ]
+  @Capabilities.SortRestrictions.NonSortableProperties : [
+    'description',
+    'runState',
+    'runStateText',
+    'startedOn',
+    'startedBy',
+    'total',
+    'failed',
+    'processed',
+    'criticalIndicator'
+  ]
   @Capabilities.InsertRestrictions.Insertable : false
   @Capabilities.DeleteRestrictions.Deletable : false
   @Capabilities.UpdateRestrictions.Updatable : false
@@ -220,7 +286,7 @@ service kernseife_btp {
     description : String(255) not null;
     @Common.Label : 'Display ID'
     @Common.QuickInfo : 'ID for ''Display Load'' - overall result of ''ABAP Check Layer'''
-    displayId : UUID;
+    runId : UUID;
     @Common.IsUpperCase : true
     @Common.Label : 'Original System'
     @Common.Heading : 'Original'
@@ -234,10 +300,31 @@ service kernseife_btp {
     statusCriticality : Integer not null;
     @Common.Label : 'Series Name'
     @Common.QuickInfo : 'Name of configuration for run series'
-    runId : String(16) not null;
+    runSeries : String(16) not null;
     @Common.Label : 'Series Name'
     @Common.QuickInfo : 'Name of configuration for run series'
-    runIdReferences : String(16) not null;
+    runSeriesReferences : String(16) not null;
+    @Common.IsUpperCase : true
+    @Common.Label : 'Analysis State'
+    @Common.Heading : 'State of the Analysis'
+    @Common.QuickInfo : 'State of the analysis'
+    runState : String(10) not null;
+    runStateText : String(64) not null;
+    @odata.Precision : 0
+    @odata.Type : 'Edm.DateTimeOffset'
+    @Common.Label : 'Started On'
+    @Common.QuickInfo : 'Analysis started on'
+    startedOn : DateTime;
+    @Common.Label : 'Created By'
+    @Common.QuickInfo : 'Created By User Description'
+    startedBy : String(80) not null;
+    total : Integer not null;
+    @Common.Label : 'Analysis Failures'
+    @Common.QuickInfo : 'Analysis failures'
+    failed : Integer not null;
+    processed : Integer not null;
+    @odata.Type : 'Edm.Byte'
+    criticalIndicator : Integer not null;
     totalObjectCount : Integer not null;
     findingCount : Integer not null;
     SAP__Messages : many SAP__Message not null;
@@ -254,6 +341,78 @@ service kernseife_btp {
     action Setup(
       _it : many $self not null
     );
+    action RunATC(
+      _it : many $self not null
+    );
+  };
+
+  @cds.external : true
+  @cds.persistence.skip : true
+  @Common.Label : 'Kernseife: ATC Run State'
+  @Capabilities.SearchRestrictions.Searchable : false
+  @Capabilities.FilterRestrictions.NonFilterableProperties : [
+    'runState',
+    'runStateText',
+    'startedOn',
+    'startedBy',
+    'total',
+    'failed',
+    'processed',
+    'criticalIndicator'
+  ]
+  @Capabilities.SortRestrictions.NonSortableProperties : [
+    'runState',
+    'runStateText',
+    'startedOn',
+    'startedBy',
+    'total',
+    'failed',
+    'processed',
+    'criticalIndicator'
+  ]
+  @Capabilities.InsertRestrictions.Insertable : false
+  @Capabilities.DeleteRestrictions.Deletable : false
+  @Capabilities.UpdateRestrictions.Updatable : false
+  @Capabilities.UpdateRestrictions.QueryOptions.SelectSupported : true
+  entity ZKNSF_I_RUN_STATE {
+    @Common.Label : 'Project ID'
+    @Common.Heading : 'Conversion Project Identification'
+    key projectId : UUID not null;
+    @Common.Label : 'Series Name'
+    @Common.QuickInfo : 'Name of configuration for run series'
+    runSeries : String(16) not null;
+    @Common.IsUpperCase : true
+    @Common.Label : 'Project State'
+    projectStatus : String(10) not null;
+    @Core.Computed : true
+    @Common.IsUpperCase : true
+    @Common.Label : 'Analysis State'
+    @Common.Heading : 'State of the Analysis'
+    @Common.QuickInfo : 'State of the analysis'
+    runState : String(10) not null;
+    @Core.Computed : true
+    runStateText : String(64) not null;
+    @odata.Precision : 0
+    @odata.Type : 'Edm.DateTimeOffset'
+    @Core.Computed : true
+    @Common.Label : 'Started On'
+    @Common.QuickInfo : 'Analysis started on'
+    startedOn : DateTime;
+    @Core.Computed : true
+    @Common.Label : 'Created By'
+    @Common.QuickInfo : 'Created By User Description'
+    startedBy : String(80) not null;
+    @Core.Computed : true
+    total : Integer not null;
+    @Core.Computed : true
+    @Common.Label : 'Analysis Failures'
+    @Common.QuickInfo : 'Analysis failures'
+    failed : Integer not null;
+    @Core.Computed : true
+    processed : Integer not null;
+    @odata.Type : 'Edm.Byte'
+    @Core.Computed : true
+    criticalIndicator : Integer not null;
   };
 };
 

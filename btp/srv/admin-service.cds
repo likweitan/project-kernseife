@@ -94,13 +94,15 @@ service AdminService @(requires: 'admin') {
     entity Systems                       as
         projection on db.Systems {
             *,
-            virtual setupDone : Boolean,
-            project           : Association to Projects
-                                    on project.systemId = $self.sid //Not exactly correct, but we need an ON condition here
+            virtual setupDone    : Boolean,
+            virtual setupNotDone : Boolean,
+            project              : Association to Projects
+                                       on project.systemId = $self.sid //Not exactly correct, but we need an ON condition here
         }
         actions {
             action syncClassifications();
             action setupSystem();
+            action triggerATCRun();
         };
 
 
