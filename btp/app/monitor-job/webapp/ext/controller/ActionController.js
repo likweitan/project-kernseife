@@ -85,7 +85,7 @@ sap.ui.define(
           .getObject().fileEndings;
         setFileEndings(fileEndings);
 
-        isFileUploadRequired = !!fileEndings;
+        isFileUploadRequired = Boolean(fileEndings);
 
         // If no file endings are defined => No File Uplaod required (e.g. BTP Connector)
         setFieldVisibility('uploader', isFileUploadRequired);
