@@ -510,3 +510,10 @@ annotate service.DevelopmentObjectUsages with {
     counter              @Common.Label: '{i18n>counter}';
     lastUsed             @Common.Label: '{i18n>lastUsed}';
 };
+annotate service.FindingsAggregated with {
+    code @(
+        Common.Text : ratingTitle,
+        Common.Text.@UI.TextArrangement : #TextFirst,
+    )
+};
+
