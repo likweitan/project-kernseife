@@ -9,4 +9,4 @@ resources:
       service-name: kernseife-dev-db
   - name: kernseife-cloud-logging
     parameters:
-      service-name: dev
+      service-plan: dev
