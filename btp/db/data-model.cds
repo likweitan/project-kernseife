@@ -1144,4 +1144,5 @@ entity FindingsAggregated as
         f.refObjectType,
         f.messageId,
         f.potentialMessageId,
-        f.softwareComponent;
+        f.softwareComponent,
+        r.score;

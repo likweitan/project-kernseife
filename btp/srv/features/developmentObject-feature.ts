@@ -291,7 +291,7 @@ export const importFinding = async (
         systemId: findingRecord.systemId || '',
         devClass: findingRecord.devClass || '',
         softwareComponent: findingRecord.softwareComponent || '',
-        latestFindingImportId: findingImport.ID,
+        version_ID: findingImport.ID,
         languageVersion_code: findingRecord.messageId,
         namespace: '',
         difficulty: 0, // Not available via import by file
@@ -303,10 +303,7 @@ export const importFinding = async (
         developmentObject,
         findingImport.ID!
       );
-      await INSERT.into(entities.DevelopmentObjectFindings).entries(
-        developmentObjectFindingList
-      );
-      //TODO Check if we need to commit?
+      await createDevelopmentObjectFindings(developmentObjectFindingList);
 
       const { score, potentialScore, level, potentialLevel } =
         await calculateScoreAndLevel(developmentObject);
@@ -504,7 +501,7 @@ export const importDevelopmentObjectsBTP = async (
         systemId: systemId,
         devClass: developmentObjectImport.devClass,
         softwareComponent: developmentObjectImport.softwareComponent,
-        latestFindingImportId: developmentObjectsImport.ID,
+        version_ID: developmentObjectsImport.ID,
         languageVersion_code: developmentObjectImport.languageVersion,
         difficulty: developmentObjectImport._metrics?.difficulty || 0,
         numberOfChanges: developmentObjectImport._metrics?.numberOfChanges || 0,
@@ -516,10 +513,7 @@ export const importDevelopmentObjectsBTP = async (
         developmentObject,
         developmentObjectsImport.ID!
       );
-      await INSERT.into(entities.DevelopmentObjectFindings).entries(
-        developmentObjectFindingList
-      );
-      //TODO Check if we need to commit?
+      await createDevelopmentObjectFindings(developmentObjectFindingList);
 
       const { score, potentialScore, level, potentialLevel } =
         await calculateScoreAndLevel(developmentObject);
@@ -605,6 +599,21 @@ const createDevelopmentObjects = async (
   await INSERT.into(entities.DevelopmentObjects).entries(
     developmentObjectsList
   );
+
+  // Also add them to History
+  await INSERT.into(entities.HistoricDevelopmentObjects).entries(
+    developmentObjectsList
+  );
+};
+
+const createDevelopmentObjectFindings = async (
+  developmentObjectFindingList: DevelopmentObjectFindings
+) => {
+  await INSERT.into(entities.DevelopmentObjectFindings).entries(
+    developmentObjectFindingList
+  );
+
+  //TODO Check if we need to commit?
 };
 
 const prepareNewDevelopmentObjectsImport = async (

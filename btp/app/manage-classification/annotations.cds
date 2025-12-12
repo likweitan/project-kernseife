@@ -500,10 +500,6 @@ annotate service.CodeSnippets with @(
     },
 );
 
-annotate service.DevelopmentObjectsAggregated with {
-    objectName @Common.SemanticObject: 'DevelopmentObjects'
-};
-
 annotate service.FrameworkUsages with @(UI.LineItem #frameworksUsed: [
     {
         $Type                    : 'UI.DataField',

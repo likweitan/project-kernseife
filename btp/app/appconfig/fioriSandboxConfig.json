@@ -82,7 +82,7 @@
                                     "id": "MonitorJobs",
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
-                                        "title": "Monitor Jobs",
+                                        "title": "Jobs",
                                         "subtitle": "Import/Export",
                                         "targetURL": "#Jobs-monitor"
                                     }
@@ -212,7 +212,7 @@
                         "Jobs-monitor": {
                             "semanticObject": "Jobs",
                             "action": "monitor",
-                            "title": "Monitor Jobs",
+                            "title": "Jobs",
                             "signature": {
                                 "parameters": {},
                                 "additionalParameters": "ignored"

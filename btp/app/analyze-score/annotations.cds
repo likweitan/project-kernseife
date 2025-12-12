@@ -265,7 +265,7 @@ annotate service.DevelopmentObjects with {
     score                @Common.Label: '{i18n>score}';
 };
 
-annotate service.FindingsAggregated with @(
+annotate service.DevelopmentObjectFindings with @(
     UI.LineItem #findingList                    : [
         {
             $Type                : 'UI.DataField',
@@ -285,7 +285,7 @@ annotate service.FindingsAggregated with @(
             $Type                    : 'UI.DataField',
             Value                    : code,
             Label                    : '{i18n>rating}',
-            Criticality              : criticality.criticality,
+            Criticality              : rating.criticality,
             CriticalityRepresentation: #WithoutIcon,
             ![@UI.Importance]        : #High,
             ![@HTML5.CssDefaults]    : {width: '16rem'},
@@ -294,7 +294,7 @@ annotate service.FindingsAggregated with @(
             $Type                    : 'UI.DataField',
             Value                    : score,
             Label                    : '{i18n>score}',
-            Criticality              : criticality.criticality,
+            Criticality              : rating.criticality.criticality,
             CriticalityRepresentation: #WithoutIcon,
             ![@UI.Importance]        : #Medium,
             ![@HTML5.CssDefaults]    : {width: '4rem'},
@@ -397,7 +397,7 @@ annotate service.DevelopmentObjects with @(
             $Type : 'UI.ReferenceFacet',
             Label : '{i18n>findings}',
             ID    : 'findingList',
-            Target: 'findingListAggregated/@UI.SelectionPresentationVariant#findingList',
+            Target: 'findingList/@UI.SelectionPresentationVariant#findingList',
         },
     ]
 );

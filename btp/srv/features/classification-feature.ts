@@ -272,7 +272,7 @@ export const updateTotalScoreAndReferenceCount = async (
   classification: Classification
 ) => {
   const totalScoreResult = await SELECT.from(
-    entities.DevelopmentObjectsAggregated
+    entities.DevelopmentObjects
   )
     .columns(
       'IFNULL(SUM(total),0) as totalScore',

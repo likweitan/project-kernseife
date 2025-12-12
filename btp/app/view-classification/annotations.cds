@@ -217,7 +217,7 @@ annotate service.Classifications with @(UI.Facets: [
 ]);
 
 
-annotate service.DevelopmentObjectsAggregated with @(
+annotate service.DevelopmentObjects with @(
     UI.LineItem #developmentObjectList          : [
         {
             $Type                : 'UI.DataField',
@@ -525,7 +525,3 @@ annotate service.CodeSnippets with @(
         ],
     },
 );
-
-annotate service.DevelopmentObjectsAggregated with {
-    objectName @Common.SemanticObject: 'DevelopmentObjects'
-};

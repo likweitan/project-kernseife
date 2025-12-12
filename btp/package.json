@@ -4,7 +4,8 @@
   "description": "CAP App for Kernseife",
   "repository": "https://github.tools.sap/Kernseife/kernseifeApp.git",
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+     "npm": ">=11"
   },
   "author": "Daniel Huser",
   "scripts": {
