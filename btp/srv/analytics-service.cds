@@ -78,19 +78,14 @@ service AnalyticsService @(requires: [
             developemtObjectList
         };
 
-
-    @Aggregation.CustomAggregate #score: 'Edm.Decimal'
-    @readonly
-    entity HistoricDevelopmentObjects    as
+    entity ScoreHistory                  as
         select from db.HistoricDevelopmentObjects {
-            objectType,
-            objectName,
-            devClass,
-            systemId,
-            score,
-            level
+            key version.systemId,
+            key version.createdAt,
+                sum(score) as score : Integer,
         }
-
+        group by
+            version_ID;
 
     @readonly
     entity Ratings                       as projection on db.Ratings;

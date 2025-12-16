@@ -23,11 +23,13 @@ annotate service.DevelopmentObjects with @(
             },
         ],
     },
-    UI.HeaderFacets       : [{
-        $Type : 'UI.ReferenceFacet',
-        ID    : 'HistoricScore',
-        Target: 'history/@UI.Chart#HistoricScore',
-    }, ],
+    UI.HeaderFacets       : [
+        {
+            $Type : 'UI.ReferenceFacet',
+            ID    : 'HistoricScore',
+            Target: 'history/@UI.Chart#HistoricScore',
+        }
+    ],
 );
 
 annotate service.DevelopmentObjects with @(
@@ -459,9 +461,8 @@ annotate service.DevelopmentObjectsFindings with @(
         Value        : totalPercentage,
         Visualization: #Progress,
         TargetValue  : 100,
-    },
+    }
 );
-
 
 annotate service.DevelopmentObjectUsages with @(
     UI.SelectionPresentationVariant #usageList: {

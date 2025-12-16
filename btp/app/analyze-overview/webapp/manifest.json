@@ -155,7 +155,7 @@
           }
         }
       },
-       "scoreShare": {
+      "scoreShare": {
         "model": "mainModel",
         "template": "sap.ovp.cards.v4.charts.analytical",
         "settings": {
@@ -372,10 +372,18 @@
             }
           ]
         }
+      },
+      "ScoreHistory": {
+        "template": "sap.ovp.cards.v4.charts.analytical",
+        "model": "mainModel",
+        "settings": {
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#ScoreHistory",
+          "entitySet": "ScoreHistory",
+          "title": "{{scoreHistory}}"
+        }
       }
     },
     "disableTableCardFlexibility": false,
-    "globalFilterControlType": "MacroFilterBar",
     "chartSettings": {
       "showDataLabel": false
     },

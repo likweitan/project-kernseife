@@ -136,23 +136,30 @@ aspect DevelopmentObjectAspect {
 @cds.persistence.journal
 
 entity DevelopmentObjects : managed, DevelopmentObjectAspect {
-    version_ID  : UUID;
-    version     : Association to DevelopmentObjectVersions
-                      on version.ID = $self.version_ID;
+    version_ID       : UUID;
+    version          : Association to DevelopmentObjectVersions
+                           on version.ID = $self.version_ID;
 
 
-    findingList : Association to many DevelopmentObjectFindings
-                      on  findingList.objectType = $self.objectType
-                      and findingList.objectName = $self.objectName
-                      and findingList.devClass   = $self.devClass
-                      and findingList.systemId   = $self.systemId
-                      and findingList.version_ID = $self.version_ID;
+    findingList      : Association to many DevelopmentObjectFindings
+                           on  findingList.objectType = $self.objectType
+                           and findingList.objectName = $self.objectName
+                           and findingList.devClass   = $self.devClass
+                           and findingList.systemId   = $self.systemId
+                           and findingList.version_ID = $self.version_ID;
 
-    history     : Association to many HistoricDevelopmentObjects
-                      on  $self.objectType = history.objectType
-                      and $self.objectName = history.objectName
-                      // Devclass does not decide history...
-                      and $self.systemId   = history.systemId
+    chartFindingList : Association to many DevelopmentObjectFindings
+                           on  chartFindingList.objectType = $self.objectType
+                           and chartFindingList.objectName = $self.objectName
+                           and chartFindingList.devClass   = $self.devClass
+                           and chartFindingList.systemId   = $self.systemId
+                           and chartFindingList.version_ID = $self.version_ID;
+
+    history          : Association to many HistoricDevelopmentObjects
+                           on  $self.objectType = history.objectType
+                           and $self.objectName = history.objectName
+                           // Devclass does not decide history...
+                           and $self.systemId   = history.systemId
 }
 
 @cds.persistence.journal
