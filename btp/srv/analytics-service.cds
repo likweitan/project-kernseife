@@ -79,14 +79,17 @@ service AnalyticsService @(requires: [
         };
 
     entity ScoreHistory                  as
-        select from db.HistoricDevelopmentObjects {
-            key version.systemId,
-            key version.createdAt,
+        select from db.HistoricDevelopmentObjects as h
+        inner join db.DevelopmentObjectVersions as v
+            on h.extension_ID = v.ID
+        {
+            key v.systemId,
+            key v.createdAt,
                 sum(score) as score : Integer,
         }
         group by
-            version.systemId,
-            version.createdAt;
+            v.systemId,
+            v.createdAt;
 
     @readonly
     entity Ratings                       as projection on db.Ratings;

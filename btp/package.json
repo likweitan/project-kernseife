@@ -17,7 +17,7 @@
     "prebuild": "npm run lint && npm run cleanup:build",
     "build": "cds build --production",
     "postbuild": "npm run cleanup:ts",
-    "build:bundle": "npm i --omit=dev --prefix=gen/srv && npm ci --omit=dev --prefix=gen/db",
+    "build:bundle": "npm ci --omit=dev --prefix=gen/srv && npm ci --omit=dev --prefix=gen/db",
     "cleanup:build": "npx rimraf resources mta_archives app/resources app/**/dist",
     "cleanup:ts": "npx rimraf gen/**/*.ts",
     "generate-cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory @cds-models",
@@ -40,7 +40,8 @@
     "is-ci": "4.1.0",
     "jszip": "3.10.1",
     "@grpc/grpc-js": "1.14.0",
-    "papaparse": "5.5.3"
+    "papaparse": "5.5.3",
+    "axios": "^1.13.2"
   },
   "devDependencies": {
     "@cap-js/cds-test": "0.4.1",
