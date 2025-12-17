@@ -10,7 +10,7 @@ import {
   Systems
 } from '#cds-models/kernseife/db';
 import dayjs from 'dayjs';
-import { Transaction, connect, db, entities, log, utils } from '@sap/cds';
+import { Transaction, db, entities, log, utils } from '@sap/cds';
 import { text } from 'node:stream/consumers';
 import papa from 'papaparse';
 import {
@@ -34,7 +34,8 @@ import { Note } from '#cds-models/AdminService';
 import { JobResult } from '../types/jobs';
 import {
   getDestinationBySystemId,
-  getMissingClassifications
+  getMissingClassifications,
+  syncClassifications
 } from './btp-connector-feature';
 
 const LOG = log('ClassificationFeature');
@@ -1790,7 +1791,7 @@ export const syncClassificationsToExternalSystemByRef = async (ref: any) => {
   LOG.info(
     `Created ZIP file for Classification JSON, size ${zipFile.length} bytes`
   );
-  await syncClassificationsToExternalSystem(system, zipFile);
+  await syncClassifications({ destination: system.destination! }, zipFile);
 };
 
 export const syncClassificationsToExternalSystems = async () => {
@@ -1801,39 +1802,6 @@ export const syncClassificationsToExternalSystems = async () => {
   const classificationJson = await getClassificationJsonCustom();
   const zipFile = await getClassificationJsonAsZip(classificationJson);
   for (const system of systemList) {
-    await syncClassificationsToExternalSystem(system, zipFile);
-  }
-};
-
-const syncClassificationsToExternalSystem = async (
-  system: System,
-  zipFile: Buffer<ArrayBufferLike>
-) => {
-  const service = await connect.to('kernseife_btp', {
-    credentials: {
-      destination: system.destination,
-      path: '/sap/opu/odata4/sap/zknsf_btp_connector/srvd/sap/zknsf_btp_connector/0001'
-    }
-  });
-  LOG.info(
-    `Sending Classification ZIP to System ${system.sid} via Destination ${system.destination}`
-  );
-  const response = await service.send(
-    'POST',
-    '/ZKNSF_I_PROJECTS/com.sap.gateway.srvd.zknsf_btp_connector.v0001.UploadFile',
-    {
-      dummy: true,
-      _StreamProperties: {
-        streamProperty: zipFile.toString('base64'),
-        mimeType: 'application/zip',
-        fileName: `classification_${dayjs().format('YYYY_MM_DD')}.zip`
-      }
-    }
-  );
-  LOG.info(
-    `Received response from System ${system.sid}: ${JSON.stringify(response?.message)}`
-  );
-  if (response?.status !== 200) {
-    throw new Error(`${response?.message?.message}`);
+    await syncClassifications({ destination: system.destination! }, zipFile);
   }
 };

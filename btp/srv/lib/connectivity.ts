@@ -42,10 +42,17 @@ export const remoteServiceCall = async (payload: {
   result: any;
   message: Message;
 }> => {
+  let jwtToken =
+    payload.jwtToken || (context?.user as any).authInfo?.config?.jwt;
+  // Check if it is actual a JWT Token
+  if (jwtToken && jwtToken.split('\\.').length != 3) {
+    // It's not a JWT
+    jwtToken = undefined;
+  }
   const response = await executeHttpRequest(
     {
       destinationName: payload.destinationName,
-      jwt: payload.jwtToken || (context?.user as any).authInfo?.config?.jwt
+      jwt: jwtToken
     },
     {
       method: payload.method,

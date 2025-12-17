@@ -8,6 +8,7 @@ import {
   ProjectImport
 } from '../types/imports';
 import { Connection } from '../types/connectivity';
+import dayjs from 'dayjs';
 
 export const BTP_CONNECTOR_PATH =
   '/sap/opu/odata4/sap/zknsf_btp_connector/srvd/sap/zknsf_btp_connector/0001/';
@@ -145,7 +146,7 @@ export const getFindingsCount = async (
 };
 
 export const getMissingClassifications = async (
-  connection: Connection,
+  connection: Connection
 ): Promise<MissingClassificationImport[]> => {
   // Read Development Objects
   const response = await remoteServiceCall({
@@ -178,6 +179,32 @@ export const getMissingClassificationsCount = async (
     `Received response from Destination ${connection.destination}: ${JSON.stringify(response?.result)}`
   );
   return response.result as number;
+};
+
+export const syncClassifications = async (
+  connection: Connection,
+  zipFile: Buffer<ArrayBufferLike>
+) => {
+  const response = await remoteServiceCall({
+    destinationName: connection.destination,
+    jwtToken: connection.jwtToken,
+    method: 'POST',
+    url:
+      BTP_CONNECTOR_PATH +
+      'ZKNSF_I_PROJECTS/com.sap.gateway.srvd.zknsf_btp_connector.v0001.UploadFile',
+    data: {
+      dummy: true,
+      _StreamProperties: {
+        streamProperty: zipFile.toString('base64'),
+        mimeType: 'application/zip',
+        fileName: `classification_${dayjs().format('YYYY_MM_DD')}.zip`
+      }
+    }
+  });
+
+  LOG.info(
+    `Received response from Destination ${connection.destination}: ${JSON.stringify(response?.message)}`
+  );
 };
 
 export const getDestinationBySystemId = async (systemId: string) => {

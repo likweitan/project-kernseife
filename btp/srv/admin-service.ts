@@ -15,7 +15,7 @@ import {
   importMissingClassificationsById,
   syncClassificationsToExternalSystemByRef,
   syncClassificationsToExternalSystems,
-  importMissingClassificationsBTP,
+  importMissingClassificationsBTP
 } from './features/classification-feature';
 import {
   calculateScores,
@@ -361,13 +361,12 @@ export default (srv: Service) => {
       system.setupDone = false;
       system.setupNotDone = true;
       if (system.destination) {
-        LOG.info('Authorization', { auth: req.headers.authorization });
         try {
           const project = await getProject({
             destination: system.destination,
             jwtToken: req.headers.authorization
           });
-          //LOG.info('Project for System', { project });
+
           system.project = project;
           system.setupDone = true;
           system.setupNotDone = false; // As UI Bindings cannot handle negation
