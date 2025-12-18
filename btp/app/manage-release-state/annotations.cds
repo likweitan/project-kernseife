@@ -1,4 +1,4 @@
-using AdminService as service from '../../srv/admin-service';
+using ClassificationService as service from '../../srv/classification-service';
 
 annotate service.ReleaseStates with @Capabilities: {FilterFunctions: ['tolower', ]};
 
@@ -98,15 +98,9 @@ annotate service.ReleaseStates with @(
         },
         {
             $Type : 'UI.DataFieldForAction',
-            Action: 'AdminService.EntityContainer/loadReleaseState',
+            Action: 'ClassificationService.EntityContainer/loadReleaseState',
             Label : '{i18n>loadReleaseState}',
-        },
-         {
-            $Type : 'UI.DataFieldForAction',
-            Action: 'AdminService.EntityContainer/exportMissingClassification',
-            Label : '{i18n>exportMissingClassification}',
-        },
-
+        }
     ],
     UI.SelectionPresentationVariant #table: {
         $Type              : 'UI.SelectionPresentationVariantType',

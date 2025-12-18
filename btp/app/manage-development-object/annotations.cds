@@ -1,4 +1,4 @@
-using AdminService as service from '../../srv/admin-service';
+using DevelopmentService as service from '../../srv/development-service';
 
 annotate service.DevelopmentObjects with @(
     Capabilities          : {FilterFunctions: ['tolower',
@@ -6,7 +6,7 @@ annotate service.DevelopmentObjects with @(
     UI.Identification     : [
                              // {
                              //     $Type : 'UI.DataFieldForAction',
-                             //     Action : 'AdminService.calculateScore',
+                             //     Action : 'DevelopmentService.calculateScore',
                              //     Label : 'calculateScore',
                              // },
                             ],
@@ -148,7 +148,7 @@ annotate service.DevelopmentObjects with @(
 
         {
             $Type : 'UI.DataFieldForAction',
-            Action: 'AdminService.EntityContainer/recalculateAllScores',
+            Action: 'DevelopmentService.EntityContainer/recalculateAllScores',
             Label : '{i18n>recalculateAllScores}',
         },
         {

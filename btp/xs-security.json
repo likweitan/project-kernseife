@@ -2,18 +2,36 @@
   "scopes": [
     {
       "name": "$XSAPPNAME.admin",
-      "description": "admin"
+      "description": "Administrator"
     },
     {
-      "name": "$XSAPPNAME.viewer",
-      "description": "viewer"
+      "name": "$XSAPPNAME.classification-viewer",
+      "description": "Classification Viewer"
+    },
+    {
+      "name": "$XSAPPNAME.classification-manager",
+      "description": "Classification Viewer"
+    },
+    {
+      "name": "$XSAPPNAME.development-viewer",
+      "description": "Development Viewer"
+    },
+    {
+      "name": "$XSAPPNAME.development-manager",
+      "description": "Development Manager"
     },
     {
       "name": "$XSAPPNAME.analyst",
-      "description": "analyst"
+      "description": "Analyst"
     }
   ],
-  "attributes": [],
+  "attributes": [
+    {
+      "name": "System",
+      "description": "System ID",
+      "valueType": "string"
+    }
+  ],
   "role-templates": [
     {
       "name": "admin",
@@ -24,20 +42,50 @@
       "attribute-references": []
     },
     {
+      "name": "classification-viewer",
+      "description": "Classification Viewer",
+      "scope-references": [
+        "$XSAPPNAME.classification-viewer"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "classification-manager",
+      "description": "Classification Viewer",
+      "scope-references": [
+        "$XSAPPNAME.classification-manager"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "development-viewer",
+      "description": "Development Viewer",
+      "scope-references": [
+        "$XSAPPNAME.development-viewer"
+      ],
+      "attribute-references": [
+        "System"
+      ]
+    },
+    {
+      "name": "development-manager",
+      "description": "Development Manager",
+      "scope-references": [
+        "$XSAPPNAME.development-manager"
+      ],
+      "attribute-references": [
+        "System"
+      ]
+    },
+    {
       "name": "analyst",
       "description": "Kernseife Analyst",
       "scope-references": [
         "$XSAPPNAME.analyst"
       ],
-      "attribute-references": []
-    },
-    {
-      "name": "viewer",
-      "description": "Kernseife Viewer",
-      "scope-references": [
-        "$XSAPPNAME.viewer"
-      ],
-      "attribute-references": []
+      "attribute-references": [
+        "System"
+      ]
     }
   ]
 }

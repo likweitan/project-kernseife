@@ -1,5 +1,5 @@
-using AdminService as service from '../../srv/admin-service';
-using from '../../db/data-model';
+using ClassificationService as service from '../../srv/classification-service';
+using from '../../db/schema';
 
 
 annotate service.Classifications with @Capabilities: {FilterFunctions: ['tolower', ]};
@@ -198,13 +198,13 @@ annotate service.Classifications with @(UI.LineItem: [
     },
     {
         $Type : 'UI.DataFieldForAction',
-        Action: 'AdminService.assignFramework',
+        Action: 'ClassificationService.assignFramework',
         Label : '{i18n>assignFramework}',
 
     },
     {
         $Type : 'UI.DataFieldForAction',
-        Action: 'AdminService.assignSuccessor',
+        Action: 'ClassificationService.assignSuccessor',
         Label : '{i18n>assignSuccessor}',
 
     }

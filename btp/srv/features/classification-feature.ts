@@ -1,7 +1,6 @@
 import {
   Classification,
   Classifications,
-  CleanCoreLevel,
   Import,
   Ratings,
   ReleaseState,
@@ -37,6 +36,7 @@ import {
   getMissingClassifications,
   syncClassifications
 } from './btp-connector-feature';
+import { CleanCoreLevel } from '#cds-models/kernseife/enums';
 
 const LOG = log('ClassificationFeature');
 

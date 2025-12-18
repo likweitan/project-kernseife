@@ -6,4 +6,3 @@ using from './manage-classification/annotations';
 using from './manage-development-object/annotations';
 using from './monitor-job/annotations';
 using from './manage-extension/annotations';
-using from './view-classification/annotations';

@@ -2,7 +2,6 @@ import {
   DevelopmentObject,
   Import,
   FindingRecord,
-  CleanCoreLevel,
   DevelopmentObjects,
   DevelopmentObjectUsage,
   DevelopmentObjectFindings,
@@ -27,6 +26,7 @@ import {
   getFindingsCount,
   getProject
 } from './btp-connector-feature';
+import { CleanCoreLevel } from '#cds-models/kernseife/enums';
 
 const LOG = log('DevelopmentObjectFeature');
 

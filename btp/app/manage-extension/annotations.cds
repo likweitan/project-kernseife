@@ -1,4 +1,4 @@
-using AdminService as service from '../../srv/admin-service';
+using DevelopmentService as service from '../../srv/development-service';
 
 annotate service.Extensions with @Capabilities: {FilterFunctions: ['tolower', ]};
 

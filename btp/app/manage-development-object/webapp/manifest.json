@@ -17,7 +17,7 @@
     },
     "dataSources": {
       "mainService": {
-        "uri": "odata/v4/admin/",
+        "uri": "odata/v4/development/",
         "type": "OData",
         "settings": {
           "annotations": [],
@@ -161,7 +161,7 @@
                     "type": "ResponsiveTable"
                   },
                   "actions": {
-                    "DataFieldForAction::AdminService.calculateScore": {
+                    "DataFieldForAction::DevelopmentService.calculateScore": {
                       "enableOnSelect": "multi",
                       "afterExecution": {
                         "enableAutoScroll": true

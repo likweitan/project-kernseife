@@ -1,10 +1,8 @@
 import { Jobs } from '#cds-models/AdminService';
-import { entities, log, Service, Transaction } from '@sap/cds';
+import { log, Service, Transaction } from '@sap/cds';
 import { PassThrough } from 'stream';
 import dayjs from 'dayjs';
 import {
-  assignFrameworkByRef,
-  assignSuccessorByRef,
   getClassificationCount,
   getClassificationJsonAsZip,
   getClassificationJsonExternal,
@@ -18,16 +16,11 @@ import {
   importMissingClassificationsBTP
 } from './features/classification-feature';
 import {
-  calculateScores,
+
   importFindingsById,
   importDevelopmentObjectsBTP
 } from './features/developmentObject-feature';
-import {
-  addAllUnassignedDevelopmentObjects,
-  addDevelopmentObject,
-  addDevelopmentObjectsByDevClass,
-  removeAllDevelopmentObjects
-} from './features/extension-feature';
+
 import {
   createExport,
   createImport,
@@ -37,10 +30,6 @@ import {
   setJobIdForImport,
   uploadFile
 } from './features/jobs-feature';
-import {
-  loadReleaseState,
-  updateClassificationsFromReleaseStates
-} from './features/releaseState-feature';
 import { createInitialData } from './features/setup-feature';
 import JSZip from 'jszip';
 import { handleMessage, updateDestinations } from './lib/connectivity';
@@ -105,84 +94,11 @@ export default (srv: Service) => {
       req.error(400);
     }
   });
-  srv.on(
-    'clearDevelopmentObjectList',
-    ['Extensions', 'Extensions.drafts'],
-    async ({ subject, params }) => {
-      LOG.info('clearDevelopmentObjectList', { subject, params });
-      await removeAllDevelopmentObjects(subject);
-    }
-  );
-
-  srv.on(
-    'addUnassignedDevelopmentObjects',
-    ['Extensions', 'Extensions.drafts'],
-    async ({ subject, params }) => {
-      LOG.info('addUnassignedDevelopmentObjects', { subject, params });
-      await addAllUnassignedDevelopmentObjects(subject);
-    }
-  );
-
-  srv.on(
-    'addDevelopmentObjectsByDevClass',
-    ['Extensions', 'Extensions.drafts'],
-    async (req: any) => {
-      LOG.info('addDevelopmentObjectsByDevClass', req);
-      const devClass = req.data.devClass;
-      if (!devClass) {
-        return req.error(400, `Package Required`);
-      }
-      const result = await addDevelopmentObjectsByDevClass(
-        req.subject,
-        devClass
-      );
-      LOG.info('addDevelopmentObjectsByDevClass Result', result);
-      req.notify({
-        message: 'Added Objects Successful',
-        status: 200
-      });
-    }
-  );
-
-  srv.on(
-    'addDevelopmentObject',
-    ['Extensions', 'Extensions.drafts'],
-    async (req) => {
-      LOG.info('addDevelopmentObject', req);
-      const objectName = req.data.objectName;
-      const objectType = req.data.objectType;
-      const devClass = req.data.devClass;
-      if (!devClass || !objectName || !objectType) {
-        return req.error(400, `Missing mandatory parameter`);
-      }
-      await addDevelopmentObject(req.subject, objectType, objectName, devClass);
-    }
-  );
 
   srv.on('createInitialData', ['Settings', 'Settings.drafts'], async (req) => {
     LOG.info('createInitialData');
     const configUrl = req.data.configUrl;
     await createInitialData(configUrl);
-  });
-
-  srv.on('loadReleaseState', async () => {
-    LOG.info('loadReleaseState');
-    await runAsJob(
-      'Import Release States',
-      'IMPORT_RELEASE_STATE',
-      100,
-      async (tx, updateProgress) => {
-        await loadReleaseState();
-        await updateProgress(25);
-        const classificationsCount = await getClassificationCount();
-        await updateClassificationsFromReleaseStates(
-          tx,
-          async (progress: number) =>
-            await updateProgress(25 + (progress / classificationsCount) * 75)
-        );
-        await updateProgress(100);
-      }
-    );
   });
 
   srv.on('Imported', async (msg) => {
@@ -236,67 +152,11 @@ export default (srv: Service) => {
     await setJobIdForImport(ID, jobId);
   });
 
-  srv.on('recalculateAllScores', async () => {
-    await calculateScores();
-  });
-
-  srv.before(
-    'DELETE',
-    ['SuccessorClassifications', 'SuccessorClassifications.drafts'],
-    async (req) => {
-      // Don't allow deletion of Successors which are still used
-      const result = await SELECT.one.from(entities.Classifications).where({
-        successorClassification_Code: (req.params[0] as { Code: string }).Code
-      });
-      if (!result || !result.custom) {
-        // Not allowed to delete
-        return req.error(400, `Only custom entries can be deleted`);
-      }
-    }
-  );
-
   srv.before(
     'READ',
     ['Destinations', 'Destinations.drafts'],
     async (req: any) => {
       await updateDestinations();
-    }
-  );
-
-  srv.on(
-    'assignFramework',
-    ['Classifications', 'Classifications.drafts'],
-    async (req: any) => {
-      const code = req.data.frameworkCode;
-      LOG.debug('assignFramework', { code });
-      return await assignFrameworkByRef(req.subject, code);
-    }
-  );
-
-  srv.on(
-    'assignSuccessor',
-    ['Classifications', 'Classifications.drafts'],
-    async (req: any) => {
-      const tadirObjectType = req.data.tadirObjectType;
-      const tadirObjectName = req.data.tadirObjectName;
-      const objectType = req.data.objectType;
-      const objectName = req.data.objectName;
-      const successorType = req.data.successorType;
-      LOG.debug('assignSuccssor', {
-        tadirObjectType,
-        tadirObjectName,
-        objectType,
-        objectName,
-        successorType
-      });
-      return await assignSuccessorByRef(
-        req.subject,
-        tadirObjectType,
-        tadirObjectName,
-        objectType,
-        objectName,
-        successorType
-      );
     }
   );
 
