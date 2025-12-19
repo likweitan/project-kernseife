@@ -35,8 +35,8 @@
           "icon": "sap-icon://syntax",
           "indicatorDataSource": {
             "dataSource": "mainService",
-            "path": "DevelopmentObjects/$count",
-            "refresh": 1000
+            "path": "getTileInfo(appName='manage-development-object')",
+            "refresh": 600
           },
           "signature": {
             "parameters": {
@@ -185,7 +185,7 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/DevelopmentObjects",
-               "enhanceI18n": "i18n/custom.properties",
+              "enhanceI18n": "i18n/custom.properties",
               "useTextForNoDataMessages": true
             }
           },

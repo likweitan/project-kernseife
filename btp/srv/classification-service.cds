@@ -1,6 +1,8 @@
 using kernseife.db as db from '../db/schema';
+using kernseife.types as types from '../db/types';
 
 service ClassificationService @(requires: ['classification-viewer']) {
+
 
     action loadReleaseState @(requires: 'classification-manager')();
 
@@ -122,4 +124,6 @@ service ClassificationService @(requires: ['classification-viewer']) {
         isManager    : Boolean;
         isNotManager : Boolean;
     }
+
+    function getTileInfo(appName : String) returns types.DynamicAppLauncher;
 }

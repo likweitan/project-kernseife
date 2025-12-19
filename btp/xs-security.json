@@ -29,7 +29,8 @@
     {
       "name": "System",
       "description": "System ID",
-      "valueType": "string"
+      "valueType": "string",
+      "valueRequired": false
     }
   ],
   "role-templates": [
@@ -64,7 +65,12 @@
         "$XSAPPNAME.development-viewer"
       ],
       "attribute-references": [
-        "System"
+        {
+          "name": "System",
+          "default-values": [
+            {}
+          ]
+        }
       ]
     },
     {
@@ -74,7 +80,12 @@
         "$XSAPPNAME.development-manager"
       ],
       "attribute-references": [
-        "System"
+        {
+          "name": "System",
+          "default-values": [
+            {}
+          ]
+        }
       ]
     },
     {
@@ -84,7 +95,12 @@
         "$XSAPPNAME.analyst"
       ],
       "attribute-references": [
-        "System"
+        {
+          "name": "System",
+          "default-values": [
+            {}
+          ]
+        }
       ]
     }
   ]

@@ -1,11 +1,12 @@
 using kernseife.db as db from '../db/schema';
+using kernseife.types as types from '../db/types';
 
 service DevelopmentService @(requires: ['development-viewer']) {
 
     // Actions
     @Common.IsActionCritical: true
     @(Common.SideEffects: {TargetEntities: ['/DevelopmentService.EntityContainer/DevelopmentObjects'], })
-    action recalculateAllScores @(requires: 'development-manager')();
+    action   recalculateAllScores @(requires: 'development-manager')();
 
     entity ReleaseStates                     as projection on db.ReleaseStates;
     entity ReleaseStateSuccessors            as projection on db.ReleaseStateSuccessors;
@@ -140,4 +141,6 @@ service DevelopmentService @(requires: ['development-viewer']) {
         isManager    : Boolean;
         isNotManager : Boolean;
     }
+
+    function getTileInfo(appName: String) returns types.DynamicAppLauncher;
 }

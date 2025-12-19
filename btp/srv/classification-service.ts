@@ -1,5 +1,5 @@
-import { entities, log, Service } from '@sap/cds';
-
+import { log, Service } from '@sap/cds';
+import { DynamicAppLauncher } from '#cds-models/kernseife/types';
 import {
   assignFrameworkByRef,
   assignSuccessorByRef,
@@ -100,5 +100,16 @@ export default (srv: Service) => {
       isNotManager: isNotManager,
       isManager: !isNotManager
     };
+  });
+
+  srv.on('getTileInfo', async (req) => {
+    switch (req.data.appName) {
+      default:
+        return {
+          subtitle: req.user.is('classification-manager') ? 'Manager' : 'Viewer',
+          icon: 'sap-icon://activity-assigned-to-goal',
+          number: await getClassificationCount(),
+        } as DynamicAppLauncher;
+    }
   });
 };

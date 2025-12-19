@@ -6,72 +6,6 @@
                     "catalogs": [],
                     "groups": [
                         {
-                            "id": "Analyze",
-                            "title": "Analyze",
-                            "isPreset": true,
-                            "isVisible": true,
-                            "isGroupLocked": false,
-                            "tiles": [
-                                {
-                                    "id": "AnalyzeScore",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
-                                    "properties": {
-                                        "title": "Analyze Score",
-                                        "targetURL": "#Score-analyze"
-                                    }
-                                },
-                                {
-                                    "id": "AnalyzeOverview",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
-                                    "properties": {
-                                        "title": "Analyze Overview",
-                                        "targetURL": "#Overview-analyze"
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "id": "Manage",
-                            "title": "Manage",
-                            "isPreset": true,
-                            "isVisible": true,
-                            "isGroupLocked": false,
-                            "tiles": [
-                                {
-                                    "id": "ManageClassifications",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
-                                    "properties": {
-                                        "title": "Manage Classifications",
-                                        "targetURL": "#Classifications-manage"
-                                    }
-                                },
-                                {
-                                    "id": "ManageDevelopmentObjects",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
-                                    "properties": {
-                                        "title": "Manage DevelopmentObjects",
-                                        "targetURL": "#DevelopmentObjects-manage"
-                                    }
-                                },
-                                {
-                                    "id": "ManageReleaseStates",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
-                                    "properties": {
-                                        "title": "Manage ReleaseStates",
-                                        "targetURL": "#ReleaseStates-manage"
-                                    }
-                                },
-                                {
-                                    "id": "ManageExtensions",
-                                    "tileType": "sap.ushell.ui.tile.StaticTile",
-                                    "properties": {
-                                        "title": "Manage Extensions",
-                                        "targetURL": "#Extensions-manage"
-                                    }
-                                }
-                            ]
-                        },
-                        {
                             "id": "Administration",
                             "title": "Administration",
                             "isPreset": true,
@@ -83,7 +17,7 @@
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
                                         "title": "Jobs",
-                                        "subtitle": "Import/Export",
+                                        "subtitle": "Imports & Exports",
                                         "targetURL": "#Jobs-monitor"
                                     }
                                 },
@@ -92,8 +26,71 @@
                                     "tileType": "sap.ushell.ui.tile.StaticTile",
                                     "properties": {
                                         "title": "Settings",
-                                        "subtitle": "Configure",
+                                        "subtitle": "Tenant configuration",
                                         "targetURL": "#Settings-configure"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "Development",
+                            "title": "Development",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "AnalyzeOverview",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "title": "Overview",
+                                        "subtitle": "Analytics",
+                                        "targetURL": "#Overview-analyze"
+                                    }
+                                },
+                                {
+                                    "id": "ManageDevelopmentObjects",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "title": "Custom Code",
+                                        "subtitle": "Explorer",
+                                        "targetURL": "#DevelopmentObjects-manage"
+                                    }
+                                },
+                                {
+                                    "id": "ManageExtensions",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "title": "Extensions",
+                                        "subtitle": "Explorer",
+                                        "targetURL": "#Extensions-manage"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "Classification",
+                            "title": "Classification",
+                            "isPreset": true,
+                            "isVisible": true,
+                            "isGroupLocked": false,
+                            "tiles": [
+                                {
+                                    "id": "ManageClassifications",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "title": "Classifications",
+                                        "subtitle": "Explorer",
+                                        "targetURL": "#Classifications-manage"
+                                    }
+                                },
+                                {
+                                    "id": "ManageReleaseStates",
+                                    "tileType": "sap.ushell.ui.tile.StaticTile",
+                                    "properties": {
+                                        "title": "Release Information",
+                                        "subtitle": "Explorer",
+                                        "targetURL": "#ReleaseStates-manage"
                                     }
                                 }
                             ]

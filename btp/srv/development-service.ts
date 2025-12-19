@@ -1,11 +1,12 @@
 import { log, Service } from '@sap/cds';
-import { calculateScores } from './features/developmentObject-feature';
+import { calculateScores, getDevelopmentObjectCount } from './features/developmentObject-feature';
 import {
   addAllUnassignedDevelopmentObjects,
   addDevelopmentObject,
   addDevelopmentObjectsByDevClass,
   removeAllDevelopmentObjects
 } from './features/extension-feature';
+import { DynamicAppLauncher } from '#cds-models/kernseife/types';
 
 export default (srv: Service) => {
   const LOG = log('DevelopmentService');
@@ -80,4 +81,15 @@ export default (srv: Service) => {
       isManager: !isNotManager
     };
   });
+
+   srv.on('getTileInfo', async (req) => {
+      switch (req.data.appName) {
+        default:
+          return {
+            subtitle: req.user.is('development-manager') ? 'Manager' : 'Viewer',
+            icon: 'sap-icon://activity-assigned-to-goal',
+            number: await getDevelopmentObjectCount(),
+          } as DynamicAppLauncher;
+      }
+    });
 };
