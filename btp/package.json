@@ -24,7 +24,7 @@
     "generate-cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory @cds-models",
     "test": "jest --silent",
     "mbt": "npm run update:version && mbt build -t gen/mtar -m=verbose -j=8",
-    "deploy-dev": "cf deploy gen/mtar/kernseife_$npm_package_versioncf.mtar -e=BTP_DEV.mtaext",
+    "deploy-dev": "cf deploy gen/mtar/kernseife_$npm_package_version.mtar -e=BTP_DEV.mtaext",
     "deploy-production": "cf deploy gen/mtar/kernseife_$npm_package_version.mtar -e=BTP_PROD.mtaext"
   },
   "dependencies": {
