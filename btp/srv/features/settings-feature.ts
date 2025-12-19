@@ -1,10 +1,10 @@
 import { Setting } from "#cds-models/kernseife/db";
-import cds from "@sap/cds";
+import { log } from "@sap/cds";
 
-const LOG = cds.log("Settings");
+const LOG = log("Settings");
 
 export const getActiveSettings = async (): Promise<Setting> => {
-  const result = await SELECT.one.from(cds.entities.Settings)
+  const result = await SELECT.one.from('kernseife.db.Settings')
   //.columns("")
   .where({ ID: "1" });
   LOG.info("settings", result);

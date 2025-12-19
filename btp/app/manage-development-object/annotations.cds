@@ -8,6 +8,7 @@ annotate service.DevelopmentObjects with @(
                              //     $Type : 'UI.DataFieldForAction',
                              //     Action : 'DevelopmentService.calculateScore',
                              //     Label : 'calculateScore',
+                             //     ![@UI.Hidden]: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
                              // },
                             ],
     UI.FieldGroup #metrics: {
@@ -23,13 +24,11 @@ annotate service.DevelopmentObjects with @(
             },
         ],
     },
-    UI.HeaderFacets       : [
-        {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'HistoricScore',
-            Target: 'history/@UI.Chart#HistoricScore',
-        }
-    ],
+    UI.HeaderFacets       : [{
+        $Type : 'UI.ReferenceFacet',
+        ID    : 'HistoricScore',
+        Target: 'history/@UI.Chart#HistoricScore',
+    }],
 );
 
 annotate service.DevelopmentObjects with @(
@@ -147,9 +146,10 @@ annotate service.DevelopmentObjects with @(
         },
 
         {
-            $Type : 'UI.DataFieldForAction',
-            Action: 'DevelopmentService.EntityContainer/recalculateAllScores',
-            Label : '{i18n>recalculateAllScores}',
+            $Type        : 'UI.DataFieldForAction',
+            Action       : 'DevelopmentService.EntityContainer/recalculateAllScores',
+            Label        : '{i18n>recalculateAllScores}',
+            ![@UI.Hidden]: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
         },
         {
             $Type                : 'UI.DataField',
@@ -567,4 +567,11 @@ annotate service.HistoricDevelopmentObjects with @(
             Label: '{i18n>level}',
         },
     ],
+);
+
+// CRUD operations
+annotate service.DevelopmentObjects with @(
+    UI.CreateHidden: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
+    UI.UpdateHidden: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
+    UI.DeleteHidden: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}}
 );

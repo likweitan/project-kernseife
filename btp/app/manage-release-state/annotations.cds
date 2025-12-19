@@ -97,16 +97,18 @@ annotate service.ReleaseStates with @(
             ![@HTML5.CssDefaults]: {width: '12rem'},
         },
         {
-            $Type : 'UI.DataFieldForAction',
-            Action: 'ClassificationService.EntityContainer/loadReleaseState',
-            Label : '{i18n>loadReleaseState}',
+            $Type        : 'UI.DataFieldForAction',
+            Action       : 'ClassificationService.EntityContainer/loadReleaseState',
+            Label        : '{i18n>loadReleaseState}',
+            ![@UI.Hidden]: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}},
         }
     ],
     UI.SelectionPresentationVariant #table: {
         $Type              : 'UI.SelectionPresentationVariantType',
         PresentationVariant: {
             $Type         : 'UI.PresentationVariantType',
-            Visualizations: ['@UI.LineItem', ],
+            Visualizations: ['@UI.LineItem',
+            ],
         },
         SelectionVariant   : {
             $Type        : 'UI.SelectionVariantType',
@@ -267,3 +269,10 @@ annotate service.ReleaseStates with {
         },
     );
 };
+
+// CRUD operations
+annotate service.ReleaseStates with @(
+    UI.CreateHidden: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}},
+    UI.UpdateHidden: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}},
+    UI.DeleteHidden: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}}
+);

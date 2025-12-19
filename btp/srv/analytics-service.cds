@@ -1,5 +1,4 @@
 using kernseife.db as db from '../db/schema';
-using kernseife.valueLists as valueLists from '../db/value-lists';
 
 service AnalyticsService @(requires: [
     'analyst'
@@ -147,27 +146,27 @@ service AnalyticsService @(requires: [
 
     @cds.redirection.target: false
     @readonly
-    entity AdoptionEffortValueList       as projection on valueLists.AdoptionEffortValueList;
+    entity AdoptionEffortValueList       as projection on db.AdoptionEffortValueList;
 
     @cds.redirection.target: false
     @readonly
-    entity ObjectSubTypeValueList        as projection on valueLists.ObjectSubTypeValueList;
+    entity ObjectSubTypeValueList        as projection on db.ObjectSubTypeValueList;
 
     @cds.redirection.target: false
     @readonly
-    entity NamespaceValueList            as projection on valueLists.NamespaceValueList;
+    entity NamespaceValueList            as projection on db.NamespaceValueList;
 
     @cds.redirection.target: false
     @readonly
-    entity ApplicationComponentValueList as projection on valueLists.ApplicationComponentValueList;
+    entity ApplicationComponentValueList as projection on db.ApplicationComponentValueList;
 
     @cds.redirection.target: false
     @readonly
-    entity SoftwareComponentValueList    as projection on valueLists.SoftwareComponentValueList;
+    entity SoftwareComponentValueList    as projection on db.SoftwareComponentValueList;
 
     @cds.redirection.target: false
     @readonly
-    entity DevClassValueList             as projection on valueLists.DevClassValueList;
+    entity DevClassValueList             as projection on db.DevClassValueList;
 
     @odata.singleton
     @cds.persistence.skip
@@ -178,7 +177,7 @@ service AnalyticsService @(requires: [
 
     @readonly
     @cds.redirection.target: false
-    entity ObjectTypeValueList           as projection on valueLists.ObjectTypeValueList;
+    entity ObjectTypeValueList           as projection on db.ObjectTypeValueList;
 
 
 }

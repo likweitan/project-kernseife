@@ -1,5 +1,4 @@
 using kernseife.db as db from '../db/schema';
-using kernseife.valueLists as valueLists from '../db/value-lists';
 using {kernseife_btp as btp} from './external/kernseife_btp';
 
 service AdminService @(requires: 'admin') {
@@ -106,34 +105,34 @@ service AdminService @(requires: 'admin') {
 
 
     @cds.redirection.target: false
-    entity ObjectTypeValueList               as projection on valueLists.ObjectTypeValueList;
+    entity ObjectTypeValueList               as projection on db.ObjectTypeValueList;
 
     @cds.redirection.target: false
-    entity AdoptionEffortValueList           as projection on valueLists.AdoptionEffortValueList;
+    entity AdoptionEffortValueList           as projection on db.AdoptionEffortValueList;
 
     @cds.redirection.target: false
-    entity ObjectSubTypeValueList            as projection on valueLists.ObjectSubTypeValueList;
+    entity ObjectSubTypeValueList            as projection on db.ObjectSubTypeValueList;
 
     @cds.redirection.target: false
-    entity NamespaceValueList                as projection on valueLists.NamespaceValueList;
+    entity NamespaceValueList                as projection on db.NamespaceValueList;
 
     @cds.redirection.target: false
-    entity ApplicationComponentValueList     as projection on valueLists.ApplicationComponentValueList;
+    entity ApplicationComponentValueList     as projection on db.ApplicationComponentValueList;
 
     @cds.redirection.target: false
-    entity SoftwareComponentValueList        as projection on valueLists.SoftwareComponentValueList;
+    entity SoftwareComponentValueList        as projection on db.SoftwareComponentValueList;
 
     @cds.redirection.target: false
-    entity DevClassValueList                 as projection on valueLists.DevClassValueList;
+    entity DevClassValueList                 as projection on db.DevClassValueList;
 
     @cds.redirection.target: false
-    entity RatingsValueList                  as projection on valueLists.RatingsValueList;
+    entity RatingsValueList                  as projection on db.RatingsValueList;
 
     @cds.redirection.target: false
-    entity NoteClassificationsValueList      as projection on valueLists.NoteClassificationsValueList;
+    entity NoteClassificationsValueList      as projection on db.NoteClassificationsValueList;
 
     @cds.redirection.target: false
-    entity SuccessorClassificationsValueList as projection on valueLists.SuccessorClassificationsValueList;
+    entity SuccessorClassificationsValueList as projection on db.SuccessorClassificationsValueList;
 
     entity ObjectTypes                       as projection on db.ObjectTypes;
     entity Criticality                       as projection on db.Criticality;

@@ -50,28 +50,32 @@ annotate service.Extensions with @(
     },
     UI.Identification                : [
         {
-            $Type      : 'UI.DataFieldForAction',
-            Action     : 'AdminService.clearDevelopmentObjectList',
-            Label      : '{i18n>clearDevelopmentObjectList}',
-            Determining: true,
+            $Type        : 'UI.DataFieldForAction',
+            Action       : 'AdminService.clearDevelopmentObjectList',
+            Label        : '{i18n>clearDevelopmentObjectList}',
+            Determining  : true,
+            ![@UI.Hidden]: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
         },
         {
-            $Type      : 'UI.DataFieldForAction',
-            Action     : 'AdminService.addUnassignedDevelopmentObjects',
-            Label      : '{i18n>addUnassignedDevelopmentObjects}',
-            Determining: true,
+            $Type        : 'UI.DataFieldForAction',
+            Action       : 'AdminService.addUnassignedDevelopmentObjects',
+            Label        : '{i18n>addUnassignedDevelopmentObjects}',
+            Determining  : true,
+            ![@UI.Hidden]: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
         },
         {
-            $Type      : 'UI.DataFieldForAction',
-            Action     : 'AdminService.addDevelopmentObjectsByDevClass',
-            Label      : '{i18n>addDevelopmentObjectsByDevClass}',
-            Determining: true,
+            $Type        : 'UI.DataFieldForAction',
+            Action       : 'AdminService.addDevelopmentObjectsByDevClass',
+            Label        : '{i18n>addDevelopmentObjectsByDevClass}',
+            Determining  : true,
+            ![@UI.Hidden]: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
         },
         {
-            $Type      : 'UI.DataFieldForAction',
-            Action     : 'AdminService.addDevelopmentObject',
-            Label      : '{i18n>addDevelopmentObject}',
-            Determining: true,
+            $Type        : 'UI.DataFieldForAction',
+            Action       : 'AdminService.addDevelopmentObject',
+            Label        : '{i18n>addDevelopmentObject}',
+            Determining  : true,
+            ![@UI.Hidden]: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
         },
     ],
 );
@@ -109,8 +113,8 @@ annotate service.Extensions with {
 };
 
 annotate service.Extensions with {
-    title          @Common.Label: '{i18n>title}';
-    system         @Common.Label: '{i18n>system}';
+    title  @Common.Label: '{i18n>title}';
+    system @Common.Label: '{i18n>system}';
 };
 
 annotate service.DevelopmentObjects with @(UI.LineItem #developmentObjectList: [
@@ -245,3 +249,10 @@ annotate service.inDevelopmentObject {
         Common.ValueListWithFixedValues: false
     );
 }
+
+// CRUD operations
+annotate service.Extensions with @(
+    UI.CreateHidden: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
+    UI.UpdateHidden: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}},
+    UI.DeleteHidden: {$edmJson: {$Path: '/DevelopmentService.EntityContainer/FeatureControl/isNotManager'}}
+);

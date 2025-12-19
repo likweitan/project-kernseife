@@ -40,9 +40,11 @@ export default (srv: Service) => {
     ['SuccessorClassifications', 'SuccessorClassifications.drafts'],
     async (req) => {
       // Don't allow deletion of Successors which are still used
-      const result = await SELECT.one.from(entities.Classifications).where({
-        successorClassification_Code: (req.params[0] as { Code: string }).Code
-      });
+      const result = await SELECT.one
+        .from('db.kernseife.Classifications')
+        .where({
+          successorClassification_Code: (req.params[0] as { Code: string }).Code
+        });
       if (!result || !result.custom) {
         // Not allowed to delete
         return req.error(400, `Only custom entries can be deleted`);
@@ -86,4 +88,17 @@ export default (srv: Service) => {
       );
     }
   );
+
+  srv.on('READ', 'FeatureControl', async (req) => {
+    let isNotManager = true;
+
+    if (req.user.is('classification-manager')) {
+      isNotManager = false;
+    }
+
+    return {
+      isNotManager: isNotManager,
+      isManager: !isNotManager
+    };
+  });
 };

@@ -8,7 +8,7 @@ import {
   DevelopmentObjectFinding,
   FindingsAggregated
 } from '#cds-models/kernseife/db';
-import { db, entities, log, Transaction } from '@sap/cds';
+import { db, log, Transaction } from '@sap/cds';
 import { text } from 'node:stream/consumers';
 import papa from 'papaparse';
 import {
@@ -31,14 +31,14 @@ import { CleanCoreLevel } from '#cds-models/kernseife/enums';
 const LOG = log('DevelopmentObjectFeature');
 
 export const getDevelopmentObjectCount = async () => {
-  const result = await SELECT.from(entities.DevelopmentObjects).columns(
+  const result = await SELECT.from('kernseife.db.DevelopmentObjects').columns(
     'IFNULL(COUNT( * ),0) as count'
   );
   return result[0]['count'];
 };
 
 export const getTotalScore = async () => {
-  const result = await SELECT.from(entities.DevelopmentObjects).columns(
+  const result = await SELECT.from('kernseife.db.DevelopmentObjects').columns(
     'IFNULL(SUM( score ), 0) as score'
   );
   return result[0]['score'];
@@ -147,7 +147,7 @@ export const getDevelopmentObjectIdentifier = (
 
 export const getDevelopmentObjectMap = async () => {
   const developmentObjectDB: DevelopmentObjects = await SELECT.from(
-    entities.DevelopmentObjects
+    'kernseife.db.DevelopmentObjects'
   );
   return developmentObjectDB.reduce((map, developmentObject) => {
     return map.set(
@@ -239,7 +239,7 @@ export const importFinding = async (
     return { message: 'No Records to import' } as JobResult;
   }
 
-  await INSERT.into(entities.FindingRecords).entries(findingRecordList);
+  await INSERT.into('kernseife.db.FindingRecords').entries(findingRecordList);
   if (tx) {
     await tx.commit();
   }
@@ -369,7 +369,7 @@ export const importFindingsById = async (
   updateProgress?: (progress: number) => Promise<void>
 ): Promise<JobResult> => {
   const findingsRunImport = await SELECT.one
-    .from(entities.Imports, (d: Import) => {
+    .from('kernseife.db.Imports', (d: Import) => {
       d.ID, d.title, d.file, d.systemId, d.createdAt;
     })
     .where({ ID: findingImportId });
@@ -382,7 +382,7 @@ export const importDevelopmentObjectsBTP = async (
   updateProgress?: (progress: number) => Promise<void>
 ): Promise<JobResult> => {
   const developmentObjectsImport = await SELECT.one
-    .from(entities.Imports, (d: Import) => {
+    .from('kernseife.db.Imports', (d: Import) => {
       d.ID, d.title, d.systemId, d.createdAt;
     })
     .where({ ID: importId });
@@ -454,7 +454,7 @@ export const importDevelopmentObjectsBTP = async (
       return findingRecord;
     });
 
-    await INSERT.into(entities.FindingRecords).entries(findingRecordList);
+    await INSERT.into('kernseife.db.FindingRecords').entries(findingRecordList);
     if (tx) {
       await tx.commit();
     }
@@ -582,7 +582,7 @@ export const importDevelopmentObjectsBTP = async (
     }
 
     if (usageInsert.length > 0) {
-      await INSERT.into(entities.DevelopmentObjectUsages).entries(usageInsert);
+      await INSERT.into('kernseife.db.DevelopmentObjectUsages').entries(usageInsert);
       if (tx) {
         await tx.commit();
       }
@@ -603,12 +603,12 @@ export const importDevelopmentObjectsBTP = async (
 const createDevelopmentObjects = async (
   developmentObjectsList: DevelopmentObjects
 ) => {
-  await INSERT.into(entities.DevelopmentObjects).entries(
+  await INSERT.into('kernseife.db.DevelopmentObjects').entries(
     developmentObjectsList
   );
 
   // Also add them to History
-  await INSERT.into(entities.HistoricDevelopmentObjects).entries(
+  await INSERT.into('kernseife.db.HistoricDevelopmentObjects').entries(
     developmentObjectsList
   );
 };
@@ -616,7 +616,7 @@ const createDevelopmentObjects = async (
 const createDevelopmentObjectFindings = async (
   developmentObjectFindingList: DevelopmentObjectFindings
 ) => {
-  await INSERT.into(entities.DevelopmentObjectFindings).entries(
+  await INSERT.into('kernseife.db.DevelopmentObjectFindings').entries(
     developmentObjectFindingList
   );
 
@@ -627,16 +627,16 @@ const prepareNewDevelopmentObjectsImport = async (
   developmentImport: Import
 ) => {
   // Remove all Development Objects for this System
-  await DELETE(entities.DevelopmentObjects).where({
+  await DELETE.from('kernseife.db.DevelopmentObjects').where({
     systemId: developmentImport.systemId
   });
 
-  await DELETE(entities.DevelopmentObjectFindings).where({
+  await DELETE.from('kernseife.db.DevelopmentObjectFindings').where({
     systemId: developmentImport.systemId
   });
 
   // Create new DevelopmentObjectVersion
-  await INSERT.into(entities.DevelopmentObjectVersions).entries([
+  await INSERT.into('kernseife.db.DevelopmentObjectVersions').entries([
     { ID: developmentImport.ID, systemId: developmentImport.systemId }
   ]);
 };
@@ -647,7 +647,7 @@ const getDevelopmentObjectFindings = async (
 ) => {
   // Select all FindingsRecords for Development Object aggregated
   const findingList: FindingsAggregated[] = await SELECT.from(
-    entities.FindingsAggregated
+    'kernseife.db.FindingsAggregated'
   )
     .columns(
       'refObjectType',

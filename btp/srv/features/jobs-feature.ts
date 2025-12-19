@@ -2,7 +2,6 @@ import { Export, Import, Job } from '#cds-models/kernseife/db';
 import cds, {
   log,
   utils,
-  entities,
   Transaction,
   db,
   context,
@@ -18,7 +17,7 @@ export const createJob = async (
   progressTotal: number
 ) => {
   const id = utils.uuid();
-  await INSERT.into(entities.Jobs).entries({
+  await INSERT.into('kernseife.db.Jobs').entries({
     ID: id,
     title,
     type,
@@ -35,7 +34,7 @@ export const updateJobProgress = async (
   tx: Transaction,
   progress: number
 ) => {
-  await UPDATE(entities.Jobs)
+  await UPDATE('kernseife.db.Jobs')
     .set({ progressCurrent: progress, status: 'RUNNING' })
     .where({ ID: id });
   if (tx) tx.commit();
@@ -44,7 +43,7 @@ export const updateJobProgress = async (
 export const finishJob = async (id: string, jobResult?: JobResult) => {
   LOG.info('Job Finished ' + id);
   const { progressTotal } = await SELECT.one
-    .from(entities.Jobs)
+    .from('kernseife.db.Jobs')
     .columns('progressTotal')
     .where({ ID: id });
   const job = {
@@ -58,16 +57,16 @@ export const finishJob = async (id: string, jobResult?: JobResult) => {
     }
   }
 
-  await UPDATE(entities.Jobs, { ID: id }).set(job);
+  await UPDATE('kernseife.db.Jobs', { ID: id }).set(job);
 };
 
 export const failJob = async (id: string, err: any) => {
   LOG.error('Job Failed: ' + id, err);
   const { progressTotal } = await SELECT.one
-    .from(entities.Jobs)
+    .from('kernseife.db.Jobs')
     .columns('progressTotal')
     .where({ ID: id });
-  await UPDATE(entities.Jobs, { ID: id }).with({
+  await UPDATE('kernseife.db.Jobs', { ID: id }).with({
     progressCurrent: progressTotal || 100,
     status: 'ERROR',
     message: err.message
@@ -129,7 +128,7 @@ export const createExport = async (
     fileName
   } as Export;
   // Seperate transaction to avoid issues with File Streams for some reason in SQLite
-  await INSERT.into(entities.Exports).entries(exportObject);
+  await INSERT.into('kernseife.db.Exports').entries(exportObject);
   LOG.info(`Export created ${exportObject.ID}`);
   return exportObject.ID as string;
 };
@@ -158,17 +157,17 @@ export const createImport = async (
     fileName
   } as Import;
   // Seperate transaction to avoid issues with File Streams for some reason in SQLite
-  await INSERT.into(entities.Imports).entries(importObject);
+  await INSERT.into('kernseife.db.Imports').entries(importObject);
 
   return importObject.ID as string;
 };
 
 export const setJobIdForImport = async (importId: string, jobId: string) => {
-  await UPDATE(entities.Imports, { ID: importId }).set({ job_ID: jobId });
+  await UPDATE('kernseife.db.Imports', { ID: importId }).set({ job_ID: jobId });
 };
 
 export const setJobIdForExport = async (exportId: string, jobId: string) => {
-  await UPDATE(entities.Exports, { ID: exportId }).set({ job_ID: jobId });
+  await UPDATE('kernseife.db.Exports', { ID: exportId }).set({ job_ID: jobId });
 };
 
 export const uploadFile = async (
@@ -224,14 +223,14 @@ export const uploadFile = async (
 };
 
 export const jobHasImports = async (jobId: string) => {
-  const result = await SELECT.from(entities.Imports)
+  const result = await SELECT.from('kernseife.db.Imports')
     .columns('COUNT( * ) as count')
     .where({ job_ID: jobId });
   return result && result[0] && result[0].count > 0;
 };
 
 export const jobHasExports = async (jobId: string) => {
-  const result = await SELECT.from(entities.Exports)
+  const result = await SELECT.from('kernseife.db.Exports')
     .columns('COUNT( * ) as count')
     .where({ job_ID: jobId });
   return result && result[0] && result[0].count > 0;

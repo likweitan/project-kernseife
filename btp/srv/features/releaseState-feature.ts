@@ -5,12 +5,12 @@ import {
   ReleaseState,
   ReleaseStates
 } from '#cds-models/kernseife/db';
-import cds, { Transaction } from '@sap/cds';
+import  { Transaction, log } from '@sap/cds';
 import axios from 'axios';
 import { CUSTOM, STANDARD } from './classification-feature';
 import { EnhancementImport } from '../types/imports';
 
-const LOG = cds.log('ReleaseStateFeature');
+const LOG = log('ReleaseStateFeature');
 
 export const getReleaseStateKey = (
   releaseState: Classification | ReleaseState | EnhancementImport
@@ -24,7 +24,7 @@ export const getReleaseStateKey = (
 };
 
 export const getReleaseStateCount = async () => {
-  const result = await SELECT.from(cds.entities.ReleaseStates).columns(
+  const result = await SELECT.from('kernseife.db.ReleaseStates').columns(
     'COUNT( * ) as count'
   );
   return result[0]['count'];
@@ -33,7 +33,7 @@ export const getReleaseStateCount = async () => {
 export const getReleaseStateMap = async (): Promise<
   Map<string, ReleaseState>
 > => {
-  const releaseStates: ReleaseStates = await SELECT.from(cds.entities.ReleaseStates, (r: any) => {
+  const releaseStates: ReleaseStates = await SELECT.from('kernseife.db.ReleaseStates', (r: any) => {
       r.tadirObjectType,
       r.tadirObjectName,
       r.objectType,
@@ -182,7 +182,7 @@ export const updateReleaseState = (
 
 export const loadReleaseState = async () => {
   // Delete existing ReleaseStates
-  await DELETE.from(cds.entities.ReleaseStates);
+  await DELETE.from('kernseife.db.ReleaseStates');
 
   const client = axios.create({
     baseURL: 'https://raw.githubusercontent.com'
@@ -298,7 +298,7 @@ export const loadReleaseState = async () => {
 
   // Insert Release States
   LOG.info('Inserting Release States', releaseStateList.length);
-  await INSERT.into(cds.entities.ReleaseStates).entries(releaseStateList);
+  await INSERT.into('kernseife.db.ReleaseStates').entries(releaseStateList);
 };
 
 export const updateClassificationsFromReleaseStates = async (
@@ -306,7 +306,7 @@ export const updateClassificationsFromReleaseStates = async (
   updateProgress: (progressCount: number) => Promise<void>
 ) => {
   const classifications: Classifications = await SELECT.from(
-    cds.entities.Classifications,
+    'kernseife.db.Classifications',
     (c: any) => {
       c.tadirObjectType,
         c.tadirObjectName,
@@ -335,7 +335,7 @@ export const updateClassificationsFromReleaseStates = async (
     if (updateClassifications.length > 0) {
       for (const classification of updateClassifications) {
         // Update Base Attributes
-        await UPDATE.entity(cds.entities.Classifications, {
+        await UPDATE.entity('kernseife.db.Classifications', {
           tadirObjectType: classification.tadirObjectType,
           tadirObjectName: classification.tadirObjectName,
           objectType: classification.objectType,
@@ -346,14 +346,14 @@ export const updateClassificationsFromReleaseStates = async (
 
       // Update Successors
       for (const classification of updateClassifications) {
-        await DELETE.from(cds.entities.ClassificationSuccessors).where({
+        await DELETE.from('kernseife.db.ClassificationSuccessors').where({
           classification_tadirObjectType: classification.tadirObjectType,
           classification_tadirObjectName: classification.tadirObjectName,
           classification_objectName: classification.objectName,
           classification_objectType: classification.objectType
         });
         if (classification.successorList) {
-          await INSERT.into(cds.entities.ClassificationSuccessors).entries(
+          await INSERT.into('kernseife.db.ClassificationSuccessors').entries(
             classification.successorList.map((successor) => ({
               ...successor,
               classification_tadirObjectType: classification.tadirObjectType,

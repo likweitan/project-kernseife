@@ -67,4 +67,17 @@ export default (srv: Service) => {
   srv.on('recalculateAllScores', async () => {
     await calculateScores();
   });
+
+  srv.on('READ', 'FeatureControl', async (req) => {
+    let isNotManager = true;
+
+    if (req.user.is('development-manager')) {
+      isNotManager = false;
+    }
+
+    return {
+      isNotManager: isNotManager,
+      isManager: !isNotManager
+    };
+  });
 };
