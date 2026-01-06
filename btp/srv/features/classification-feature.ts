@@ -274,7 +274,7 @@ export const updateSimplifications = async (classification: Classification) => {
 export const updateTotalScoreAndReferenceCount = async (
   classification: Classification
 ) => {
-  const totalScoreResult = await SELECT.from('kernseife.db.DevelopmentObjects')
+  const totalScoreResult = await SELECT.from('kernseife.db.DevelopmentObjectFindings')
     .columns(
       'IFNULL(SUM(total),0) as totalScore',
       'IFNULL(SUM(count), 0) as referenceCount'

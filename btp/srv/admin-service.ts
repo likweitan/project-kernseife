@@ -75,7 +75,7 @@ export default (srv: Service) => {
               comment
             )
           );
-        } catch (e) {
+        } catch {
           resolve(undefined);
         }
       });
