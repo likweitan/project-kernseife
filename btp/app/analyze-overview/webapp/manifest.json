@@ -377,7 +377,7 @@
         "template": "sap.ovp.cards.v4.charts.analytical",
         "model": "mainModel",
         "settings": {
-          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#ScoreHistory",
+          "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#scoreHistory",
           "entitySet": "ScoreHistory",
           "title": "{{scoreHistory}}"
         }

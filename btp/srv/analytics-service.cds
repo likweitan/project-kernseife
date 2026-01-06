@@ -80,7 +80,7 @@ service AnalyticsService @(requires: [
     entity ScoreHistory                  as
         select from db.HistoricDevelopmentObjects as h
         inner join db.DevelopmentObjectVersions as v
-            on h.extension_ID = v.ID
+            on h.version_ID = v.ID
         {
             key v.systemId,
             key v.createdAt,

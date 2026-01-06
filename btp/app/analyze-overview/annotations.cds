@@ -660,31 +660,33 @@ annotate service.DevClasses with @(
     }, ],
 );
 
-annotate service.ScoreHistory with @(UI.Chart #ScoreHistory: {
-    $Type              : 'UI.ChartDefinitionType',
-    Description        : '{i18n>scoreHistoryDescription}',
-    Title              : '{i18n>scoreHistory}',
-    ChartType          : #Line,
-    Dimensions         : [
-        createdAt,
-        systemId
-    ],
-    DimensionAttributes: [
-        {
-            $Type    : 'UI.ChartDimensionAttributeType',
-            Dimension: createdAt,
-            Role     : #Category,
-        },
-        {
-            $Type    : 'UI.ChartDimensionAttributeType',
-            Dimension: systemId,
-            Role     : #Series,
-        }
-    ],
-    Measures           : [score],
-    MeasureAttributes  : [{
-        $Type  : 'UI.ChartMeasureAttributeType',
-        Measure: score,
-        Role   : #Axis1,
-    }],
-});
+annotate service.ScoreHistory with @(
+    UI.Chart #scoreHistory                 : {
+        $Type              : 'UI.ChartDefinitionType',
+        Description        : '{i18n>scoreHistoryDescription}',
+        Title              : '{i18n>scoreHistory}',
+        ChartType          : #Line,
+        Dimensions         : [
+            createdAt,
+            systemId
+        ],
+        DimensionAttributes: [
+            {
+                $Type    : 'UI.ChartDimensionAttributeType',
+                Dimension: createdAt,
+                Role     : #Category,
+            },
+            {
+                $Type    : 'UI.ChartDimensionAttributeType',
+                Dimension: systemId,
+                Role     : #Series,
+            }
+        ],
+        Measures           : [score],
+        MeasureAttributes  : [{
+            $Type  : 'UI.ChartMeasureAttributeType',
+            Measure: score,
+            Role   : #Axis1,
+        }],
+    }
+);
