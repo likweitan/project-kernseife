@@ -45,7 +45,7 @@ export const remoteServiceCall = async (payload: {
   let jwtToken =
     payload.jwtToken || (context?.user as any).authInfo?.config?.jwt;
   // Check if it is actual a JWT Token
-  if (jwtToken && jwtToken.split('\\.').length != 3) {
+  if (jwtToken && jwtToken.split('.').length != 3) {
     // It's not a JWT
     jwtToken = undefined;
   }
