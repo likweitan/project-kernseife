@@ -40,13 +40,11 @@ sap.ui.define(
       };
 
       const setFileEndings = function (fileEndings) {
-        console.log('File Endings:', fileEndings);
         const oFileUploader = byId('uploader');
         if (fileEndings) {
           const fileTypes = fileEndings.split(',').map(function (sFileEnding) {
             return sFileEnding.trim();
           });
-          console.log('File types:', fileTypes);
           oFileUploader.setFileType(fileTypes);
         } else {
           oFileUploader.setFileType([]);
