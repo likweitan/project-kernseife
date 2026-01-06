@@ -16,7 +16,6 @@ import {
   importMissingClassificationsBTP
 } from './features/classification-feature';
 import {
-
   importFindingsById,
   importDevelopmentObjectsBTP
 } from './features/developmentObject-feature';
@@ -227,9 +226,11 @@ export default (srv: Service) => {
             jwtToken: req.headers.authorization
           });
 
-          system.project = project;
-          system.setupDone = true;
-          system.setupNotDone = false; // As UI Bindings cannot handle negation
+          if (project && project.projectId) {
+            system.project = project;
+            system.setupDone = true;
+            system.setupNotDone = false; // As UI Bindings cannot handle negation
+          }
         } catch (e) {
           LOG.error('Error getting Project for System', {
             systemId: system.ID,
