@@ -35,7 +35,7 @@
   ],
   "role-templates": [
     {
-      "name": "admin",
+      "name": "kernseife-admin",
       "description": "Kernseife Administrator",
       "scope-references": [
         "$XSAPPNAME.admin"
@@ -43,7 +43,7 @@
       "attribute-references": []
     },
     {
-      "name": "classification-viewer",
+      "name": "kernseife-classification-viewer",
       "description": "Classification Viewer",
       "scope-references": [
         "$XSAPPNAME.classification-viewer"
@@ -51,7 +51,7 @@
       "attribute-references": []
     },
     {
-      "name": "classification-manager",
+      "name": "kernseife-classification-manager",
       "description": "Classification Viewer",
       "scope-references": [
         "$XSAPPNAME.classification-manager"
@@ -59,7 +59,7 @@
       "attribute-references": []
     },
     {
-      "name": "development-viewer",
+      "name": "kernseife-development-viewer",
       "description": "Development Viewer",
       "scope-references": [
         "$XSAPPNAME.development-viewer"
@@ -74,7 +74,7 @@
       ]
     },
     {
-      "name": "development-manager",
+      "name": "kernseife-development-manager",
       "description": "Development Manager",
       "scope-references": [
         "$XSAPPNAME.development-manager"
@@ -89,7 +89,7 @@
       ]
     },
     {
-      "name": "analyst",
+      "name": "kernseife-analyst",
       "description": "Kernseife Analyst",
       "scope-references": [
         "$XSAPPNAME.analyst"

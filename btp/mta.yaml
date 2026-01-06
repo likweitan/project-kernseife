@@ -270,29 +270,29 @@ resources:
         xsappname: kernseife-${space}
         tenant-mode: dedicated
         role-collections:
-          - name: 'kernseife-admin-${space}'
-            description: Kernseife Administrator
+          - name: 'kernseife-admin-${space}-template'
+            description: Kernseife Administrator (Template)
             role-template-references:
-              - $XSAPPNAME.admin
-              - $XSAPPNAME.classification-viewer
-              - $XSAPPNAME.classification-manager
-              - $XSAPPNAME.development-viewer
-              - $XSAPPNAME.development-manager
-              - $XSAPPNAME.analyst
-          - name: 'kernseife-manager-${space}'
-            description: Kernseife Manager
+              - $XSAPPNAME.kernseife-admin
+              - $XSAPPNAME.kernseife-classification-viewer
+              - $XSAPPNAME.kernseife-classification-manager
+              - $XSAPPNAME.kernseife-development-viewer
+              - $XSAPPNAME.kernseife-development-manager
+              - $XSAPPNAME.kernseife-analyst
+          - name: 'kernseife-manager-${space}-template'
+            description: Kernseife Manager (Template)
             role-template-references:
-              - $XSAPPNAME.classification-viewer
-              - $XSAPPNAME.classification-manager
-              - $XSAPPNAME.development-viewer
-              - $XSAPPNAME.development-manager
-              - $XSAPPNAME.analyst
-          - name: 'kernseife-developer-${space}'
-            description: Kernseife Developer
+              - $XSAPPNAME.kernseife-classification-viewer
+              - $XSAPPNAME.kernseife-classification-manager
+              - $XSAPPNAME.kernseife-development-viewer
+              - $XSAPPNAME.kernseife-development-manager
+              - $XSAPPNAME.kernseife-analyst
+          - name: 'kernseife-developer-${space}-template'
+            description: Kernseife Developer (Template)
             role-template-references:
-              - $XSAPPNAME.classification-viewer
-              - $XSAPPNAME.development-viewer
-              - $XSAPPNAME.analyst
+              - $XSAPPNAME.kernseife-classification-viewer
+              - $XSAPPNAME.kernseife-development-viewer
+              - $XSAPPNAME.kernseife-analyst
 
   # ------------------------------------------------------------
   - name: kernseife-html5-repo-host
