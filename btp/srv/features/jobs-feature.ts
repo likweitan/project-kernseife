@@ -35,10 +35,11 @@ export const updateJobProgress = async (
   tx: Transaction,
   progress: number
 ) => {
-  await UPDATE(entities.Jobs)
-    .set({ progressCurrent: progress, status: 'RUNNING' })
-    .where({ ID: id });
-  if (tx) tx.commit();
+  await cds.spawn({ user: context?.user }, async () => {
+    await UPDATE(entities.Jobs)
+      .set({ progressCurrent: progress, status: 'RUNNING' })
+      .where({ ID: id });
+  });
 };
 
 export const finishJob = async (id: string, jobResult?: JobResult) => {
