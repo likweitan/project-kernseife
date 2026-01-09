@@ -568,10 +568,10 @@ export const importDevelopmentObjectsBTP = async (
       const { score, potentialScore, level, potentialLevel } =
         calculateScoreAndLevel(ratingMap, developmentObjectFindingList);
       calculateTotalPercent(developmentObjectFindingList, score);
-
+      
       developmentObject.potentialScore = potentialScore;
       developmentObject.score = score;
-      
+
       developmentObject.level =
         level == CleanCoreLevel.A &&
         developmentObjectImport.languageVersion != '5' &&
