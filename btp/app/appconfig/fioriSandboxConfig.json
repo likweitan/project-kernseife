@@ -159,7 +159,7 @@
                             "title": "Manage DevelopmentObjects",
                             "signature": {
                                 "parameters": {},
-                                "additionalParameters": "ignored"
+                                "additionalParameters": "allowed"
                             },
                             "resolutionResult": {
                                 "applicationType": "SAPUI5",
