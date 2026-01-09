@@ -517,8 +517,6 @@ export const importInitialClassification = async (csv: string) => {
 
 export const importMissingClassifications = async (
   classificationRecordList: MissingClassificationImport[],
-  comment?: string,
-  defaultRating?: string,
   tx?: Transaction,
   updateProgress?: (progress: number) => void
 ): Promise<JobResult> => {
@@ -589,7 +587,7 @@ export const importMissingClassifications = async (
           releaseLevel_code: 'undefined',
           successorClassification_code: 'undefined',
           referenceCount: 0,
-          comment: comment || ''
+          comment: ''
         } as Classification;
 
         if (classification.subType == 'TABL') {
@@ -608,8 +606,7 @@ export const importMissingClassifications = async (
         await updateTotalScoreAndReferenceCount(classification);
 
         // Set default rating code
-        classification.rating_code =
-          defaultRating || getDefaultRatingCode(classification);
+        classification.rating_code = getDefaultRatingCode(classification);
 
         // Add to Map to prevent double inserts
         classificationRatingMap.set(key, classification.rating_code);
@@ -627,52 +624,6 @@ export const importMissingClassifications = async (
           oldRating: '',
           newRating: classification.rating_code
         } as ClassificationImportLog);
-      } else if (defaultRating != NO_CLASS || comment) {
-        const updatePayload = {} as { rating_code?: string; comment?: string };
-        if (
-          defaultRating &&
-          defaultRating != NO_CLASS &&
-          classificationRatingMap.get(key) != defaultRating
-        ) {
-          updatePayload['rating_code'] = defaultRating;
-        }
-        if (comment) {
-          updatePayload['comment'] = comment;
-        }
-
-        // Update Rating
-        if (updatePayload.rating_code || updatePayload.comment) {
-          await UPDATE.entity('kernseife.db.Classifications')
-            .with(updatePayload)
-            .where({
-              tadirObjectType: classificationRecord.tadirObjectType,
-              tadirObjectName: classificationRecord.tadirObjectName,
-              objectType: classificationRecord.objectType,
-              objectName: classificationRecord.objectName
-            });
-          if (tx) {
-            await tx.commit();
-          }
-          importLogList.push({
-            tadirObjectType: classificationRecord.tadirObjectType,
-            tadirObjectName: classificationRecord.tadirObjectName,
-            objectType: classificationRecord.objectType,
-            objectName: classificationRecord.objectName,
-            status: 'UPDATED',
-            oldRating: classificationRatingMap.get(key),
-            newRating: updatePayload['rating_code']
-          } as ClassificationImportLog);
-        } else {
-          importLogList.push({
-            tadirObjectType: classificationRecord.tadirObjectType,
-            tadirObjectName: classificationRecord.tadirObjectName,
-            objectType: classificationRecord.objectType,
-            objectName: classificationRecord.objectName,
-            status: 'UNCHANGED',
-            oldRating: classificationRatingMap.get(key),
-            newRating: classificationRatingMap.get(key)
-          } as ClassificationImportLog);
-        }
       } else {
         importLogList.push({
           tadirObjectType: classificationRecord.tadirObjectType,
@@ -1155,7 +1106,7 @@ export const importMissingClassificationsById = async (
 ): Promise<JobResult> => {
   const missingClassificationsImport = await SELECT.one
     .from('kernseife.db.Imports', (d: Import) => {
-      d.ID, d.title, d.file, d.defaultRating, d.comment;
+      d.ID, d.title, d.file
     })
     .where({ ID: missingClassificationsImportId });
 
@@ -1192,8 +1143,6 @@ export const importMissingClassificationsById = async (
 
   return await importMissingClassifications(
     classificationRecordList,
-    missingClassificationsImport.comment || undefined,
-    missingClassificationsImport.defaultRating || undefined,
     tx,
     updateProgress
   );
@@ -1222,8 +1171,6 @@ export const importMissingClassificationsBTP = async (
 
   return await importMissingClassifications(
     missingClassificationList,
-    undefined, // no comment
-    undefined, // no default rating
     tx,
     updateProgress
   );

@@ -197,22 +197,12 @@
           "length": 5000,
           "@cds.persistence.name": "SYSTEMID"
         },
-        "comment": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "COMMENT"
-        },
         "overwrite": {
           "type": "cds.Boolean",
           "default": {
             "val": false
           },
           "@cds.persistence.name": "OVERWRITE"
-        },
-        "defaultRating": {
-          "type": "cds.String",
-          "length": 3,
-          "@cds.persistence.name": "DEFAULTRATING"
         },
         "file": {
           "type": "cds.LargeBinary",

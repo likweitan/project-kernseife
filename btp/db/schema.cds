@@ -508,9 +508,7 @@ entity Imports : cuid, managed {
     type          : String;
     title         : String;
     systemId      : String;
-    comment       : String;
     overwrite     : Boolean default false;
-    defaultRating : String(3);
     system        : Association to Systems
                         on system.sid = $self.systemId;
 
@@ -811,22 +809,6 @@ entity Settings : managed {
                             on frameworkList.setting = $self;
 }
 
-entity JobTypes           as
-        select from db.ImportTypes {
-            key concat(
-                    'IMPORT_', code
-                ) as code : String,
-                title
-        }
-    union
-        select from db.ExportTypes {
-            key concat(
-                    'EXPORT_', code
-                ) as code : String,
-                title
-        }
-
-
 @cds.persistence.journal
 entity Jobs : cuid, managed {
     title           : String;
@@ -947,28 +929,11 @@ entity Enhancements : cuid, managed {
 }
 
 
-entity ImportTypes {
+entity JobTypes {
     key code          : String;
-        order         : Integer;
         title         : String;
-        reqSystemId   : Boolean;
-        defaultRating : Boolean;
-        comment       : Boolean;
-        overwrite     : Boolean;
-        fileEndings   : String;
-        hidden        : Boolean;
-        description   : String;
 }
 
-entity ExportTypes {
-    key code        : String;
-        order       : Integer;
-        title       : String;
-        legacy      : Boolean;
-        hidden      : Boolean;
-        dateFrom    : Boolean;
-        description : String;
-}
 
 entity Destinations {
     key name           : String;

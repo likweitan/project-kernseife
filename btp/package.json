@@ -1,6 +1,6 @@
 {
   "name": "kernseife",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "CAP App for Kernseife",
   "repository": "https://github.tools.sap/Kernseife/kernseifeApp.git",
   "engines": {

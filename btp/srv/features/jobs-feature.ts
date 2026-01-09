@@ -37,7 +37,7 @@ export const updateJobProgress = async (
   await UPDATE('kernseife.db.Jobs')
     .set({ progressCurrent: progress, status: 'RUNNING' })
     .where({ ID: id });
-  if (tx) tx.commit();
+  if (tx) await tx.commit();
 };
 
 export const finishJob = async (id: string, jobResult?: JobResult) => {
@@ -89,7 +89,7 @@ export const runAsJob = async (
   }
   const jobId = await createJob(title, type, progressTotal);
   const { user } = context as EventContext;
-  LOG.info(`Starting Job ${jobId} as user ${user.id}`, user);
+  LOG.info(`Starting Job ${jobId} as user ${user.id}`);
   cds
     .spawn({ user, after: 200 }, async (tx: Transaction) => {
       return await jobFunction(tx, (progress) =>
@@ -139,9 +139,7 @@ export const createImport = async (
   file: any,
   fileType: string,
   systemId: string | undefined | null = undefined,
-  defaultRating: string | undefined = undefined,
-  overwite: boolean | undefined = undefined,
-  comment: string | undefined = undefined
+  overwite: boolean | undefined = undefined
 ): Promise<string> => {
   const importObject = {
     ID: utils.uuid(),
@@ -149,9 +147,7 @@ export const createImport = async (
     title: importType + ' Import ' + fileName,
     status: 'NEW',
     systemId,
-    defaultRating,
     overwite,
-    comment,
     file,
     fileType,
     fileName
@@ -168,58 +164,6 @@ export const setJobIdForImport = async (importId: string, jobId: string) => {
 
 export const setJobIdForExport = async (exportId: string, jobId: string) => {
   await UPDATE('kernseife.db.Exports', { ID: exportId }).set({ job_ID: jobId });
-};
-
-export const uploadFile = async (
-  importType: string,
-  fileName: string,
-  file: any,
-  systemId: string | undefined | null,
-  defaultRating?: string,
-  overwrite?: boolean,
-  comment?: string
-): Promise<string> => {
-  LOG.info('Uploading file', {
-    fileName: fileName,
-    type: importType,
-    defaultRating,
-    overwrite,
-    systemId,
-    comment
-  });
-
-  if (!file) {
-    throw new Error('No file uploaded');
-  }
-  let fileType = 'text/csv'; // Default file type
-  switch (importType) {
-    case 'FINDINGS':
-      if (!systemId) {
-        throw new Error('No SystemId provided');
-      }
-      break;
-    case 'MISSING_CLASSIFICATION':
-      break;
-    case 'ENHANCEMENT':
-      break;
-    case 'EXPLICIT':
-      break;
-    case 'EXTERNAL_CLASSIFICATION':
-      fileType = 'application/zip';
-      break;
-    default:
-      throw new Error('Invalid type provided');
-  }
-  return await createImport(
-    importType,
-    fileName,
-    file,
-    fileType,
-    systemId,
-    defaultRating,
-    overwrite,
-    comment
-  );
 };
 
 export const jobHasImports = async (jobId: string) => {

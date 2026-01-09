@@ -2,7 +2,8 @@ using kernseife.db as db from '../db/schema';
 using {kernseife_btp as btp} from './external/kernseife_btp';
 
 service AdminService @(requires: 'admin') {
-    
+
+
     // Actions
     @Common.IsActionCritical: true
     action syncClassificationsToAllSystems();
@@ -10,20 +11,85 @@ service AdminService @(requires: 'admin') {
     action triggerExport(exportType: String, legacy: Boolean, dateFrom: Timestamp); // as "export" is not allowed due to TS type generation
     action triggerImport(importType: String, systemId: String);
 
+
+    type inSystemBTP                  : {
+        @Common.ValueListWithFixedValues: true
+        @(Common                        : {
+            Label    : '{i18n>system}',
+            ValueList: {
+                CollectionPath: 'BTPSystems',
+                Parameters    : [
+                    {
+                        $Type            : 'Common.ValueListParameterInOut',
+                        LocalDataProperty: systemId,
+                        ValueListProperty: 'sid'
+                    },
+                    {
+                        $Type            : 'Common.ValueListParameterDisplayOnly',
+                        ValueListProperty: 'title'
+                    }
+                ]
+            },
+        }) systemId : String;
+    }
+
+    type inSystem                     : {
+        @Common.ValueListWithFixedValues: true
+        @(Common                        : {
+            Label    : '{i18n>system}',
+            ValueList: {
+                CollectionPath: 'Systems',
+                Parameters    : [
+                    {
+                        $Type            : 'Common.ValueListParameterInOut',
+                        LocalDataProperty: systemId,
+                        ValueListProperty: 'sid'
+                    },
+                    {
+                        $Type            : 'Common.ValueListParameterDisplayOnly',
+                        ValueListProperty: 'title'
+                    }
+                ]
+            },
+        }) systemId : String;
+    }
+
+    type inFileType {
+        @Common.Label: '{i18n>file}'
+        stream   : LargeBinary  @Core.MediaType: mimeType  @Core.ContentDisposition.Filename: fileName;
+        mimeType : String       @Core.IsMediaType;
+        fileName : String;
+    };
+
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importMissingClassificationsBTP(@mandatory systemId: inSystemBTP:systemId, );
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importMissingClassificationsFile(file: inFileType not null);
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importFindingsFile(@mandatory systemId: inSystem:systemId, file: inFileType not null);
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importFindingsBTP(@mandatory systemIdBTP: inSystemBTP:systemId, );
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importClassifications( @mandatory file: inFileType not null, @Common.Label: '{i18n>overwriteExisting}' overwriteExisting: Boolean);
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action exportClassificationsSystem( @Common.Label: '{i18n>useLegacy}' useLegacy: Boolean);
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action exportClassificationsExternal( @Common.Label: '{i18n>dateFrom}' dateFrom: Timestamp);
+
     entity ReleaseStates                     as projection on db.ReleaseStates;
     entity ReleaseStateSuccessors            as projection on db.ReleaseStateSuccessors;
 
     entity Imports                           as projection on db.Imports;
     entity Exports                           as projection on db.Exports;
 
-    entity ImportTypes                       as projection on db.ImportTypes
-                                                where
-                                                    hidden == false;
-
-    entity ExportTypes                       as projection on db.ExportTypes
-                                                where
-                                                    hidden == false;
-
+    entity JobTypes                          as projection on db.JobTypes;
 
     event Imported : { // Async API
         ID   : Imports:ID;
@@ -35,7 +101,6 @@ service AdminService @(requires: 'admin') {
     entity Destinations                      as projection on db.Destinations;
 
     entity JobStatus                         as projection on db.JobStatus;
-    entity JobTypes                          as projection on db.JobTypes;
 
     entity SimplificationItems               as projection on db.SimplificationItems;
 
@@ -136,4 +201,10 @@ service AdminService @(requires: 'admin') {
 
     entity ObjectTypes                       as projection on db.ObjectTypes;
     entity Criticality                       as projection on db.Criticality;
+
+    @cds.redirection.target: false
+    entity BTPSystems                        as projection on db.Systems
+                                                where
+                                                        destination != null
+                                                    and destination != '';
 }

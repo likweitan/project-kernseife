@@ -1,4 +1,0 @@
-code,title,legacy,hidden,order,dateFrom,description
-SYSTEM_CLASSIFICATION,Classification (System Upload Format),true,false,1,false,"This zip-file is used to transfer the classication to the S/4 System by uploading it using the Report ZKNSF_CLASSIFICATION_MANAGR"
-EXTERNAL_CLASSIFICATION,Classifications (External Sharing Format),false,false,2,true,"This zip-file is used to either backup the classification or transfer it to another Kernseife BTP Tenant."
-MISSING_CLASSIFICATION,Missing Classifications,false,true,3,false,"Exports the Classification for objects which exist in the Cloudification Repository, but not in your Kernseife tenant. This needs a specical connection to an S/4 System and is not meant for public usage."

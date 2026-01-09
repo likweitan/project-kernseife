@@ -1,14 +1,11 @@
 import { Jobs } from '#cds-models/AdminService';
 import { log, Service, Transaction } from '@sap/cds';
-import { PassThrough } from 'stream';
 import dayjs from 'dayjs';
 import {
   getClassificationCount,
   getClassificationJsonAsZip,
   getClassificationJsonExternal,
   getClassificationJsonCustom,
-  importEnhancementObjectsById,
-  importExpliticObjectsById,
   importExternalClassificationById,
   importMissingClassificationsById,
   syncClassificationsToExternalSystemByRef,
@@ -26,8 +23,7 @@ import {
   jobHasExports,
   jobHasImports,
   runAsJob,
-  setJobIdForImport,
-  uploadFile
+  setJobIdForImport
 } from './features/jobs-feature';
 import { createInitialData } from './features/setup-feature';
 import JSZip from 'jszip';
@@ -43,46 +39,142 @@ import { System } from '#cds-models/kernseife/db';
 export default (srv: Service) => {
   const LOG = log('AdminService');
 
-  srv.on('PUT', 'FileUpload', async (req: any, next: any) => {
-    LOG.info('FileUpload');
+  srv.on('importMissingClassificationsFile', async (req: any) => {
+    LOG.info('importMissingClassificationsFile');
 
-    const uploadType = req.headers['x-upload-type'];
-    const fileName = req.headers['x-file-name'];
-    const systemId = req.headers['x-system-id'];
-    const defaultRating = req.headers['x-default-rating'];
-    const overwrite = req.headers['x-overwrite'] === 'true';
-    const comment = req.headers['x-comment'];
+    if (req.data.file.mimeType != 'text/csv') {
+      req.error(400, 'FILE_TYPE_NOT_SUPPORTED');
+      return;
+    }
 
-    const stream = new PassThrough();
-    const buffers = [] as any[];
-    req.data.file.pipe(stream);
-    const importId = await new Promise((resolve) => {
-      stream.on('data', (dataChunk: any) => {
-        buffers.push(dataChunk);
-      });
-      stream.on('end', async () => {
-        const buffer = Buffer.concat(buffers);
-        try {
-          resolve(
-            await uploadFile(
-              uploadType,
-              fileName,
-              buffer,
-              systemId,
-              defaultRating,
-              overwrite,
-              comment
-            )
-          );
-        } catch {
-          resolve(undefined);
-        }
-      });
-    });
+    const importId = await createImport(
+      'MISSING_CLASSIFICATION',
+      req.data.file.fileName,
+      req.data.file.stream,
+      req.data.file.mimeType
+    );
+
     if (importId) {
       await srv.emit('Imported', {
         ID: importId,
-        type: uploadType
+        type: 'MISSING_CLASSIFICATION'
+      });
+    } else {
+      req.error(400, 'IMPORT_CREATION_FAILED');
+      return;
+    }
+
+    req.notify({
+      message: 'IMPORT_STARTED',
+      status: 200
+    });
+  });
+
+  srv.on('importMissingClassificationsBTP', async (req: any) => {
+    LOG.info('importMissingClassifications');
+
+    const importId = await createImport(
+      'BTP_MISSING_CLASSIFICATION',
+      '',
+      null,
+      '',
+      req.data.systemId,
+      false
+    );
+
+    if (importId) {
+      await srv.emit('Imported', {
+        ID: importId,
+        type: 'BTP_MISSING_CLASSIFICATION'
+      });
+    } else {
+      req.error(400, 'IMPORT_CREATION_FAILED');
+      return;
+    }
+
+    req.notify({
+      message: 'IMPORT_STARTED',
+      status: 200
+    });
+  });
+
+  srv.on('importFindingsFile', async (req: any) => {
+    LOG.info('importFindingsFile');
+
+    if (req.data.file.mimeType != 'text/csv') {
+      req.error(400, 'FILE_TYPE_NOT_SUPPORTED');
+      return;
+    }
+
+    const importId = await createImport(
+      'FINDINGS',
+      req.data.file.fileName,
+      req.data.file.stream,
+      req.data.file.mimeType,
+      req.data.systemId
+    );
+
+    if (importId) {
+      await srv.emit('Imported', {
+        ID: importId,
+        type: 'FINDINGS'
+      });
+    }
+    req.notify({
+      message: 'IMPORT_STARTED',
+      status: 200
+    });
+  });
+
+  srv.on('importFindingsBTP', async (req: any) => {
+    LOG.info('importFindingsBTP');
+
+    const importId = await createImport(
+      'BTP_FINDINGS',
+      '',
+      null,
+      '',
+      req.data.systemId,
+      false
+    );
+
+    if (importId) {
+      await srv.emit('Imported', {
+        ID: importId,
+        type: 'BTP_FINDINGS'
+      });
+    } else {
+      req.error(400, 'IMPORT_CREATION_FAILED');
+      return;
+    }
+
+    req.notify({
+      message: 'IMPORT_STARTED',
+      status: 200
+    });
+  });
+
+  srv.on('importClassifications', async (req: any) => {
+    LOG.info('importClassifications');
+
+    if (req.data.file.mimeType != 'application/zip') {
+      req.error(400, 'FILE_TYPE_NOT_SUPPORTED');
+      return;
+    }
+
+    const importId = await createImport(
+      'EXTERNAL_CLASSIFICATION',
+      req.data.file.fileName,
+      req.data.file.stream,
+      req.data.file.mimeType,
+      req.data.systemId,
+      req.data.overwriteExisting
+    );
+
+    if (importId) {
+      await srv.emit('Imported', {
+        ID: importId,
+        type: 'EXTERNAL_CLASSIFICATION'
       });
 
       req.notify({
@@ -123,10 +215,10 @@ export default (srv: Service) => {
             );
           case 'FINDINGS':
             return await importFindingsById(ID, tx, updateProgress);
-          case 'ENHANCEMENT':
-            return await importEnhancementObjectsById(ID, tx, updateProgress);
-          case 'EXPLICIT':
-            return await importExpliticObjectsById(ID, tx, updateProgress);
+          // case 'ENHANCEMENT':
+          //   return await importEnhancementObjectsById(ID, tx, updateProgress);
+          // case 'EXPLICIT':
+          //   return await importExpliticObjectsById(ID, tx, updateProgress);
           case 'EXTERNAL_CLASSIFICATION':
             return await importExternalClassificationById(
               ID,
@@ -250,132 +342,120 @@ export default (srv: Service) => {
     }
   });
 
-  srv.on('triggerImport', async (req: any) => {
-    LOG.info('Trigger Import', req.data);
-    const { importType, systemId } = req.data;
-    const importId = await createImport(
-      importType,
-      '',
-      null,
-      '',
-      systemId,
-      '',
-      false,
-      ''
-    );
-
-    if (importId) {
-      await srv.emit('Imported', {
-        ID: importId,
-        type: importType
-      });
-
-      req.notify({
-        message: 'Import started',
-        status: 200
-      });
-    } else {
-      req.error(400);
-    }
-  });
-
-  srv.on('triggerExport', async (req: any) => {
-    LOG.info('Trigger Export', req.data);
-    const { exportType, legacy, dateFrom } = req.data;
-
+  srv.on('exportClassificationsSystem', async (req: any) => {
+    LOG.info('exportClassificationsSystem', req.data);
     await runAsJob(
-      `Export ${exportType}`,
-      `EXPORT_${exportType}`,
+      `Export SYSTEM_CLASSIFICATION`,
+      `EXPORT_SYSTEM_CLASSIFICATION`,
       100,
       async (
         tx: Transaction,
         updateProgress: (progress: number) => Promise<void>
       ): Promise<JobResult> => {
-        LOG.info('type', exportType);
-        switch (exportType) {
-          case 'SYSTEM_CLASSIFICATION': {
-            const fileType = 'application/zip';
-            const filename = `system_classification_${dayjs().format('YYYY_MM_DD')}.zip`;
-            await updateProgress(15);
-            const classificationJson = await getClassificationJsonCustom({
-              legacy
-            });
-            await updateProgress(85);
-            const file = await getClassificationJsonAsZip(classificationJson);
-            await updateProgress(100);
+        const fileType = 'application/zip';
+        const filename = `system_classification_${dayjs().format('YYYY_MM_DD')}.zip`;
+        await updateProgress(15);
+        const classificationJson = await getClassificationJsonCustom({
+          legacy: req.data.useLegacy
+        });
+        await updateProgress(85);
+        const file = await getClassificationJsonAsZip(classificationJson);
+        await updateProgress(100);
+        return {
+          message: `Exported ${classificationJson.objectClassifications.length} classifications`,
+          exportIdList: [
+            await createExport(
+              'SYSTEM_CLASSIFICATION',
+              filename,
+              file,
+              fileType
+            )
+          ]
+        };
+      }
+    );
+  });
+
+  srv.on('exportClassificationsExternal', async (req: any) => {
+    LOG.info('exportClassificationsExternal', req.data);
+    await runAsJob(
+      `Export EXTERNAL_CLASSIFICATION`,
+      `EXPORT_EXTERNAL_CLASSIFICATION`,
+      100,
+      async (
+        tx: Transaction,
+        updateProgress: (progress: number) => Promise<void>
+      ): Promise<JobResult> => {
+        // Wrap in ZIP
+        const count = await getClassificationCount(req.data.dateFrom);
+        let offset = 0;
+        const rowSize = 100000;
+        let classificationList;
+        const exportList: string[] = [];
+        do {
+          const zip = new JSZip();
+          const fileType = 'application/zip';
+          const filename = `external_classification_${dayjs().format('YYYY_MM_DD')}_${offset + 1}.zip`;
+          const progress = Math.round((100 / count) * rowSize * offset);
+          classificationList = await getClassificationJsonExternal(
+            rowSize,
+            offset * rowSize,
+            req.data.dateFrom
+          );
+          if (tx) await tx.commit(); // Commit Read
+
+          if (classificationList.length === 0) {
             return {
-              message: `Exported ${classificationJson.objectClassifications.length} classifications`,
-              exportIdList: [
-                await createExport(exportType, filename, file, fileType)
-              ]
+              message: `No classifications found`,
+              exportIdList: []
             };
           }
-          case 'EXTERNAL_CLASSIFICATION': {
-            // Wrap in ZIP
-
-            const count = await getClassificationCount(dateFrom);
-            let offset = 0;
-            const rowSize = 100000;
-            let classificationList;
-            const exportList: string[] = [];
-            do {
-              const zip = new JSZip();
-              const fileType = 'application/zip';
-              const filename = `external_classification_${dayjs().format('YYYY_MM_DD')}_${offset + 1}.zip`;
-              const progress = Math.round((100 / count) * rowSize * offset);
-              classificationList = await getClassificationJsonExternal(
-                rowSize,
-                offset * rowSize,
-                dateFrom
+          for (const classification of classificationList) {
+            if (
+              classification.tadirObjectType === classification.objectType &&
+              classification.tadirObjectName === classification.objectName
+            ) {
+              zip.file(
+                `${classification.objectName.replaceAll('/', '#').toUpperCase()}.${classification.objectType.toUpperCase()}.json`,
+                JSON.stringify(classification, null, 2)
               );
-              if (tx) tx.commit(); // Commit Read
-              for (const classification of classificationList) {
-                if (
-                  classification.tadirObjectType ===
-                    classification.objectType &&
-                  classification.tadirObjectName === classification.objectName
-                ) {
-                  zip.file(
-                    `${classification.objectName.replaceAll('/', '#').toUpperCase()}.${classification.objectType.toUpperCase()}.json`,
-                    JSON.stringify(classification, null, 2)
-                  );
-                } else {
-                  zip.file(
-                    `${classification.tadirObjectName.replaceAll('/', '#').toUpperCase()}.${classification.tadirObjectType.toUpperCase()}.${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toUpperCase()}.json`,
-                    JSON.stringify(classification, null, 2)
-                  );
-                }
-              }
-              offset++;
-
-              await updateProgress(progress);
-
-              LOG.info('Generate Zip - Start ' + Object.keys(zip.files).length);
-              const file = await zip.generateAsync({
-                streamFiles: true,
-                type: 'nodebuffer',
-                compression: 'DEFLATE',
-                compressionOptions: { level: 7 }
-              });
-
-              LOG.info('Generate Zip - Finish');
-
-              exportList.push(
-                await createExport(exportType, filename, file, fileType)
+            } else {
+              zip.file(
+                `${classification.tadirObjectName.replaceAll('/', '#').toUpperCase()}.${classification.tadirObjectType.toUpperCase()}.${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toUpperCase()}.json`,
+                JSON.stringify(classification, null, 2)
               );
-              if (tx) tx.commit();
-            } while (classificationList.length == rowSize);
-
-            await updateProgress(100);
-            return {
-              message: `Exported ${count} classifications`,
-              exportIdList: exportList
-            };
+            }
           }
-          default:
-            LOG.error(`Unknown Export Type ${exportType}`);
-            throw new Error(`Unknown Import Type ${exportType}`);
-        }
+          offset++;
+
+          await updateProgress(progress);
+
+          LOG.info('Generate Zip - Start ' + Object.keys(zip.files).length);
+          const file = await zip.generateAsync({
+            streamFiles: true,
+            type: 'nodebuffer',
+            compression: 'DEFLATE',
+            compressionOptions: { level: 7 }
+          });
+
+          LOG.info('Generate Zip - Finish');
+
+          exportList.push(
+            await createExport(
+              'EXTERNAL_CLASSIFICATION',
+              filename,
+              file,
+              fileType
+            )
+          );
+          if (tx) await tx.commit();
+        } while (classificationList.length == rowSize);
+
+        await updateProgress(100);
+        return {
+          message: `Exported ${count} classifications`,
+          exportIdList: exportList
+        };
       }
     );
   });
