@@ -10,7 +10,7 @@ import {
   FindingRecord,
   DevelopmentObjectFinding
 } from '#cds-models/kernseife/db';
-import { describe, expect, it } from '@jest/globals';
+import {describe, expect, it} from '@jest/globals';
 
 describe('developmentObject-feature', () => {
   describe('calculateScoreAndLevel', () => {
