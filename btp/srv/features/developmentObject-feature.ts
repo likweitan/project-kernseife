@@ -30,6 +30,35 @@ import {
 
 const LOG = log('DevelopmentObjectFeature');
 
+// Required fields for FINDINGS import
+const REQUIRED_FINDINGS_FIELDS = ['runId', 'itemId', 'objectType', 'objectName', 'devClass', 'softwareComponent', 'messageId', 'refObjectType', 'refObjectName'];
+
+export interface CsvValidationResult {
+  isValid: boolean;
+  errors: string[];
+}
+
+/**
+ * Validates that the CSV has the required columns
+ */
+export const validateFindingsCsvColumns = (csvHeaders: string[]): CsvValidationResult => {
+  const errors: string[] = [];
+  const headers = csvHeaders.map(h => h.trim());
+
+  // Check required fields
+  for (const requiredField of REQUIRED_FINDINGS_FIELDS) {
+    if (!headers.includes(requiredField)) {
+      errors.push(`Missing required column '${requiredField}'`);
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+};
+
+
 export const getDevelopmentObjectCount = async () => {
   const result = await SELECT.from(entities.DevelopmentObjects).columns(
     'IFNULL(COUNT( * ),0) as count'
@@ -76,10 +105,10 @@ export const calculateScores = async () => {
   // Calculate Total Score for all Development Objects
   await db.run(
     'UPDATE kernseife_db_DEVELOPMENTOBJECTS as d SET score = IFNULL(' +
-      'SELECT sum(IFNULL(f.total,0))) AS sum_score ' +
-      'FROM kernseife_db_DEVELOPMENTOBJECTFINDINGS as f ' +
-      'WHERE f.objectType = d.objectType AND f.objectName = d.objectName AND f.devClass = d.devClass AND f.systemId = d.systemId ' +
-      ',0)'
+    'SELECT sum(IFNULL(f.total,0))) AS sum_score ' +
+    'FROM kernseife_db_DEVELOPMENTOBJECTFINDINGS as f ' +
+    'WHERE f.objectType = d.objectType AND f.objectName = d.objectName AND f.devClass = d.devClass AND f.systemId = d.systemId ' +
+    ',0)'
   );
 
   // Calculate Name spaces
@@ -87,8 +116,8 @@ export const calculateScores = async () => {
   // Calculate Reference Count & Score
   await db.run(
     'UPDATE kernseife_db_CLASSIFICATIONS as c SET ' +
-      'referenceCount =  IFNULL((SELECT SUM(count) FROM kernseife_db_DEVELOPMENTOBJECTFINDINGS as f WHERE f.refObjectType = c.objectType AND f.refObjectName = c.objectName),0),' +
-      'totalScore = IFNULL((SELECT SUM(total) FROM kernseife_db_DEVELOPMENTOBJECTFINDINGS as f WHERE f.refObjectType = c.objectType AND f.refObjectName = c.objectName),0)'
+    'referenceCount =  IFNULL((SELECT SUM(count) FROM kernseife_db_DEVELOPMENTOBJECTFINDINGS as f WHERE f.refObjectType = c.objectType AND f.refObjectName = c.objectName),0),' +
+    'totalScore = IFNULL((SELECT SUM(total) FROM kernseife_db_DEVELOPMENTOBJECTFINDINGS as f WHERE f.refObjectType = c.objectType AND f.refObjectName = c.objectName),0)'
   );
 };
 
@@ -170,6 +199,22 @@ export const importFinding = async (
     skipEmptyLines: true
   });
 
+  // Validate CSV columns before processing
+  if (!result.meta.fields || result.meta.fields.length === 0) {
+    throw new Error('CSV file is empty or has no headers');
+  }
+
+  const validation = validateFindingsCsvColumns(result.meta.fields);
+  if (!validation.isValid) {
+    const errorMessage = `Invalid CSV format. ${validation.errors.join('. ')}`;
+    LOG.error('CSV Validation Failed', { errors: validation.errors, headers: result.meta.fields });
+    throw new Error(errorMessage);
+  }
+
+  LOG.info('CSV columns validated successfully', {
+    headers: result.meta.fields
+  });
+
   const successorMap = await getSuccessorRatingMap();
 
   const itemIdSet = new Set();
@@ -180,7 +225,7 @@ export const importFinding = async (
         // duplicate!
         throw new Error(
           'Duplicate ItemId ' +
-            (finding.itemId || finding.ITEMID || finding.itemID)
+          (finding.itemId || finding.ITEMID || finding.itemID)
         );
       }
 
@@ -316,8 +361,8 @@ export const importFinding = async (
 
       developmentObject.level =
         level == CleanCoreLevel.A &&
-        findingRecord.messageId != '5' &&
-        findingRecord.messageId != '2' // Key-User is also Part of ABAP Cloud => Level A as well
+          findingRecord.messageId != '5' &&
+          findingRecord.messageId != '2' // Key-User is also Part of ABAP Cloud => Level A as well
           ? CleanCoreLevel.B
           : level;
 
@@ -523,14 +568,14 @@ export const importDevelopmentObjectsBTP = async (
       const { score, potentialScore, level, potentialLevel } =
         calculateScoreAndLevel(ratingMap, developmentObjectFindingList);
       calculateTotalPercent(developmentObjectFindingList, score);
-      
+
       developmentObject.potentialScore = potentialScore;
       developmentObject.score = score;
 
       developmentObject.level =
         level == CleanCoreLevel.A &&
-        developmentObjectImport.languageVersion != '5' &&
-        developmentObjectImport.languageVersion != '2' // Key-User is also Part of ABAP Cloud => Level A as well
+          developmentObjectImport.languageVersion != '5' &&
+          developmentObjectImport.languageVersion != '2' // Key-User is also Part of ABAP Cloud => Level A as well
           ? CleanCoreLevel.B
           : level;
 
