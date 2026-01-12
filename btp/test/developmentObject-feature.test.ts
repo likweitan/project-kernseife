@@ -1,7 +1,8 @@
 import {
   calculateScoreAndLevel,
   determineNamespace,
-  getDevelopmentObjectIdentifier
+  getDevelopmentObjectIdentifier,
+  validateFindingsCsvColumns
 } from '../srv/features/developmentObject-feature';
 import {
   CleanCoreLevel,
@@ -133,6 +134,35 @@ describe('developmentObject-feature', () => {
       const result = getDevelopmentObjectIdentifier(obj);
 
       expect(result).toBe('SYS1CLASTEST');
+    });
+  });
+
+  describe('validateFindingsCsvColumns', () => {
+    it('should validate correct column headers', () => {
+      const headers = ['runId', 'itemId', 'objectType', 'objectName', 'devClass', 'softwareComponent', 'messageId', 'refObjectType', 'refObjectName'];
+      const result = validateFindingsCsvColumns(headers);
+
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should return errors for missing required columns', () => {
+      const headers = ['objectType', 'objectName']; // missing many required fields
+      const result = validateFindingsCsvColumns(headers);
+
+      expect(result.isValid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors.some(e => e.includes('runId'))).toBe(true);
+      expect(result.errors.some(e => e.includes('itemId'))).toBe(true);
+      expect(result.errors.some(e => e.includes('messageId'))).toBe(true);
+    });
+
+    it('should return all missing column errors at once', () => {
+      const headers = ['someRandomColumn', 'anotherColumn'];
+      const result = validateFindingsCsvColumns(headers);
+
+      expect(result.isValid).toBe(false);
+      expect(result.errors.length).toBe(9); // All required fields missing
     });
   });
 });

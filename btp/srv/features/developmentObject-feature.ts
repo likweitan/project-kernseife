@@ -30,6 +30,35 @@ import {
 
 const LOG = log('DevelopmentObjectFeature');
 
+// Required fields for FINDINGS import
+const REQUIRED_FINDINGS_FIELDS = ['runId', 'itemId', 'objectType', 'objectName', 'devClass', 'softwareComponent', 'messageId', 'refObjectType', 'refObjectName'];
+
+export interface CsvValidationResult {
+  isValid: boolean;
+  errors: string[];
+}
+
+/**
+ * Validates that the CSV has the required columns
+ */
+export const validateFindingsCsvColumns = (csvHeaders: string[]): CsvValidationResult => {
+  const errors: string[] = [];
+  const headers = csvHeaders.map(h => h.trim());
+
+  // Check required fields
+  for (const requiredField of REQUIRED_FINDINGS_FIELDS) {
+    if (!headers.includes(requiredField)) {
+      errors.push(`Missing required column '${requiredField}'`);
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+};
+
+
 export const getDevelopmentObjectCount = async () => {
   const result = await SELECT.from(entities.DevelopmentObjects).columns(
     'IFNULL(COUNT( * ),0) as count'
@@ -168,6 +197,22 @@ export const importFinding = async (
   const result = papa.parse<any>(csv, {
     header: true,
     skipEmptyLines: true
+  });
+
+  // Validate CSV columns before processing
+  if (!result.meta.fields || result.meta.fields.length === 0) {
+    throw new Error('CSV file is empty or has no headers');
+  }
+
+  const validation = validateFindingsCsvColumns(result.meta.fields);
+  if (!validation.isValid) {
+    const errorMessage = `Invalid CSV format. ${validation.errors.join('. ')}`;
+    LOG.error('CSV Validation Failed', { errors: validation.errors, headers: result.meta.fields });
+    throw new Error(errorMessage);
+  }
+
+  LOG.info('CSV columns validated successfully', {
+    headers: result.meta.fields
   });
 
   const successorMap = await getSuccessorRatingMap();
