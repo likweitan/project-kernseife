@@ -1,92 +1,130 @@
-using kernseife.db as db from '../db/data-model';
+using kernseife.db as db from '../db/schema';
 using {kernseife_btp as btp} from './external/kernseife_btp';
 
 service AdminService @(requires: 'admin') {
 
-    entity ReleaseStates                 as projection on db.ReleaseStates;
-    entity ReleaseStateSuccessors        as projection on db.ReleaseStateSuccessors;
 
-    @cds.redirection.target: false
-    entity DevClasses                    as
-        select from db.DevelopmentObjects {
-            key devClass,
-                sum(score) as score : Integer,
+    // Actions
+    @Common.IsActionCritical: true
+    action syncClassificationsToAllSystems();
 
-        }
-        group by
-            devClass;
+    action triggerExport(exportType: String, legacy: Boolean, dateFrom: Timestamp); // as "export" is not allowed due to TS type generation
+    action triggerImport(importType: String, systemId: String);
 
 
-    entity DevelopmentObjects            as projection on db.DevelopmentObjects;
-
-    entity DevelopmentObjectsFindings    as projection on db.DevelopmentObjectFindings;
-
-    entity HistoricDevelopmentObjects    as
-        projection on db.HistoricDevelopmentObjects {
-            *,
-            ROW_NUMBER() over(partition by objectType, objectName, systemId order by createdAt asc) as versionNumber : Integer
-        } order by versionNumber desc;
-
-    entity Imports                       as projection on db.Imports;
-    entity Exports                       as projection on db.Exports;
-
-
-    entity SimplificationItems           as projection on db.SimplificationItems;
-
-    type inFramework                  : {
-        code : String;
+    type inSystemBTP                  : {
+        @Common.ValueListWithFixedValues: true
+        @(Common                        : {
+            Label    : '{i18n>system}',
+            ValueList: {
+                CollectionPath: 'BTPSystems',
+                Parameters    : [
+                    {
+                        $Type            : 'Common.ValueListParameterInOut',
+                        LocalDataProperty: systemId,
+                        ValueListProperty: 'sid'
+                    },
+                    {
+                        $Type            : 'Common.ValueListParameterDisplayOnly',
+                        ValueListProperty: 'title'
+                    }
+                ]
+            },
+        }) systemId : String;
     }
 
-    type inSuccessor                  : {
-        tadirObjectType : String;
-        tadirObjectName : String;
-        objectType      : String;
-        objectName      : String;
-        successorType   : String;
+    type inSystem                     : {
+        @Common.ValueListWithFixedValues: true
+        @(Common                        : {
+            Label    : '{i18n>system}',
+            ValueList: {
+                CollectionPath: 'Systems',
+                Parameters    : [
+                    {
+                        $Type            : 'Common.ValueListParameterInOut',
+                        LocalDataProperty: systemId,
+                        ValueListProperty: 'sid'
+                    },
+                    {
+                        $Type            : 'Common.ValueListParameterDisplayOnly',
+                        ValueListProperty: 'title'
+                    }
+                ]
+            },
+        }) systemId : String;
     }
 
-            @odata.draft.enabled
-            @odata.draft.bypass
-    entity Classifications               as projection on db.Classifications
-        actions {
-            @(Common.SideEffects: {TargetEntities: ['in/frameworkUsageList'], })
-            action assignFramework( @mandatory frameworkCode: inFramework:code)          returns Classifications;
-            @(Common.SideEffects: {TargetEntities: ['in/frameworkUsageList'], })
-            action assignSuccessor( @mandatory tadirObjectType: inSuccessor:tadirObjectType,
-                                    @mandatory tadirObjectName: inSuccessor:tadirObjectName,
-                                    @mandatory objectType: inSuccessor:objectType,
-                                    @mandatory objectName: inSuccessor:objectName,
-                                    @mandatory successorType: inSuccessor:successorType) returns Classifications;
-        };
+    type inFileType {
+        @Common.Label: '{i18n>file}'
+        stream   : LargeBinary  @Core.MediaType: mimeType  @Core.ContentDisposition.Filename: fileName;
+        mimeType : String       @Core.IsMediaType;
+        fileName : String;
+    };
 
-    entity FrameworkUsages               as projection on db.FrameworkUsages;
-    entity ClassificationSuccessors      as projection on db.ClassificationSuccessors;
 
-    entity Ratings                       as projection on db.Ratings;
-    entity Frameworks                    as projection on db.Frameworks;
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importMissingClassificationsBTP(@mandatory systemId: inSystemBTP:systemId, );
 
-    entity FrameworkTypes                as projection on db.FrameworkTypes;
-    entity SuccessorClassifications      as projection on db.SuccessorClassifications;
-    entity ReleaseInfo                   as projection on db.ReleaseInfo;
-    entity ClassicInfo                   as projection on db.ClassicInfo;
-    entity ReleaseLabel                  as projection on db.ReleaseLabel;
-    entity ReleaseLevel                  as projection on db.ReleaseLevel;
-    entity LanguageVersions              as projection on db.LanguageVersions;
-    entity Notes                         as projection on db.Notes;
-    entity NoteClassifications           as projection on db.NoteClassifications;
-    entity SuccessorTypes                as projection on db.SuccessorTypes;
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importMissingClassificationsFile(file: inFileType not null);
 
-    @odata.draft.bypass
-    entity CodeSnippets                  as projection on db.CodeSnippets;
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importFindingsFile(@mandatory systemId: inSystem:systemId, file: inFileType not null);
 
-    entity Customers                     as projection on db.Customers;
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importFindingsBTP(@mandatory systemIdBTP: inSystemBTP:systemId, );
 
-    entity Projects                      as
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action importClassifications( @mandatory file: inFileType not null, @Common.Label: '{i18n>overwriteExisting}' overwriteExisting: Boolean);
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action exportClassificationsSystem( @Common.Label: '{i18n>useLegacy}' useLegacy: Boolean);
+
+    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
+    action exportClassificationsExternal( @Common.Label: '{i18n>dateFrom}' dateFrom: Timestamp);
+
+    entity ReleaseStates                     as projection on db.ReleaseStates;
+    entity ReleaseStateSuccessors            as projection on db.ReleaseStateSuccessors;
+
+    entity Imports                           as projection on db.Imports;
+    entity Exports                           as projection on db.Exports;
+
+    entity JobTypes                          as projection on db.JobTypes;
+
+    event Imported : { // Async API
+        ID   : Imports:ID;
+        type : Imports:type;
+    }
+
+    entity FileUpload                        as projection on db.FileUpload;
+
+    entity Destinations                      as projection on db.Destinations;
+
+    entity JobStatus                         as projection on db.JobStatus;
+
+    entity SimplificationItems               as projection on db.SimplificationItems;
+
+    entity Ratings                           as projection on db.Ratings;
+    entity Frameworks                        as projection on db.Frameworks;
+    entity FrameworkTypes                    as projection on db.FrameworkTypes;
+    entity SuccessorClassifications          as projection on db.SuccessorClassifications;
+    entity ReleaseInfo                       as projection on db.ReleaseInfo;
+    entity ClassicInfo                       as projection on db.ClassicInfo;
+    entity ReleaseLabel                      as projection on db.ReleaseLabel;
+    entity ReleaseLevel                      as projection on db.ReleaseLevel;
+    entity LanguageVersions                  as projection on db.LanguageVersions;
+    entity Notes                             as projection on db.Notes;
+    entity NoteClassifications               as projection on db.NoteClassifications;
+    entity SuccessorTypes                    as projection on db.SuccessorTypes;
+
+    entity Customers                         as projection on db.Customers;
+
+    entity Projects                          as
         projection on btp.ZKNSF_I_PROJECTS {
             *
         };
 
-    entity Systems                       as
+    entity Systems                           as
         projection on db.Systems {
             *,
             virtual setupDone    : Boolean,
@@ -101,38 +139,12 @@ service AdminService @(requires: 'admin') {
         };
 
 
-    type inDevClass                   : {
-        devClass : String;
-    }
-
-    type inDevelopmentObject          : {
-        objectType : String;
-        objectName : String;
-        devClass   : String;
-    }
-
-            @odata.draft.enabled
-    entity Extensions                    as projection on db.Extensions
-        actions {
-            @(Common.SideEffects: {TargetEntities: ['in/developemtObjectList'], })
-            action clearDevelopmentObjectList();
-            @(Common.SideEffects: {TargetEntities: ['in/developemtObjectList'], })
-            action addDevelopmentObjectsByDevClass( @mandatory devClass: inDevClass:devClass);
-            @(Common.SideEffects: {TargetEntities: ['in/developemtObjectList'], })
-            action addUnassignedDevelopmentObjects();
-            @(Common.SideEffects: {TargetEntities: ['in/developemtObjectList'], })
-            action addDevelopmentObject(
-            @mandatory objectType: inDevelopmentObject:objectType,
-                                        @mandatory objectName: inDevelopmentObject:objectName,
-                                        @mandatory devClass: inDevelopmentObject:devClass);
-        }
-
     type inInitialData                : {
         configUrl : String;
     }
 
             @odata.draft.enabled
-    entity Settings                      as projection on db.Settings
+    entity Settings                          as projection on db.Settings
         actions {
             @Common.IsActionCritical: true
             @(Common.SideEffects: {TargetEntities: [
@@ -145,98 +157,54 @@ service AdminService @(requires: 'admin') {
             );
         };
 
-    entity Jobs                          as
+    entity Jobs                              as
         projection on db.Jobs {
             *,
             virtual hideImports : Boolean,
             virtual hideExports : Boolean,
         };
 
-    // Actions
-    @Common.IsActionCritical: true
-    @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/DevelopmentObjects'], })
-    action recalculateAllScores();
-
-    action loadReleaseState();
-
     type inExportSystemClassification : {
         legacy : Boolean;
     }
 
-    @Common.IsActionCritical: true
-    action syncClassificationsToAllSystems();
-
-    // Actions
-    action triggerExport(exportType: String, legacy: Boolean, dateFrom: Timestamp); // as "export" is not allowed due to TS type generation
-    action triggerImport(importType: String, systemId: String);
-
-    entity AdoptionEffort                as projection on db.AdoptionEffort;
 
     @cds.redirection.target: false
-    entity ObjectTypeValueList           as projection on db.ObjectTypeValueList;
+    entity ObjectTypeValueList               as projection on db.ObjectTypeValueList;
 
     @cds.redirection.target: false
-    entity AdoptionEffortValueList       as projection on db.AdoptionEffortValueList;
+    entity AdoptionEffortValueList           as projection on db.AdoptionEffortValueList;
 
     @cds.redirection.target: false
-    entity ObjectSubTypeValueList        as projection on db.ObjectSubTypeValueList;
+    entity ObjectSubTypeValueList            as projection on db.ObjectSubTypeValueList;
 
     @cds.redirection.target: false
-    entity NamespaceValueList            as projection on db.NamespaceValueList;
+    entity NamespaceValueList                as projection on db.NamespaceValueList;
 
     @cds.redirection.target: false
-    entity ApplicationComponentValueList as projection on db.ApplicationComponentValueList;
+    entity ApplicationComponentValueList     as projection on db.ApplicationComponentValueList;
 
     @cds.redirection.target: false
-    entity SoftwareComponentValueList    as projection on db.SoftwareComponentValueList;
+    entity SoftwareComponentValueList        as projection on db.SoftwareComponentValueList;
 
     @cds.redirection.target: false
-    entity DevClassValueList             as projection on db.DevClassValueList;
-
-    entity ObjectTypes                   as projection on db.ObjectTypes;
-    entity Criticality                   as projection on db.Criticality;
-
-    entity ImportTypes                   as projection on db.ImportTypes
-                                            where
-                                                hidden == false;
-
-    entity ExportTypes                   as projection on db.ExportTypes
-                                            where
-                                                hidden == false;
-
-    entity DevelopmentObjectUsages       as projection on db.DevelopmentObjectUsages;
+    entity DevClassValueList                 as projection on db.DevClassValueList;
 
     @cds.redirection.target: false
-    define view RatingsValueList as
-        select from db.Ratings
-        where
-            usableInClassification == true
-        order by
-            score desc,
-            code  asc;
+    entity RatingsValueList                  as projection on db.RatingsValueList;
 
     @cds.redirection.target: false
-    define view NoteClassificationsValueList as
-        select from db.NoteClassifications
-        order by
-            code asc;
+    entity NoteClassificationsValueList      as projection on db.NoteClassificationsValueList;
 
     @cds.redirection.target: false
-    define view SuccessorClassificationsValueList as
-        select from db.SuccessorClassifications
-        order by
-            title asc;
+    entity SuccessorClassificationsValueList as projection on db.SuccessorClassificationsValueList;
 
+    entity ObjectTypes                       as projection on db.ObjectTypes;
+    entity Criticality                       as projection on db.Criticality;
 
-    event Imported : { // Async API
-        ID   : Imports:ID;
-        type : Imports:type;
-    }
-
-    entity FileUpload                    as projection on db.FileUpload;
-
-    entity Destinations                  as projection on db.Destinations;
-
-    entity JobStatus                     as projection on db.JobStatus;
-    entity JobTypes                      as projection on db.JobTypes;
+    @cds.redirection.target: false
+    entity BTPSystems                        as projection on db.Systems
+                                                where
+                                                        destination != null
+                                                    and destination != '';
 }

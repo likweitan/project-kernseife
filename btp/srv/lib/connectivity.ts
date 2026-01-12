@@ -1,17 +1,17 @@
 import { Destination } from '#cds-models/kernseife/db';
 import { getAllDestinationsFromDestinationService } from '@sap-cloud-sdk/connectivity';
-import { entities, context, log } from '@sap/cds';
+import { context, log } from '@sap/cds';
 import { executeHttpRequest } from '@sap-cloud-sdk/http-client';
 import { Message } from '../types/connectivity';
 
 const LOG = log('Connectivity');
 
 export const updateDestinations = async () => {
-  await DELETE(entities.Destinations);
+  await DELETE.from('kernseife.db.Destinations');
 
   const destinations = await getAllDestinationsFromDestinationService();
 
-  await INSERT.into(entities.Destinations).entries(
+  await INSERT.into('kernseife.db.Destinations').entries(
     destinations
       .filter(
         (destination) =>
@@ -45,10 +45,18 @@ export const remoteServiceCall = async (payload: {
   let jwtToken =
     payload.jwtToken || (context?.user as any).authInfo?.config?.jwt;
   // Check if it is actual a JWT Token
-  if (jwtToken && jwtToken.split('\\.').length != 3) {
-    // It's not a JWT
-    jwtToken = undefined;
+  if (jwtToken) {
+    if (jwtToken.split('.').length != 3) {
+      // It's not a JWT
+      jwtToken = undefined;
+    }
+
+    // Remove Bearer prefix if exists
+    if (jwtToken.startsWith('Bearer ')) {
+      jwtToken = jwtToken.substring(7);
+    }
   }
+
   const response = await executeHttpRequest(
     {
       destinationName: payload.destinationName,

@@ -64,10 +64,10 @@ annotate service.Jobs with @(
             CriticalityRepresentation: #WithIcon,
         },
         {
-            $Type                    : 'UI.DataField',
-            Label                    : '{i18n>type}',
-            Value                    : typeDetail.title,
-            ![@UI.Importance]        : #Medium
+            $Type            : 'UI.DataField',
+            Label            : '{i18n>type}',
+            Value            : typeDetail.title,
+            ![@UI.Importance]: #Medium
         },
         {
             $Type                : 'UI.DataFieldForAnnotation',
@@ -91,7 +91,56 @@ annotate service.Jobs with @(
             $Type            : 'UI.DataField',
             Value            : createdBy,
             ![@UI.Importance]: #Low,
-        }
+        },
+        {
+            $Type  : 'UI.DataFieldForActionGroup',
+            Actions: [
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Action: 'AdminService.EntityContainer/importMissingClassificationsBTP',
+                    Label : '{i18n>importMissingClassificationsBTP}',
+                },
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Action: 'AdminService.EntityContainer/importMissingClassificationsFile',
+                    Label : '{i18n>importMissingClassificationsFile}',
+                },
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Action: 'AdminService.EntityContainer/importFindingsFile',
+                    Label : '{i18n>importFindingsFile}',
+                },
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Action: 'AdminService.EntityContainer/importFindingsBTP',
+                    Label : '{i18n>importFindingsBTP}',
+                },
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Action: 'AdminService.EntityContainer/importClassifications',
+                    Label : '{i18n>importClassifications}',
+                },
+            ],
+            ID     : 'i18nimport',
+            Label  : '{i18n>import}',
+        },
+        {
+            $Type  : 'UI.DataFieldForActionGroup',
+            Actions: [
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Action: 'AdminService.EntityContainer/exportClassificationsSystem',
+                    Label : '{i18n>exportClassificationsSystem}',
+                },
+                {
+                    $Type : 'UI.DataFieldForAction',
+                    Action: 'AdminService.EntityContainer/exportClassificationsExternal',
+                    Label : '{i18n>exportClassificationsExternal}',
+                },
+            ],
+            ID     : 'i18nexport',
+            Label  : '{i18n>export}',
+        },
     ],
     UI.DataPoint #progressCurrent         : {
         Value        : progressCurrent,

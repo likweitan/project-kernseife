@@ -1,7 +1,6 @@
 import {
   Classification,
   Classifications,
-  CleanCoreLevel,
   Import,
   Ratings,
   ReleaseState,
@@ -10,7 +9,7 @@ import {
   Systems
 } from '#cds-models/kernseife/db';
 import dayjs from 'dayjs';
-import { Transaction, db, entities, log, utils } from '@sap/cds';
+import { Transaction, db, log, utils } from '@sap/cds';
 import { text } from 'node:stream/consumers';
 import papa from 'papaparse';
 import {
@@ -37,6 +36,7 @@ import {
   getMissingClassifications,
   syncClassifications
 } from './btp-connector-feature';
+import { CleanCoreLevel } from '#cds-models/kernseife/enums';
 
 const LOG = log('ClassificationFeature');
 
@@ -100,7 +100,7 @@ export const getClassificationState = (classification: Classification) => {
 };
 
 export const getClassificationCount = async (dateFrom?: string) => {
-  const result = await SELECT.from(entities.Classifications)
+  const result = await SELECT.from('kernseife.db.Classifications')
     .columns('COUNT( * ) as count')
     .where(dateFrom ? { modifiedAt: { '>=': dateFrom } } : {});
   return result[0]['count'];
@@ -109,7 +109,7 @@ export const getClassificationCount = async (dateFrom?: string) => {
 export const getClassificationSet = async (): Promise<Set<string>> => {
   // Load all Classifications so we can check if they exist
   const classificationList: Classifications = await SELECT.from(
-    entities.Classifications
+    'kernseife.db.Classifications'
   ).columns('tadirObjectType', 'tadirObjectName', 'objectType', 'objectName');
   const classificationSet = classificationList.reduce((set, classification) => {
     set.add(getClassificationKey(classification as ClassificationKey));
@@ -129,7 +129,7 @@ export const getSuccessorKey = (
 export const getSuccessorRatingMap = async (): Promise<Map<string, string>> => {
   const ratingScoreMap = await getRatingScoreMap();
   // Load all Successors that exist
-  const successorList = await SELECT.from(entities.SuccessorRatings).columns(
+  const successorList = await SELECT.from('kernseife.db.SuccessorRatings').columns(
     'tadirObjectType',
     'tadirObjectName',
     'objectType',
@@ -160,7 +160,7 @@ export const getClassificationRatingMap = async (): Promise<
 > => {
   // Load all Classifications so we can check if they exist
   const classificationList = (await SELECT.from(
-    entities.Classifications
+    'kernseife.db.Classifications'
   ).columns(
     'tadirObjectType',
     'tadirObjectName',
@@ -187,7 +187,7 @@ export const getClassificationRatingAndCommentMap = async (): Promise<
 > => {
   // Load all Classifications so we can check if they exist
   const classificationList = (await SELECT.from(
-    entities.Classifications
+    'kernseife.db.Classifications'
   ).columns(
     'tadirObjectType',
     'tadirObjectName',
@@ -217,7 +217,7 @@ export const getClassificationRatingAndCommentMap = async (): Promise<
 export const updateSimplifications = async (classification: Classification) => {
   // Find Simplification Items for classification
   const simplificationItems: SimplificationItems = await SELECT.from(
-    entities.SimplificationItems
+    'kernseife.db.SimplificationItems'
   ).where({
     objectName: classification.objectName,
     objectType: classification.objectType
@@ -249,7 +249,7 @@ export const updateSimplifications = async (classification: Classification) => {
       }) as Note
   );
 
-  await DELETE.from(entities.Notes).where({
+  await DELETE.from('kernseife.db.Notes').where({
     noteClassification_code: 'SIMPLIFICATION_DB',
     classification_objectName: classification.objectName,
     classification_objectType: classification.objectType,
@@ -274,7 +274,7 @@ export const updateSimplifications = async (classification: Classification) => {
 export const updateTotalScoreAndReferenceCount = async (
   classification: Classification
 ) => {
-  const totalScoreResult = await SELECT.from(entities.DevelopmentObjects)
+  const totalScoreResult = await SELECT.from('kernseife.db.DevelopmentObjectFindings')
     .columns(
       'IFNULL(SUM(total),0) as totalScore',
       'IFNULL(SUM(count), 0) as referenceCount'
@@ -381,7 +381,7 @@ const getDefaultRatingCode = (classification: Classification) => {
 export const getRatingMap = async (): Promise<
   Map<string, { score: number; level: CleanCoreLevel }>
 > => {
-  const ratingList: Ratings = await SELECT.from(entities.Ratings, (c: any) => {
+  const ratingList: Ratings = await SELECT.from('kernseife.db.Ratings', (c: any) => {
     c.code, c.score, c.level;
   });
   return ratingList.reduce((map, rating) => {
@@ -391,7 +391,7 @@ export const getRatingMap = async (): Promise<
 };
 
 export const getRatingScoreMap = async (): Promise<Map<string, number>> => {
-  const ratingList: Ratings = await SELECT.from(entities.Ratings, (c: any) => {
+  const ratingList: Ratings = await SELECT.from('kernseife.db.Ratings', (c: any) => {
     c.code, c.score;
   });
   return ratingList.reduce((map, rating) => {
@@ -509,7 +509,7 @@ export const importInitialClassification = async (csv: string) => {
     }
 
     if (classificationInsert.length > 0) {
-      await INSERT.into(entities.Classifications).entries(classificationInsert);
+      await INSERT.into('kernseife.db.Classifications').entries(classificationInsert);
       await tx.commit();
     }
   }
@@ -517,8 +517,6 @@ export const importInitialClassification = async (csv: string) => {
 
 export const importMissingClassifications = async (
   classificationRecordList: MissingClassificationImport[],
-  comment?: string,
-  defaultRating?: string,
   tx?: Transaction,
   updateProgress?: (progress: number) => void
 ): Promise<JobResult> => {
@@ -589,7 +587,7 @@ export const importMissingClassifications = async (
           releaseLevel_code: 'undefined',
           successorClassification_code: 'undefined',
           referenceCount: 0,
-          comment: comment || ''
+          comment: ''
         } as Classification;
 
         if (classification.subType == 'TABL') {
@@ -608,8 +606,7 @@ export const importMissingClassifications = async (
         await updateTotalScoreAndReferenceCount(classification);
 
         // Set default rating code
-        classification.rating_code =
-          defaultRating || getDefaultRatingCode(classification);
+        classification.rating_code = getDefaultRatingCode(classification);
 
         // Add to Map to prevent double inserts
         classificationRatingMap.set(key, classification.rating_code);
@@ -627,52 +624,6 @@ export const importMissingClassifications = async (
           oldRating: '',
           newRating: classification.rating_code
         } as ClassificationImportLog);
-      } else if (defaultRating != NO_CLASS || comment) {
-        const updatePayload = {} as { rating_code?: string; comment?: string };
-        if (
-          defaultRating &&
-          defaultRating != NO_CLASS &&
-          classificationRatingMap.get(key) != defaultRating
-        ) {
-          updatePayload['rating_code'] = defaultRating;
-        }
-        if (comment) {
-          updatePayload['comment'] = comment;
-        }
-
-        // Update Rating
-        if (updatePayload.rating_code || updatePayload.comment) {
-          await UPDATE.entity(entities.Classifications)
-            .with(updatePayload)
-            .where({
-              tadirObjectType: classificationRecord.tadirObjectType,
-              tadirObjectName: classificationRecord.tadirObjectName,
-              objectType: classificationRecord.objectType,
-              objectName: classificationRecord.objectName
-            });
-          if (tx) {
-            await tx.commit();
-          }
-          importLogList.push({
-            tadirObjectType: classificationRecord.tadirObjectType,
-            tadirObjectName: classificationRecord.tadirObjectName,
-            objectType: classificationRecord.objectType,
-            objectName: classificationRecord.objectName,
-            status: 'UPDATED',
-            oldRating: classificationRatingMap.get(key),
-            newRating: updatePayload['rating_code']
-          } as ClassificationImportLog);
-        } else {
-          importLogList.push({
-            tadirObjectType: classificationRecord.tadirObjectType,
-            tadirObjectName: classificationRecord.tadirObjectName,
-            objectType: classificationRecord.objectType,
-            objectName: classificationRecord.objectName,
-            status: 'UNCHANGED',
-            oldRating: classificationRatingMap.get(key),
-            newRating: classificationRatingMap.get(key)
-          } as ClassificationImportLog);
-        }
       } else {
         importLogList.push({
           tadirObjectType: classificationRecord.tadirObjectType,
@@ -687,7 +638,7 @@ export const importMissingClassifications = async (
     }
 
     if (classificationInsert.length > 0) {
-      await INSERT.into(entities.Classifications).entries(classificationInsert);
+      await INSERT.into('kernseife.db.Classifications').entries(classificationInsert);
       if (tx) {
         await tx.commit();
       }
@@ -855,7 +806,7 @@ export const importEnhancementObjects = async (
           comment: classification.comment
         });
 
-        await INSERT.into(entities.Classifications).entries([classification]);
+        await INSERT.into('kernseife.db.Classifications').entries([classification]);
         transactionPending = true;
         insertCount++;
       } else {
@@ -889,7 +840,7 @@ export const importEnhancementObjects = async (
         });
 
         // Update Rating
-        await UPDATE.entity(entities.Classifications)
+        await UPDATE.entity('kernseife.db.Classifications')
           .with({
             rating_code: newRatingCode,
             comment: newComment
@@ -959,7 +910,7 @@ export const importEnhancementObjectsById = async (
   updateProgress?: (progress: number) => Promise<void>
 ) => {
   const enhancementImport = await SELECT.one
-    .from(entities.Imports, (d: Import) => {
+    .from('kernseife.db.Imports', (d: Import) => {
       d.ID, d.title, d.file;
     })
     .where({ ID: enhancementImportId });
@@ -1050,7 +1001,7 @@ export const importExplicitObjects = async (
           comment: classification.comment
         });
 
-        await INSERT.into(entities.Classifications).entries([classification]);
+        await INSERT.into('kernseife.db.Classifications').entries([classification]);
         transactionPending = true;
         insertCount++;
       } else {
@@ -1080,7 +1031,7 @@ export const importExplicitObjects = async (
         });
 
         // Update Rating
-        await UPDATE.entity(entities.Classifications)
+        await UPDATE.entity('kernseife.db.Classifications')
           .with({
             rating_code: newRatingCode,
             comment: newComment
@@ -1141,7 +1092,7 @@ export const importExpliticObjectsById = async (
   updateProgress?: (progress: number) => Promise<void>
 ) => {
   const explicitImport = await SELECT.one
-    .from(entities.Imports, (d: Import) => {
+    .from('kernseife.db.Imports', (d: Import) => {
       d.ID, d.title, d.file;
     })
     .where({ ID: explicitImportId });
@@ -1154,8 +1105,8 @@ export const importMissingClassificationsById = async (
   updateProgress?: (progress: number) => Promise<void>
 ): Promise<JobResult> => {
   const missingClassificationsImport = await SELECT.one
-    .from(entities.Imports, (d: Import) => {
-      d.ID, d.title, d.file, d.defaultRating, d.comment;
+    .from('kernseife.db.Imports', (d: Import) => {
+      d.ID, d.title, d.file
     })
     .where({ ID: missingClassificationsImportId });
 
@@ -1192,8 +1143,6 @@ export const importMissingClassificationsById = async (
 
   return await importMissingClassifications(
     classificationRecordList,
-    missingClassificationsImport.comment || undefined,
-    missingClassificationsImport.defaultRating || undefined,
     tx,
     updateProgress
   );
@@ -1205,7 +1154,7 @@ export const importMissingClassificationsBTP = async (
   updateProgress?: (progress: number) => Promise<void>
 ): Promise<JobResult> => {
   const developmentObjectsImport = await SELECT.one
-    .from(entities.Imports, (d: Import) => {
+    .from('kernseife.db.Imports', (d: Import) => {
       d.ID, d.title, d.systemId;
     })
     .where({ ID: importId });
@@ -1222,8 +1171,6 @@ export const importMissingClassificationsBTP = async (
 
   return await importMissingClassifications(
     missingClassificationList,
-    undefined, // no comment
-    undefined, // no default rating
     tx,
     updateProgress
   );
@@ -1231,7 +1178,7 @@ export const importMissingClassificationsBTP = async (
 
 export const getClassificationJsonStandard = async () => {
   const classifications: Classifications = await SELECT.from(
-    entities.Classifications,
+    'kernseife.db.Classifications',
     (c: any) => {
       c.tadirObjectType,
         c.tadirObjectName,
@@ -1282,12 +1229,12 @@ export const getClassificationJsonCustom = async (
     whereClause = { usableInClassification: true };
   }
 
-  ratings = await SELECT.from(entities.Ratings, (r: any) => {
+  ratings = await SELECT.from('kernseife.db.Ratings', (r: any) => {
     r.code, r.title, r.criticality_code.as('criticality'), r.score;
   }).where(whereClause);
 
   const classifications: Classifications = await SELECT.from(
-    entities.Classifications,
+    'kernseife.db.Classifications',
     (c: any) => {
       c.tadirObjectType,
         c.tadirObjectName,
@@ -1346,7 +1293,7 @@ export const getClassificationJsonExternal = async (
     whereClause.modifiedAt = { '>=': dateFrom };
   }
   const classifications: Classifications = await SELECT.from(
-    entities.Classifications,
+    'kernseife.db.Classifications',
     (c: any) => {
       c.tadirObjectType,
         c.tadirObjectName,
@@ -1427,7 +1374,7 @@ const assignFramework = async (
     }
   ];
 
-  await UPDATE(entities.Classifications).set(classification).where({
+  await UPDATE('kernseife.db.Classifications').set(classification).where({
     tadirObjectType: classification.tadirObjectType,
     tadirObjectName: classification.tadirObjectName,
     objectName: classification.objectName,
@@ -1474,7 +1421,7 @@ const assignSuccessor = async (
     }
   ];
 
-  await UPDATE(entities.Classifications).set(classification).where({
+  await UPDATE('kernseife.db.Classifications').set(classification).where({
     tadirObjectType: classification.tadirObjectType,
     tadirObjectName: classification.tadirObjectName,
     objectName: classification.objectName,
@@ -1572,7 +1519,7 @@ const importClassification = async (
     // Update Total Score
     await updateTotalScoreAndReferenceCount(classification);
 
-    await INSERT.into(entities.Classifications).entries([classification]);
+    await INSERT.into('kernseife.db.Classifications').entries([classification]);
 
     return {
       tadirObjectType: classification.tadirObjectType as string,
@@ -1589,7 +1536,7 @@ const importClassification = async (
   } else {
     // Merge Classification
     const existingClassification = await SELECT.one
-      .from(entities.Classifications)
+      .from('kernseife.db.Classifications')
       .columns(getAllClassificationColumns)
       .where({
         tadirObjectType: classificationImport.tadirObjectType,
@@ -1649,7 +1596,7 @@ const importClassification = async (
       } as ClassificationImportLog;
     } else if (updated) {
       // Update DB
-      await UPDATE(entities.Classifications).set(existingClassification).where({
+      await UPDATE('kernseife.db.Classifications').set(existingClassification).where({
         tadirObjectType: existingClassification.tadirObjectType,
         tadirObjectName: existingClassification.tadirObjectName,
         objectName: existingClassification.objectName,
@@ -1697,7 +1644,7 @@ export const importExternalClassificationById = async (
 ): Promise<JobResult> => {
   // Unzip the file
   const externalImport = await SELECT.one
-    .from(entities.Imports, (d: Import) => {
+    .from('kernseife.db.Imports', (d: Import) => {
       d.ID, d.title, d.file, d.systemId, d.overwrite;
     })
     .where({ ID: classificationImportId });
@@ -1797,7 +1744,7 @@ export const syncClassificationsToExternalSystemByRef = async (ref: any) => {
 };
 
 export const syncClassificationsToExternalSystems = async () => {
-  const systemList: Systems = await SELECT.from(entities.Systems).where({
+  const systemList: Systems = await SELECT.from('kernseife.db.Systems').where({
     destination: { '!=': null }
   });
 

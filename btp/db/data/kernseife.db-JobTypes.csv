@@ -1,0 +1,8 @@
+code,title
+IMPORT_MISSING_CLASSIFICATION,"Missing Classifications Import (CSV)"
+IMPORT_FINDINGS,"Findings Import (CSV)"
+IMPORT_EXTERNAL_CLASSIFICATION,"Classification Import (External)"
+IMPORT_BTP_FINDINGS,"Findings Import (BTP)"
+IMPORT_BTP_MISSING_CLASSIFICATION,"Missing Classifications Import (BTP)"
+EXPORT_SYSTEM_CLASSIFICATION,Classification (System)
+EXPORT_EXTERNAL_CLASSIFICATION,Classifications (External)

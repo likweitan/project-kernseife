@@ -1,6 +1,6 @@
 {
   "name": "kernseife",
-  "version": "1.0.0",
+  "version": "1.4.2",
   "description": "CAP App for Kernseife",
   "repository": "https://github.tools.sap/Kernseife/kernseifeApp.git",
   "engines": {
@@ -11,6 +11,7 @@
   "scripts": {
     "start": "cds-serve",
     "dev": "cds-ts watch",
+    "update:version": "node ./scripts/updateVersion.js",
     "hybrid": "cds-ts watch --profile hybrid",
     "format": "npx pretty-quick --pattern \"**/*.*(js|ts|json)\" && format-cds",
     "lint": "eslint . --fix",
@@ -22,26 +23,26 @@
     "cleanup:ts": "npx rimraf gen/**/*.ts",
     "generate-cds-types": "npx @cap-js/cds-typer \"*\" --outputDirectory @cds-models",
     "test": "jest --silent",
-    "mbt": "mbt build -t gen/mtar -m=verbose -j=8",
-    "deploy-dev": "cf deploy gen/mtar/kernseife_1.0.0.mtar -e=BTP_DEV.mtaext",
-    "deploy-production": "cf deploy gen/mtar/kernseife_1.0.0.mtar -e=BTP_PROD.mtaext"
+    "mbt": "npm run update:version && mbt build -t gen/mtar -m=verbose -j=8",
+    "deploy-dev": "cf deploy gen/mtar/kernseife_$npm_package_version.mtar -e=BTP_DEV.mtaext",
+    "deploy-production": "cf deploy gen/mtar/kernseife_$npm_package_version.mtar -e=BTP_PROD.mtaext"
   },
   "dependencies": {
     "@cap-js/hana": "2.5.0",
+    "@grpc/grpc-js": "1.14.0",
     "@sap-cloud-sdk/connectivity": "4.2.0",
     "@sap-cloud-sdk/http-client": "4.2.0",
     "@sap-cloud-sdk/resilience": "4.2.0",
     "@sap-cloud-sdk/util": "4.2.0",
     "@sap/cds": "9.6.0",
     "@sap/xssec": "4.12.1",
+    "axios": "^1.13.2",
     "dayjs": "1.11.13",
     "express": "4.22.1",
     "helmet": "8.1.0",
     "is-ci": "4.1.0",
     "jszip": "3.10.1",
-    "@grpc/grpc-js": "1.14.0",
-    "papaparse": "5.5.3",
-    "axios": "^1.13.2"
+    "papaparse": "5.5.3"
   },
   "devDependencies": {
     "@cap-js/cds-test": "0.4.1",
@@ -71,7 +72,8 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.0"
+    "typescript-eslint": "^8.50.0",
+    "replace-in-file": "^8.4.0"
   },
   "cds": {
     "requires": {
@@ -90,20 +92,24 @@
           "kind": "mocked",
           "users": {
             "any": {
-              "roles": [
-                "viewer"
-              ]
+              "roles": []
             },
             "viewer": {
               "password": "viewer",
               "roles": [
-                "viewer"
+                "classification-viewer",
+                "development-viewer"
               ]
             },
             "admin": {
               "password": "admin",
               "roles": [
-                "admin"
+                "admin",
+                "classification-viewer",
+                "classification-manager",
+                "development-viewer",
+                "development-manager",
+                "analyst"
               ]
             }
           }
@@ -127,7 +133,6 @@
     }
   },
   "sapux": [
-    "app/view-classification",
     "app/analyze-score",
     "app/analyze-overview",
     "app/import-center",

@@ -2,21 +2,40 @@
   "scopes": [
     {
       "name": "$XSAPPNAME.admin",
-      "description": "admin"
+      "description": "Administrator"
     },
     {
-      "name": "$XSAPPNAME.viewer",
-      "description": "viewer"
+      "name": "$XSAPPNAME.classification-viewer",
+      "description": "Classification Viewer"
+    },
+    {
+      "name": "$XSAPPNAME.classification-manager",
+      "description": "Classification Viewer"
+    },
+    {
+      "name": "$XSAPPNAME.development-viewer",
+      "description": "Development Viewer"
+    },
+    {
+      "name": "$XSAPPNAME.development-manager",
+      "description": "Development Manager"
     },
     {
       "name": "$XSAPPNAME.analyst",
-      "description": "analyst"
+      "description": "Analyst"
     }
   ],
-  "attributes": [],
+  "attributes": [
+    {
+      "name": "System",
+      "description": "System ID",
+      "valueType": "string",
+      "valueRequired": false
+    }
+  ],
   "role-templates": [
     {
-      "name": "admin",
+      "name": "kernseife-admin",
       "description": "Kernseife Administrator",
       "scope-references": [
         "$XSAPPNAME.admin"
@@ -24,20 +43,65 @@
       "attribute-references": []
     },
     {
-      "name": "analyst",
-      "description": "Kernseife Analyst",
+      "name": "kernseife-classification-viewer",
+      "description": "Classification Viewer",
       "scope-references": [
-        "$XSAPPNAME.analyst"
+        "$XSAPPNAME.classification-viewer"
       ],
       "attribute-references": []
     },
     {
-      "name": "viewer",
-      "description": "Kernseife Viewer",
+      "name": "kernseife-classification-manager",
+      "description": "Classification Viewer",
       "scope-references": [
-        "$XSAPPNAME.viewer"
+        "$XSAPPNAME.classification-manager"
       ],
       "attribute-references": []
+    },
+    {
+      "name": "kernseife-development-viewer",
+      "description": "Development Viewer",
+      "scope-references": [
+        "$XSAPPNAME.development-viewer"
+      ],
+      "attribute-references": [
+        {
+          "name": "System",
+          "default-values": [
+            {}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kernseife-development-manager",
+      "description": "Development Manager",
+      "scope-references": [
+        "$XSAPPNAME.development-manager"
+      ],
+      "attribute-references": [
+        {
+          "name": "System",
+          "default-values": [
+            {}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "kernseife-analyst",
+      "description": "Kernseife Analyst",
+      "scope-references": [
+        "$XSAPPNAME.analyst"
+      ],
+      "attribute-references": [
+        {
+          "name": "System",
+          "default-values": [
+            {}
+          ]
+        }
+      ]
     }
   ]
 }

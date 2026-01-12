@@ -1,5 +1,5 @@
-using AdminService as service from '../../srv/admin-service';
-using from '../../db/data-model';
+using ClassificationService as service from '../../srv/classification-service';
+using from '../../db/schema';
 
 
 annotate service.Classifications with @Capabilities: {FilterFunctions: ['tolower', ]};
@@ -197,15 +197,17 @@ annotate service.Classifications with @(UI.LineItem: [
         ![@UI.Importance]: #Low,
     },
     {
-        $Type : 'UI.DataFieldForAction',
-        Action: 'AdminService.assignFramework',
-        Label : '{i18n>assignFramework}',
+        $Type        : 'UI.DataFieldForAction',
+        Action       : 'ClassificationService.assignFramework',
+        Label        : '{i18n>assignFramework}',
+        ![@UI.Hidden]: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}},
 
     },
     {
-        $Type : 'UI.DataFieldForAction',
-        Action: 'AdminService.assignSuccessor',
-        Label : '{i18n>assignSuccessor}',
+        $Type        : 'UI.DataFieldForAction',
+        Action       : 'ClassificationService.assignSuccessor',
+        Label        : '{i18n>assignSuccessor}',
+        ![@UI.Hidden]: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}},
 
     }
 ]);
@@ -597,3 +599,10 @@ annotate service.inSuccessor {
         Common.ValueListWithFixedValues: true
     );
 };
+
+// CRUD operations
+annotate service.Classifications with @(
+    UI.CreateHidden: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}},
+    UI.UpdateHidden: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}},
+    UI.DeleteHidden: {$edmJson: {$Path: '/ClassificationService.EntityContainer/FeatureControl/isNotManager'}}
+);

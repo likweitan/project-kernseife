@@ -4,7 +4,7 @@ import {
   Frameworks,
   Rating
 } from '#cds-models/kernseife/db';
-import { entities, log } from '@sap/cds';
+import { log } from '@sap/cds';
 import axios from 'axios';
 import { loadReleaseState } from './releaseState-feature';
 
@@ -33,11 +33,11 @@ export const createInitialData = async (configUrl: string) => {
 
     LOG.info('Config Data', configData);
     // Fix broken
-    await UPDATE.entity(entities.Ratings)
+    await UPDATE.entity('kernseife.db.Ratings')
       .set({ setting_ID: '1' })
       .where({ not: { setting_ID: '1' } });
     const ratingCount: { count: number }[] = await SELECT.from(
-      entities.Ratings
+      'kernseife.db.Ratings'
     ).columns('IFNULL(COUNT( * ),0) as count');
     if (ratingCount[0].count === 0 && configData.ratingList.length > 0) {
       const ratingList = configData.ratingList.map((rating: Rating) => ({
@@ -49,10 +49,10 @@ export const createInitialData = async (configUrl: string) => {
         level: rating.level,
         usableInClassification: rating.usableInClassification ?? true
       }));
-      await INSERT.into(entities.Ratings).entries(ratingList);
+      await INSERT.into('kernseife.db.Ratings').entries(ratingList);
     }
 
-    const frameworkCount = await SELECT.from(entities.Frameworks).columns(
+    const frameworkCount = await SELECT.from('kernseife.db.Frameworks').columns(
       'IFNULL(COUNT( * ),0) as count'
     );
     if (
@@ -60,15 +60,15 @@ export const createInitialData = async (configUrl: string) => {
       configData.frameworkList &&
       configData.frameworkList.length > 0
     ) {
-      await INSERT.into(entities.Frameworks).entries(configData.frameworkList);
+      await INSERT.into('kernseife.db.Frameworks').entries(configData.frameworkList);
     }
 
     // Create Base Customer
-    const customerCount = await SELECT.from(entities.Customers).columns(
+    const customerCount = await SELECT.from('kernseife.db.Customers').columns(
       'IFNULL(COUNT( * ),0) as count'
     );
     if (customerCount[0]['count'] === 0) {
-      await INSERT.into(entities.Customers).entries([
+      await INSERT.into('kernseife.db.Customers').entries([
         {
           setting_ID: '1',
           contact: '<Contact Person>',

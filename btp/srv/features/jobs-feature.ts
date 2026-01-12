@@ -2,7 +2,6 @@ import { Export, Import, Job } from '#cds-models/kernseife/db';
 import cds, {
   log,
   utils,
-  entities,
   Transaction,
   db,
   context,
@@ -18,7 +17,7 @@ export const createJob = async (
   progressTotal: number
 ) => {
   const id = utils.uuid();
-  await INSERT.into(entities.Jobs).entries({
+  await INSERT.into('kernseife.db.Jobs').entries({
     ID: id,
     title,
     type,
@@ -35,16 +34,16 @@ export const updateJobProgress = async (
   tx: Transaction,
   progress: number
 ) => {
-  await UPDATE(entities.Jobs)
+  await UPDATE('kernseife.db.Jobs')
     .set({ progressCurrent: progress, status: 'RUNNING' })
     .where({ ID: id });
-  if (tx) tx.commit();
+  if (tx) await tx.commit();
 };
 
 export const finishJob = async (id: string, jobResult?: JobResult) => {
   LOG.info('Job Finished ' + id);
   const { progressTotal } = await SELECT.one
-    .from(entities.Jobs)
+    .from('kernseife.db.Jobs')
     .columns('progressTotal')
     .where({ ID: id });
   const job = {
@@ -58,16 +57,16 @@ export const finishJob = async (id: string, jobResult?: JobResult) => {
     }
   }
 
-  await UPDATE(entities.Jobs, { ID: id }).set(job);
+  await UPDATE('kernseife.db.Jobs', { ID: id }).set(job);
 };
 
 export const failJob = async (id: string, err: any) => {
   LOG.error('Job Failed: ' + id, err);
   const { progressTotal } = await SELECT.one
-    .from(entities.Jobs)
+    .from('kernseife.db.Jobs')
     .columns('progressTotal')
     .where({ ID: id });
-  await UPDATE(entities.Jobs, { ID: id }).with({
+  await UPDATE('kernseife.db.Jobs', { ID: id }).with({
     progressCurrent: progressTotal || 100,
     status: 'ERROR',
     message: err.message
@@ -90,7 +89,7 @@ export const runAsJob = async (
   }
   const jobId = await createJob(title, type, progressTotal);
   const { user } = context as EventContext;
-  LOG.info(`Starting Job ${jobId} as user ${user.id}`, user);
+  LOG.info(`Starting Job ${jobId} as user ${user.id}`);
   cds
     .spawn({ user, after: 200 }, async (tx: Transaction) => {
       return await jobFunction(tx, (progress) =>
@@ -129,7 +128,7 @@ export const createExport = async (
     fileName
   } as Export;
   // Seperate transaction to avoid issues with File Streams for some reason in SQLite
-  await INSERT.into(entities.Exports).entries(exportObject);
+  await INSERT.into('kernseife.db.Exports').entries(exportObject);
   LOG.info(`Export created ${exportObject.ID}`);
   return exportObject.ID as string;
 };
@@ -140,9 +139,7 @@ export const createImport = async (
   file: any,
   fileType: string,
   systemId: string | undefined | null = undefined,
-  defaultRating: string | undefined = undefined,
-  overwite: boolean | undefined = undefined,
-  comment: string | undefined = undefined
+  overwite: boolean | undefined = undefined
 ): Promise<string> => {
   const importObject = {
     ID: utils.uuid(),
@@ -150,88 +147,34 @@ export const createImport = async (
     title: importType + ' Import ' + fileName,
     status: 'NEW',
     systemId,
-    defaultRating,
     overwite,
-    comment,
     file,
     fileType,
     fileName
   } as Import;
   // Seperate transaction to avoid issues with File Streams for some reason in SQLite
-  await INSERT.into(entities.Imports).entries(importObject);
+  await INSERT.into('kernseife.db.Imports').entries(importObject);
 
   return importObject.ID as string;
 };
 
 export const setJobIdForImport = async (importId: string, jobId: string) => {
-  await UPDATE(entities.Imports, { ID: importId }).set({ job_ID: jobId });
+  await UPDATE('kernseife.db.Imports', { ID: importId }).set({ job_ID: jobId });
 };
 
 export const setJobIdForExport = async (exportId: string, jobId: string) => {
-  await UPDATE(entities.Exports, { ID: exportId }).set({ job_ID: jobId });
-};
-
-export const uploadFile = async (
-  importType: string,
-  fileName: string,
-  file: any,
-  systemId: string | undefined | null,
-  defaultRating?: string,
-  overwrite?: boolean,
-  comment?: string
-): Promise<string> => {
-  LOG.info('Uploading file', {
-    fileName: fileName,
-    type: importType,
-    defaultRating,
-    overwrite,
-    systemId,
-    comment
-  });
-
-  if (!file) {
-    throw new Error('No file uploaded');
-  }
-  let fileType = 'text/csv'; // Default file type
-  switch (importType) {
-    case 'FINDINGS':
-      if (!systemId) {
-        throw new Error('No SystemId provided');
-      }
-      break;
-    case 'MISSING_CLASSIFICATION':
-      break;
-    case 'ENHANCEMENT':
-      break;
-    case 'EXPLICIT':
-      break;
-    case 'EXTERNAL_CLASSIFICATION':
-      fileType = 'application/zip';
-      break;
-    default:
-      throw new Error('Invalid type provided');
-  }
-  return await createImport(
-    importType,
-    fileName,
-    file,
-    fileType,
-    systemId,
-    defaultRating,
-    overwrite,
-    comment
-  );
+  await UPDATE('kernseife.db.Exports', { ID: exportId }).set({ job_ID: jobId });
 };
 
 export const jobHasImports = async (jobId: string) => {
-  const result = await SELECT.from(entities.Imports)
+  const result = await SELECT.from('kernseife.db.Imports')
     .columns('COUNT( * ) as count')
     .where({ job_ID: jobId });
   return result && result[0] && result[0].count > 0;
 };
 
 export const jobHasExports = async (jobId: string) => {
-  const result = await SELECT.from(entities.Exports)
+  const result = await SELECT.from('kernseife.db.Exports')
     .columns('COUNT( * ) as count')
     .where({ job_ID: jobId });
   return result && result[0] && result[0].count > 0;

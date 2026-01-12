@@ -7,5 +7,7 @@
   "src/gen/**/*.hdbtabledata",
   "src/kernseife.db.ClusterRules.hdbmigrationtable",
   "src/kernseife.db.Clusters.hdbmigrationtable",
-  "src/kernseife.db.DefaultRatingMappings.hdbmigrationtable"
+  "src/kernseife.db.DefaultRatingMappings.hdbmigrationtable",
+  "src/kernseife.db.LegacyRatings.hdbmigrationtable",
+  "src/kernseife.db.ScoringRecords.hdbmigrationtable"
 ]

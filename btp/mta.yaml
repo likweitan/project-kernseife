@@ -1,6 +1,6 @@
 _schema-version: '3.1'
 ID: kernseife
-version: 1.0.0
+version: 1.4.1
 description: 'Kernseife Project'
 parameters:
   deploy_mode: html5-repo
@@ -89,10 +89,6 @@ modules:
     build-parameters:
       build-result: resources
       requires:
-        - name: view-classification-app
-          artifacts:
-            - view-classification.zip
-          target-path: resources/
         - name: manage-classification-app
           artifacts:
             - manage-classification.zip
@@ -155,18 +151,6 @@ modules:
           existing_destinations_policy: update
     build-parameters:
       no-source: true
-
-  # ------------- APPLICATION: View Classification ----------------
-  - name: view-classification-app
-    # ------------------------------------------------------------
-    type: html5
-    path: app/view-classification
-    build-parameters:
-      build-result: dist
-      builder: custom
-      commands:
-        - npm run build
-      supported-platforms: []
 
   # ------------- APPLICATION: Manage Classification ----------------
   - name: manage-classification-app
@@ -286,18 +270,29 @@ resources:
         xsappname: kernseife-${space}
         tenant-mode: dedicated
         role-collections:
-          - name: 'kernseife-admin-${space}'
-            description: Kernseife Admin
+          - name: 'kernseife-admin-${space}-template'
+            description: Kernseife Administrator (Template)
             role-template-references:
-              - $XSAPPNAME.admin
-          - name: 'kernseife-analyst-${space}'
-            description: Kernseife Analyst
+              - $XSAPPNAME.kernseife-admin
+              - $XSAPPNAME.kernseife-classification-viewer
+              - $XSAPPNAME.kernseife-classification-manager
+              - $XSAPPNAME.kernseife-development-viewer
+              - $XSAPPNAME.kernseife-development-manager
+              - $XSAPPNAME.kernseife-analyst
+          - name: 'kernseife-manager-${space}-template'
+            description: Kernseife Manager (Template)
             role-template-references:
-              - $XSAPPNAME.analyst
-          - name: 'kernseife-viewer-${space}'
-            description: Kernseife Viewer
+              - $XSAPPNAME.kernseife-classification-viewer
+              - $XSAPPNAME.kernseife-classification-manager
+              - $XSAPPNAME.kernseife-development-viewer
+              - $XSAPPNAME.kernseife-development-manager
+              - $XSAPPNAME.kernseife-analyst
+          - name: 'kernseife-developer-${space}-template'
+            description: Kernseife Developer (Template)
             role-template-references:
-              - $XSAPPNAME.viewer
+              - $XSAPPNAME.kernseife-classification-viewer
+              - $XSAPPNAME.kernseife-development-viewer
+              - $XSAPPNAME.kernseife-analyst
 
   # ------------------------------------------------------------
   - name: kernseife-html5-repo-host
@@ -318,7 +313,7 @@ resources:
       service: destination
       service-plan: lite
       config:
-        version: 1.0.0
+        version: 1.4.1
         HTML5Runtime_enabled: true
         init_data:
           instance:

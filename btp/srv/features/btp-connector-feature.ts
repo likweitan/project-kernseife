@@ -1,4 +1,4 @@
-import { entities, log } from '@sap/cds';
+import { log } from '@sap/cds';
 import { remoteServiceCall } from '../lib/connectivity';
 import { System } from '#cds-models/kernseife/db';
 import {
@@ -209,7 +209,7 @@ export const syncClassifications = async (
 
 export const getDestinationBySystemId = async (systemId: string) => {
   const system: System = await SELECT.one
-    .from(entities.Systems)
+    .from('kernseife.db.Systems')
     .where({ sid: systemId });
   if (!system || !system.destination) {
     throw new Error(`System ${systemId} not found or no destination assigned`);

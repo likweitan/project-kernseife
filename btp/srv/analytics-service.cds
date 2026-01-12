@@ -1,8 +1,7 @@
-using kernseife.db as db from '../db/data-model';
+using kernseife.db as db from '../db/schema';
 
 service AnalyticsService @(requires: [
-    'analyst',
-    'admin'
+    'analyst'
 ]) {
 
     @Aggregation.CustomAggregate #score: 'Edm.Decimal'
@@ -81,7 +80,7 @@ service AnalyticsService @(requires: [
     entity ScoreHistory                  as
         select from db.HistoricDevelopmentObjects as h
         inner join db.DevelopmentObjectVersions as v
-            on h.extension_ID = v.ID
+            on h.version_ID = v.ID
         {
             key v.systemId,
             key v.createdAt,

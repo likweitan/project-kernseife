@@ -1,4 +1,5 @@
 namespace kernseife.db;
+using kernseife.enums as enums from './enums';
 
 using {
     cuid,
@@ -103,8 +104,8 @@ aspect DevelopmentObjectAspect {
 
         score                   : Integer;
         potentialScore          : Integer;
-        level                   : CleanCoreLevel;
-        potentialLevel          : CleanCoreLevel;
+        level                   : enums.CleanCoreLevel;
+        potentialLevel          : enums.CleanCoreLevel;
         cleanupPotential        : Integer       = score - potentialScore stored;
 
         @Common.Label                   : '{i18n>cleanupPotentialPercent}'
@@ -134,7 +135,6 @@ aspect DevelopmentObjectAspect {
 }
 
 @cds.persistence.journal
-
 entity DevelopmentObjects : managed, DevelopmentObjectAspect {
     version_ID       : UUID;
     version          : Association to DevelopmentObjectVersions
@@ -508,9 +508,7 @@ entity Imports : cuid, managed {
     type          : String;
     title         : String;
     systemId      : String;
-    comment       : String;
     overwrite     : Boolean default false;
-    defaultRating : String(3);
     system        : Association to Systems
                         on system.sid = $self.systemId;
 
@@ -613,54 +611,13 @@ entity ObjectTypes {
 //TODO Language Version enabled? BTP enabled?
 }
 
-define view ObjectTypeValueList as
-        select from Classifications distinct {
-            key objectType
-        }
-    union
-        select from DevelopmentObjects distinct {
-            key objectType
-        };
-
-define view ObjectSubTypeValueList as
-    select from Classifications distinct {
-        key subType
-    };
-
-define view NamespaceValueList as
-    select from DevelopmentObjects distinct {
-        key namespace
-    };
-
-define view SoftwareComponentValueList as
-    select from Classifications distinct {
-        key softwareComponent
-    };
-
-define view ApplicationComponentValueList as
-    select from Classifications distinct {
-        key applicationComponent
-    };
-
-
-define view DevClassValueList as
-    select from DevelopmentObjects distinct {
-        key devClass
-    };
-
-define view AdoptionEffortValueList as
-    select from AdoptionEffort distinct {
-        key code,
-            title
-    };
-
 @cds.persistence.journal
 entity Ratings : cuid, managed {
     setting                : Association to Settings;
     @mandatory code        : String(20);
     @mandatory title       : String;
     @mandatory score       : Integer;
-    @mandatory level       : CleanCoreLevel;
+    @mandatory level       : enums.CleanCoreLevel;
     usableInClassification : Boolean;
 
     @Common.ValueListWithFixedValues: true
@@ -701,12 +658,6 @@ entity Frameworks : cuid, managed {
 }
 
 
-@cds.odata.valuelist
-entity FrameworkTypes {
-    key code  : String;
-        title : String;
-}
-
 @cds.persistence.journal
 entity FrameworkUsages : cuid {
     classification : Association to Classifications;
@@ -735,74 +686,6 @@ entity FrameworkUsages : cuid {
 
     framework      : Association to Frameworks
                          on framework.code = $self.framework_code;
-}
-
-@cds.odata.valuelist
-@cds.persistence.journal
-entity SuccessorClassifications {
-    key code        : String;
-
-        @Common.Label: '{i18n>title}'
-        title       : String;
-        criticality : Association to Criticality;
-
-        @Common.Label: '{i18n>obsolete}'
-        obsolete    : Boolean default false;
-
-        custom      : Boolean default true;
-}
-
-@cds.odata.valuelist
-@cds.persistence.journal
-entity NoteClassifications {
-    key code        : String;
-        title       : String;
-        criticality : Association to Criticality;
-}
-
-@cds.odata.valuelist
-entity SuccessorTypes {
-    key code        : String;
-        title       : String;
-        criticality : Association to Criticality;
-}
-
-@cds.odata.valuelist
-entity ClassicInfo {
-    key code        : String;
-        title       : String;
-        criticality : Association to Criticality;
-}
-
-
-@cds.odata.valuelist
-entity ReleaseInfo {
-    key code        : String;
-        title       : String;
-        criticality : Association to Criticality;
-}
-
-@cds.odata.valuelist
-entity ReleaseLevel {
-    key code        : String;
-        title       : String;
-        criticality : Association to Criticality;
-        score       : Integer;
-}
-
-@cds.odata.valuelist
-entity ReleaseLabel {
-    key code        : String;
-        title       : String;
-        criticality : Association to Criticality;
-}
-
-
-@cds.odata.valuelist
-entity LanguageVersions {
-    key code        : String;
-        title       : String;
-        criticality : Association to Criticality;
 }
 
 
@@ -983,21 +866,6 @@ entity Jobs : cuid, managed {
                           on $self.ID = exportList.job_ID;
 }
 
-
-type CleanCoreLevel : String enum {
-    A;
-    B;
-    C;
-    D;
-}
-
-@cds.odata.valuelist
-entity Criticality {
-    key code        : String;
-        criticality : Integer;
-        title       : String;
-}
-
 @cds.persistence.skip
 @odata.singleton
 entity FileUpload {
@@ -1044,12 +912,6 @@ entity Modifications : cuid, managed {
                        on extension.ID = $self.extension_ID;
 }
 
-@cds.odata.valuelist
-entity ModificationTypes {
-    key code        : String;
-        criticality : Association to Criticality;
-        title       : String;
-}
 
 @cds.persistence.journal
 entity Enhancements : cuid, managed {
@@ -1067,28 +929,11 @@ entity Enhancements : cuid, managed {
 }
 
 
-entity ImportTypes {
+entity JobTypes {
     key code          : String;
-        order         : Integer;
         title         : String;
-        reqSystemId   : Boolean;
-        defaultRating : Boolean;
-        comment       : Boolean;
-        overwrite     : Boolean;
-        fileEndings   : String;
-        hidden        : Boolean;
-        description   : String;
 }
 
-entity ExportTypes {
-    key code        : String;
-        order       : Integer;
-        title       : String;
-        legacy      : Boolean;
-        hidden      : Boolean;
-        dateFrom    : Boolean;
-        description : String;
-}
 
 entity Destinations {
     key name           : String;
@@ -1096,29 +941,6 @@ entity Destinations {
         proxyType      : String;
         authentication : String;
 }
-
-@cds.odata.valuelist
-entity JobStatus {
-    key code        : String;
-        criticality : Association to Criticality;
-        title       : String;
-}
-
-
-entity JobTypes           as
-        select from db.ImportTypes {
-            key concat(
-                    'IMPORT_', code
-                ) as code : String,
-                title
-        }
-    union
-        select from db.ExportTypes {
-            key concat(
-                    'EXPORT_', code
-                ) as code : String,
-                title
-        }
 
 @cds.persistence.journal
 entity DevelopmentObjectUsages {
@@ -1166,3 +988,165 @@ entity FindingsAggregated as
         f.potentialMessageId,
         f.softwareComponent,
         r.score;
+
+
+// Value List Entities
+@cds.odata.valuelist
+entity JobStatus {
+    key code        : String;
+        criticality : Association to Criticality;
+        title       : String;
+}
+
+
+@cds.odata.valuelist
+@cds.persistence.journal
+entity SuccessorClassifications {
+    key code        : String;
+
+        @Common.Label: '{i18n>title}'
+        title       : String;
+        criticality : Association to Criticality;
+
+        @Common.Label: '{i18n>obsolete}'
+        obsolete    : Boolean default false;
+
+        custom      : Boolean default true;
+}
+
+@cds.odata.valuelist
+@cds.persistence.journal
+entity NoteClassifications {
+    key code        : String;
+        title       : String;
+        criticality : Association to Criticality;
+}
+
+@cds.odata.valuelist
+entity SuccessorTypes {
+    key code        : String;
+        title       : String;
+        criticality : Association to Criticality;
+}
+
+@cds.odata.valuelist
+entity ClassicInfo {
+    key code        : String;
+        title       : String;
+        criticality : Association to Criticality;
+}
+
+
+@cds.odata.valuelist
+entity ReleaseInfo {
+    key code        : String;
+        title       : String;
+        criticality : Association to Criticality;
+}
+
+@cds.odata.valuelist
+entity ReleaseLevel {
+    key code        : String;
+        title       : String;
+        criticality : Association to Criticality;
+        score       : Integer;
+}
+
+@cds.odata.valuelist
+entity ReleaseLabel {
+    key code        : String;
+        title       : String;
+        criticality : Association to Criticality;
+}
+
+@cds.odata.valuelist
+entity LanguageVersions {
+    key code        : String;
+        title       : String;
+        criticality : Association to Criticality;
+}
+
+@cds.odata.valuelist
+entity FrameworkTypes {
+    key code  : String;
+        title : String;
+}
+
+@cds.odata.valuelist
+entity Criticality {
+    key code        : String;
+        criticality : Integer;
+        title       : String;
+}
+
+
+@cds.odata.valuelist
+entity ModificationTypes {
+    key code        : String;
+        criticality : Association to Criticality;
+        title       : String;
+}
+
+
+
+entity AdoptionEffortValueList           as
+    select from db.AdoptionEffort distinct {
+        key code,
+            title
+    };
+
+entity ObjectTypeValueList               as
+        select from db.Classifications distinct {
+            key objectType
+        }
+    union
+        select from db.DevelopmentObjects distinct {
+            key objectType
+        };
+
+entity ObjectSubTypeValueList            as
+    select from db.Classifications distinct {
+        key subType
+    };
+
+entity NamespaceValueList                as
+    select from db.DevelopmentObjects distinct {
+        key namespace
+    };
+
+entity SoftwareComponentValueList        as
+    select from db.Classifications distinct {
+        key softwareComponent
+    };
+
+entity ApplicationComponentValueList     as
+    select from db.Classifications distinct {
+        key applicationComponent
+    };
+
+
+entity DevClassValueList                 as
+    select from db.DevelopmentObjects distinct {
+        key devClass
+    };
+
+
+entity RatingsValueList                  as
+    select from db.Ratings
+    where
+        usableInClassification == true
+    order by
+        score desc,
+        code  asc;
+
+
+entity NoteClassificationsValueList      as
+    select from db.NoteClassifications
+    order by
+        code asc;
+
+
+entity SuccessorClassificationsValueList as
+    select from db.SuccessorClassifications
+    order by
+        title asc;

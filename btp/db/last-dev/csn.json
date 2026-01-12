@@ -1,5 +1,5 @@
 {
-  "namespace": "kernseife.db",
+  "namespace": "kernseife.enums",
   "definitions": {
     "kernseife.db.ReleaseStates": {
       "kind": "entity",
@@ -154,10 +154,16 @@
       },
       "@cds.persistence.name": "KERNSEIFE_DB_RELEASESTATESUCCESSORS"
     },
-    "kernseife.db.DevelopmentObjects": {
+    "kernseife.db.Imports": {
       "kind": "entity",
       "@cds.persistence.journal": true,
       "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "ID"
+        },
         "createdAt": {
           "type": "cds.Timestamp",
           "@cds.persistence.name": "CREATEDAT"
@@ -176,188 +182,49 @@
           "length": 255,
           "@cds.persistence.name": "MODIFIEDBY"
         },
-        "objectType": {
-          "key": true,
+        "type": {
           "type": "cds.String",
           "length": 5000,
-          "@cds.persistence.name": "OBJECTTYPE"
+          "@cds.persistence.name": "TYPE"
         },
-        "objectName": {
-          "key": true,
+        "title": {
           "type": "cds.String",
           "length": 5000,
-          "@cds.persistence.name": "OBJECTNAME"
-        },
-        "devClass": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "DEVCLASS"
+          "@cds.persistence.name": "TITLE"
         },
         "systemId": {
-          "key": true,
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "SYSTEMID"
         },
-        "extension_ID": {
+        "overwrite": {
+          "type": "cds.Boolean",
+          "default": {
+            "val": false
+          },
+          "@cds.persistence.name": "OVERWRITE"
+        },
+        "file": {
+          "type": "cds.LargeBinary",
+          "@cds.persistence.name": "FILE"
+        },
+        "fileType": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "FILETYPE"
+        },
+        "fileName": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "FILENAME"
+        },
+        "job_ID": {
           "type": "cds.String",
           "length": 36,
-          "@cds.persistence.name": "EXTENSION_ID"
-        },
-        "namespace": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "NAMESPACE"
-        },
-        "softwareComponent": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "SOFTWARECOMPONENT"
-        },
-        "languageVersion_code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "LANGUAGEVERSION_CODE"
-        },
-        "score": {
-          "type": "cds.Integer",
-          "@cds.persistence.name": "SCORE"
-        },
-        "potentialScore": {
-          "type": "cds.Integer",
-          "@cds.persistence.name": "POTENTIALSCORE"
-        },
-        "level": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "LEVEL"
-        },
-        "potentialLevel": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "POTENTIALLEVEL"
-        },
-        "difficulty": {
-          "type": "cds.Integer",
-          "default": {
-            "val": 0
-          },
-          "@cds.persistence.name": "DIFFICULTY"
-        },
-        "numberOfChanges": {
-          "type": "cds.Integer",
-          "default": {
-            "val": 0
-          },
-          "@cds.persistence.name": "NUMBEROFCHANGES"
-        },
-        "version_ID": {
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "VERSION_ID"
-        },
-        "cleanupPotential": {
-          "@Core.Computed": true,
-          "type": "cds.Integer",
-          "value": {
-            "stored": true,
-            "xpr": [
-              [
-                {
-                  "ref": [
-                    "score"
-                  ]
-                },
-                "-",
-                {
-                  "ref": [
-                    "potentialScore"
-                  ]
-                }
-              ]
-            ]
-          },
-          "@cds.persistence.name": "CLEANUPPOTENTIAL"
-        },
-        "cleanupPotentialPercent": {
-          "@Core.Computed": true,
-          "type": "cds.Decimal",
-          "precision": 8,
-          "scale": 2,
-          "value": {
-            "stored": true,
-            "xpr": [
-              [
-                "case",
-                "when",
-                {
-                  "xpr": [
-                    [
-                      {
-                        "ref": [
-                          "score"
-                        ]
-                      },
-                      ">",
-                      {
-                        "val": 0
-                      }
-                    ]
-                  ]
-                },
-                "then",
-                {
-                  "xpr": [
-                    [
-                      {
-                        "val": "100.0",
-                        "literal": "number"
-                      },
-                      "-",
-                      {
-                        "xpr": [
-                          [
-                            {
-                              "xpr": [
-                                [
-                                  {
-                                    "val": "100.0",
-                                    "literal": "number"
-                                  },
-                                  "/",
-                                  {
-                                    "ref": [
-                                      "score"
-                                    ]
-                                  }
-                                ]
-                              ]
-                            },
-                            "*",
-                            {
-                              "ref": [
-                                "potentialScore"
-                              ]
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  ]
-                },
-                "else",
-                {
-                  "val": 0
-                },
-                "end"
-              ]
-            ]
-          },
-          "@cds.persistence.name": "CLEANUPPOTENTIALPERCENT"
+          "@cds.persistence.name": "JOB_ID"
         }
       },
-      "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTS"
+      "@cds.persistence.name": "KERNSEIFE_DB_IMPORTS"
     },
     "kernseife.db.Systems": {
       "kind": "entity",
@@ -628,205 +495,6 @@
       },
       "@cds.persistence.name": "KERNSEIFE_DB_FRAMEWORKS"
     },
-    "kernseife.db.Extensions": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "ID"
-        },
-        "createdAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "CREATEDAT"
-        },
-        "createdBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "CREATEDBY"
-        },
-        "modifiedAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "MODIFIEDAT"
-        },
-        "modifiedBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "MODIFIEDBY"
-        },
-        "title": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "TITLE"
-        },
-        "system_ID": {
-          "type": "cds.String",
-          "length": 36,
-          "@odata.foreignKey4": "system",
-          "@cds.persistence.name": "SYSTEM_ID"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_EXTENSIONS"
-    },
-    "kernseife.db.DevelopmentObjectUsages": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "entryPointObjectType": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "ENTRYPOINTOBJECTTYPE"
-        },
-        "entryPointObjectName": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "ENTRYPOINTOBJECTNAME"
-        },
-        "objectType": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "OBJECTTYPE"
-        },
-        "objectName": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "OBJECTNAME"
-        },
-        "counter": {
-          "type": "cds.Integer",
-          "@cds.persistence.name": "COUNTER"
-        },
-        "lastUsed": {
-          "type": "cds.DateTime",
-          "@cds.persistence.name": "LASTUSED"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTUSAGES"
-    },
-    "kernseife.db.DevelopmentObjectVersions": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "createdAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "CREATEDAT"
-        },
-        "createdBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "CREATEDBY"
-        },
-        "modifiedAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "MODIFIEDAT"
-        },
-        "modifiedBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "MODIFIEDBY"
-        },
-        "ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "ID"
-        },
-        "systemId": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "SYSTEMID"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTVERSIONS"
-    },
-    "kernseife.db.Imports": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "ID"
-        },
-        "createdAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "CREATEDAT"
-        },
-        "createdBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "CREATEDBY"
-        },
-        "modifiedAt": {
-          "type": "cds.Timestamp",
-          "@cds.persistence.name": "MODIFIEDAT"
-        },
-        "modifiedBy": {
-          "type": "cds.String",
-          "length": 255,
-          "@cds.persistence.name": "MODIFIEDBY"
-        },
-        "type": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "TYPE"
-        },
-        "title": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "TITLE"
-        },
-        "systemId": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "SYSTEMID"
-        },
-        "comment": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "COMMENT"
-        },
-        "overwrite": {
-          "type": "cds.Boolean",
-          "default": {
-            "val": false
-          },
-          "@cds.persistence.name": "OVERWRITE"
-        },
-        "defaultRating": {
-          "type": "cds.String",
-          "length": 3,
-          "@cds.persistence.name": "DEFAULTRATING"
-        },
-        "file": {
-          "type": "cds.LargeBinary",
-          "@cds.persistence.name": "FILE"
-        },
-        "fileType": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "FILETYPE"
-        },
-        "fileName": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "FILENAME"
-        },
-        "job_ID": {
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "JOB_ID"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_IMPORTS"
-    },
     "kernseife.db.Jobs": {
       "kind": "entity",
       "@cds.persistence.journal": true,
@@ -941,16 +609,10 @@
       },
       "@cds.persistence.name": "KERNSEIFE_DB_EXPORTS"
     },
-    "kernseife.db.DevelopmentObjectFindings": {
+    "kernseife.db.SimplificationItems": {
       "kind": "entity",
       "@cds.persistence.journal": true,
       "elements": {
-        "version_ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "VERSION_ID"
-        },
         "objectType": {
           "key": true,
           "type": "cds.String",
@@ -963,61 +625,81 @@
           "length": 5000,
           "@cds.persistence.name": "OBJECTNAME"
         },
-        "refObjectType": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "REFOBJECTTYPE"
-        },
-        "refObjectName": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "REFOBJECTNAME"
-        },
-        "devClass": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "DEVCLASS"
-        },
-        "code": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "CODE"
-        },
         "softwareComponent": {
+          "key": true,
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "SOFTWARECOMPONENT"
         },
-        "systemId": {
+        "note": {
+          "key": true,
           "type": "cds.String",
           "length": 5000,
-          "@cds.persistence.name": "SYSTEMID"
+          "@cds.persistence.name": "NOTE"
         },
-        "potentialCode": {
+        "title": {
           "type": "cds.String",
           "length": 5000,
-          "@cds.persistence.name": "POTENTIALCODE"
+          "@cds.persistence.name": "TITLE"
         },
-        "total": {
+        "itemCount": {
           "type": "cds.Integer",
-          "@cds.persistence.name": "TOTAL"
-        },
-        "count": {
-          "type": "cds.Integer",
-          "@cds.persistence.name": "COUNT"
-        },
-        "totalPercentage": {
-          "type": "cds.Decimal",
-          "precision": 5,
-          "scale": 2,
-          "@cds.persistence.name": "TOTALPERCENTAGE"
+          "@cds.persistence.name": "ITEMCOUNT"
         }
       },
-      "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTFINDINGS"
+      "@cds.persistence.name": "KERNSEIFE_DB_SIMPLIFICATIONITEMS"
+    },
+    "kernseife.db.Notes": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "ID"
+        },
+        "classification_tadirObjectType": {
+          "type": "cds.String",
+          "length": 5000,
+          "@odata.foreignKey4": "classification",
+          "@cds.persistence.name": "CLASSIFICATION_TADIROBJECTTYPE"
+        },
+        "classification_tadirObjectName": {
+          "type": "cds.String",
+          "length": 5000,
+          "@odata.foreignKey4": "classification",
+          "@cds.persistence.name": "CLASSIFICATION_TADIROBJECTNAME"
+        },
+        "classification_objectType": {
+          "type": "cds.String",
+          "length": 5000,
+          "@odata.foreignKey4": "classification",
+          "@cds.persistence.name": "CLASSIFICATION_OBJECTTYPE"
+        },
+        "classification_objectName": {
+          "type": "cds.String",
+          "length": 5000,
+          "@odata.foreignKey4": "classification",
+          "@cds.persistence.name": "CLASSIFICATION_OBJECTNAME"
+        },
+        "note": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "NOTE"
+        },
+        "title": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "TITLE"
+        },
+        "noteClassification_code": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "NOTECLASSIFICATION_CODE"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_NOTES"
     },
     "kernseife.db.Classifications": {
       "kind": "entity",
@@ -1253,82 +935,6 @@
       },
       "@cds.persistence.name": "KERNSEIFE_DB_CLASSIFICATIONSUCCESSORS"
     },
-    "kernseife.db.Notes": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "ID": {
-          "key": true,
-          "type": "cds.String",
-          "length": 36,
-          "@cds.persistence.name": "ID"
-        },
-        "classification_tadirObjectType": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "classification",
-          "@cds.persistence.name": "CLASSIFICATION_TADIROBJECTTYPE"
-        },
-        "classification_tadirObjectName": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "classification",
-          "@cds.persistence.name": "CLASSIFICATION_TADIROBJECTNAME"
-        },
-        "classification_objectType": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "classification",
-          "@cds.persistence.name": "CLASSIFICATION_OBJECTTYPE"
-        },
-        "classification_objectName": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "classification",
-          "@cds.persistence.name": "CLASSIFICATION_OBJECTNAME"
-        },
-        "note": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "NOTE"
-        },
-        "title": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "TITLE"
-        },
-        "noteClassification_code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "NOTECLASSIFICATION_CODE"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_NOTES"
-    },
-    "kernseife.db.NoteClassifications": {
-      "kind": "entity",
-      "@cds.persistence.journal": true,
-      "elements": {
-        "code": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "CODE"
-        },
-        "title": {
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "TITLE"
-        },
-        "criticality_code": {
-          "type": "cds.String",
-          "length": 5000,
-          "@odata.foreignKey4": "criticality",
-          "@cds.persistence.name": "CRITICALITY_CODE"
-        }
-      },
-      "@cds.persistence.name": "KERNSEIFE_DB_NOTECLASSIFICATIONS"
-    },
     "kernseife.db.CodeSnippets": {
       "kind": "entity",
       "@cds.persistence.journal": true,
@@ -1380,6 +986,406 @@
         }
       },
       "@cds.persistence.name": "KERNSEIFE_DB_CODESNIPPETS"
+    },
+    "kernseife.db.DevelopmentObjectFindings": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "version_ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "VERSION_ID"
+        },
+        "objectType": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "OBJECTTYPE"
+        },
+        "objectName": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "OBJECTNAME"
+        },
+        "refObjectType": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "REFOBJECTTYPE"
+        },
+        "refObjectName": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "REFOBJECTNAME"
+        },
+        "devClass": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "DEVCLASS"
+        },
+        "code": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "CODE"
+        },
+        "softwareComponent": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "SOFTWARECOMPONENT"
+        },
+        "systemId": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "SYSTEMID"
+        },
+        "potentialCode": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "POTENTIALCODE"
+        },
+        "total": {
+          "type": "cds.Integer",
+          "@cds.persistence.name": "TOTAL"
+        },
+        "count": {
+          "type": "cds.Integer",
+          "@cds.persistence.name": "COUNT"
+        },
+        "totalPercentage": {
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 2,
+          "@cds.persistence.name": "TOTALPERCENTAGE"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTFINDINGS"
+    },
+    "kernseife.db.DevelopmentObjectVersions": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "createdAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "CREATEDAT"
+        },
+        "createdBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "CREATEDBY"
+        },
+        "modifiedAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "MODIFIEDAT"
+        },
+        "modifiedBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "MODIFIEDBY"
+        },
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "ID"
+        },
+        "systemId": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "SYSTEMID"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTVERSIONS"
+    },
+    "kernseife.db.DevelopmentObjects": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "createdAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "CREATEDAT"
+        },
+        "createdBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "CREATEDBY"
+        },
+        "modifiedAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "MODIFIEDAT"
+        },
+        "modifiedBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "MODIFIEDBY"
+        },
+        "objectType": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "OBJECTTYPE"
+        },
+        "objectName": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "OBJECTNAME"
+        },
+        "devClass": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "DEVCLASS"
+        },
+        "systemId": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "SYSTEMID"
+        },
+        "extension_ID": {
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "EXTENSION_ID"
+        },
+        "namespace": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "NAMESPACE"
+        },
+        "softwareComponent": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "SOFTWARECOMPONENT"
+        },
+        "languageVersion_code": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "LANGUAGEVERSION_CODE"
+        },
+        "score": {
+          "type": "cds.Integer",
+          "@cds.persistence.name": "SCORE"
+        },
+        "potentialScore": {
+          "type": "cds.Integer",
+          "@cds.persistence.name": "POTENTIALSCORE"
+        },
+        "level": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "LEVEL"
+        },
+        "potentialLevel": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "POTENTIALLEVEL"
+        },
+        "difficulty": {
+          "type": "cds.Integer",
+          "default": {
+            "val": 0
+          },
+          "@cds.persistence.name": "DIFFICULTY"
+        },
+        "numberOfChanges": {
+          "type": "cds.Integer",
+          "default": {
+            "val": 0
+          },
+          "@cds.persistence.name": "NUMBEROFCHANGES"
+        },
+        "version_ID": {
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "VERSION_ID"
+        },
+        "cleanupPotential": {
+          "@Core.Computed": true,
+          "type": "cds.Integer",
+          "value": {
+            "stored": true,
+            "xpr": [
+              [
+                {
+                  "ref": [
+                    "score"
+                  ]
+                },
+                "-",
+                {
+                  "ref": [
+                    "potentialScore"
+                  ]
+                }
+              ]
+            ]
+          },
+          "@cds.persistence.name": "CLEANUPPOTENTIAL"
+        },
+        "cleanupPotentialPercent": {
+          "@Core.Computed": true,
+          "type": "cds.Decimal",
+          "precision": 8,
+          "scale": 2,
+          "value": {
+            "stored": true,
+            "xpr": [
+              [
+                "case",
+                "when",
+                {
+                  "xpr": [
+                    [
+                      {
+                        "ref": [
+                          "score"
+                        ]
+                      },
+                      ">",
+                      {
+                        "val": 0
+                      }
+                    ]
+                  ]
+                },
+                "then",
+                {
+                  "xpr": [
+                    [
+                      {
+                        "val": "100.0",
+                        "literal": "number"
+                      },
+                      "-",
+                      {
+                        "xpr": [
+                          [
+                            {
+                              "xpr": [
+                                [
+                                  {
+                                    "val": "100.0",
+                                    "literal": "number"
+                                  },
+                                  "/",
+                                  {
+                                    "ref": [
+                                      "score"
+                                    ]
+                                  }
+                                ]
+                              ]
+                            },
+                            "*",
+                            {
+                              "ref": [
+                                "potentialScore"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                "else",
+                {
+                  "val": 0
+                },
+                "end"
+              ]
+            ]
+          },
+          "@cds.persistence.name": "CLEANUPPOTENTIALPERCENT"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTS"
+    },
+    "kernseife.db.Extensions": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 36,
+          "@cds.persistence.name": "ID"
+        },
+        "createdAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "CREATEDAT"
+        },
+        "createdBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "CREATEDBY"
+        },
+        "modifiedAt": {
+          "type": "cds.Timestamp",
+          "@cds.persistence.name": "MODIFIEDAT"
+        },
+        "modifiedBy": {
+          "type": "cds.String",
+          "length": 255,
+          "@cds.persistence.name": "MODIFIEDBY"
+        },
+        "title": {
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "TITLE"
+        },
+        "system_ID": {
+          "type": "cds.String",
+          "length": 36,
+          "@odata.foreignKey4": "system",
+          "@cds.persistence.name": "SYSTEM_ID"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_EXTENSIONS"
+    },
+    "kernseife.db.DevelopmentObjectUsages": {
+      "kind": "entity",
+      "@cds.persistence.journal": true,
+      "elements": {
+        "entryPointObjectType": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "ENTRYPOINTOBJECTTYPE"
+        },
+        "entryPointObjectName": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "ENTRYPOINTOBJECTNAME"
+        },
+        "objectType": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "OBJECTTYPE"
+        },
+        "objectName": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5000,
+          "@cds.persistence.name": "OBJECTNAME"
+        },
+        "counter": {
+          "type": "cds.Integer",
+          "@cds.persistence.name": "COUNTER"
+        },
+        "lastUsed": {
+          "type": "cds.DateTime",
+          "@cds.persistence.name": "LASTUSED"
+        }
+      },
+      "@cds.persistence.name": "KERNSEIFE_DB_DEVELOPMENTOBJECTUSAGES"
     },
     "kernseife.db.HistoricDevelopmentObjects": {
       "kind": "entity",
@@ -1587,45 +1593,29 @@
       },
       "@cds.persistence.name": "KERNSEIFE_DB_HISTORICDEVELOPMENTOBJECTS"
     },
-    "kernseife.db.SimplificationItems": {
+    "kernseife.db.NoteClassifications": {
       "kind": "entity",
       "@cds.persistence.journal": true,
       "elements": {
-        "objectType": {
+        "code": {
           "key": true,
           "type": "cds.String",
           "length": 5000,
-          "@cds.persistence.name": "OBJECTTYPE"
-        },
-        "objectName": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "OBJECTNAME"
-        },
-        "softwareComponent": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "SOFTWARECOMPONENT"
-        },
-        "note": {
-          "key": true,
-          "type": "cds.String",
-          "length": 5000,
-          "@cds.persistence.name": "NOTE"
+          "@cds.persistence.name": "CODE"
         },
         "title": {
           "type": "cds.String",
           "length": 5000,
           "@cds.persistence.name": "TITLE"
         },
-        "itemCount": {
-          "type": "cds.Integer",
-          "@cds.persistence.name": "ITEMCOUNT"
+        "criticality_code": {
+          "type": "cds.String",
+          "length": 5000,
+          "@odata.foreignKey4": "criticality",
+          "@cds.persistence.name": "CRITICALITY_CODE"
         }
       },
-      "@cds.persistence.name": "KERNSEIFE_DB_SIMPLIFICATIONITEMS"
+      "@cds.persistence.name": "KERNSEIFE_DB_NOTECLASSIFICATIONS"
     },
     "kernseife.db.ObjectTypes": {
       "kind": "entity",
@@ -1836,7 +1826,7 @@
     "creator": "CDS Compiler v6.4.2",
     "flavor": "inferred",
     "minified": true,
-    "build": "CDS Build v9.4.2"
+    "build": "CDS Build v9.6.0"
   },
   "$version": "2.0"
 }
