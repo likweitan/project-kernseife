@@ -31,7 +31,17 @@ import { CleanCoreLevel } from '#cds-models/kernseife/enums';
 const LOG = log('DevelopmentObjectFeature');
 
 // Required fields for FINDINGS import
-const REQUIRED_FINDINGS_FIELDS = ['runId', 'itemId', 'objectType', 'objectName', 'devClass', 'softwareComponent', 'messageId', 'refObjectType', 'refObjectName'];
+const REQUIRED_FINDINGS_FIELDS = [
+  'runId',
+  'itemId',
+  'objectType',
+  'objectName',
+  'devClass',
+  'softwareComponent',
+  'messageId',
+  'refObjectType',
+  'refObjectName'
+];
 
 export interface CsvValidationResult {
   isValid: boolean;
@@ -41,9 +51,11 @@ export interface CsvValidationResult {
 /**
  * Validates that the CSV has the required columns
  */
-export const validateFindingsCsvColumns = (csvHeaders: string[]): CsvValidationResult => {
+export const validateFindingsCsvColumns = (
+  csvHeaders: string[]
+): CsvValidationResult => {
   const errors: string[] = [];
-  const headers = csvHeaders.map(h => h.trim());
+  const headers = csvHeaders.map((h) => h.trim());
 
   // Check required fields
   for (const requiredField of REQUIRED_FINDINGS_FIELDS) {
@@ -57,7 +69,6 @@ export const validateFindingsCsvColumns = (csvHeaders: string[]): CsvValidationR
     errors
   };
 };
-
 
 export const getDevelopmentObjectCount = async () => {
   const result = await SELECT.from('kernseife.db.DevelopmentObjects').columns(
@@ -207,7 +218,10 @@ export const importFinding = async (
   const validation = validateFindingsCsvColumns(result.meta.fields);
   if (!validation.isValid) {
     const errorMessage = `Invalid CSV format. ${validation.errors.join('. ')}`;
-    LOG.error('CSV Validation Failed', { errors: validation.errors, headers: result.meta.fields });
+    LOG.error('CSV Validation Failed', {
+      errors: validation.errors,
+      headers: result.meta.fields
+    });
     throw new Error(errorMessage);
   }
 
@@ -291,7 +305,10 @@ export const importFinding = async (
 
   LOG.info(`Importing Findings ${findingRecordList.length}`);
 
-  await prepareNewDevelopmentObjectsImport(findingImport);
+  await prepareNewDevelopmentObjectsImport(
+    findingImport.ID!,
+    findingImport.systemId!
+  );
   if (tx) {
     await tx.commit();
   }
@@ -421,22 +438,15 @@ export const importFindingsById = async (
   return await importFinding(findingsRunImport, tx, updateProgress);
 };
 
-export const importDevelopmentObjectsBTP = async (
+const importDevelopmentObjectsBTPBySystem = async (
   importId: string,
+  systemId: string,
+  successorMap: Map<string, string>,
   tx: Transaction,
   updateProgress?: (progress: number) => Promise<void>
-): Promise<JobResult> => {
-  const developmentObjectsImport = await SELECT.one
-    .from('kernseife.db.Imports', (d: Import) => {
-      d.ID, d.title, d.systemId, d.createdAt;
-    })
-    .where({ ID: importId });
-
-  const systemId = developmentObjectsImport.systemId;
-
+): Promise<number> => {
   // Get Destination from System
   const destination = await getDestinationBySystemId(systemId);
-
   // Get Project Id
   const project = await getProject({ destination });
 
@@ -450,8 +460,6 @@ export const importDevelopmentObjectsBTP = async (
     project.runId
   );
   LOG.info(`Found ${findingsCount} Findings for Project ${project.projectId}`);
-
-  const successorMap = await getSuccessorRatingMap();
 
   let findingsCounter = 0;
   skip = 0;
@@ -471,7 +479,7 @@ export const importDevelopmentObjectsBTP = async (
     const findingRecordList = findingsImportList.map((finding) => {
       const findingRecord = {
         // Map Attribues
-        import_ID: developmentObjectsImport.ID,
+        import_ID: importId,
         systemId: systemId,
         itemId: finding.itemId,
         objectType: finding.objectType,
@@ -510,7 +518,7 @@ export const importDevelopmentObjectsBTP = async (
       await updateProgress(Math.round((50 / findingsCount) * findingsCounter));
   }
 
-  await prepareNewDevelopmentObjectsImport(developmentObjectsImport);
+  await prepareNewDevelopmentObjectsImport(importId, systemId);
   if (tx) {
     await tx.commit();
   }
@@ -551,7 +559,7 @@ export const importDevelopmentObjectsBTP = async (
         systemId: systemId,
         devClass: developmentObjectImport.devClass,
         softwareComponent: developmentObjectImport.softwareComponent,
-        version_ID: developmentObjectsImport.ID,
+        version_ID: importId,
         languageVersion_code: developmentObjectImport.languageVersion,
         difficulty: developmentObjectImport._metrics?.difficulty || 0,
         numberOfChanges: developmentObjectImport._metrics?.numberOfChanges || 0,
@@ -561,14 +569,14 @@ export const importDevelopmentObjectsBTP = async (
       // Process the DevelopmentObjectFindings, cause we need it to calculate stuff later
       const developmentObjectFindingList = await getDevelopmentObjectFindings(
         developmentObject,
-        developmentObjectsImport.ID!
+        importId
       );
       await createDevelopmentObjectFindings(developmentObjectFindingList);
 
       const { score, potentialScore, level, potentialLevel } =
         calculateScoreAndLevel(ratingMap, developmentObjectFindingList);
       calculateTotalPercent(developmentObjectFindingList, score);
-      
+
       developmentObject.potentialScore = potentialScore;
       developmentObject.score = score;
 
@@ -627,7 +635,9 @@ export const importDevelopmentObjectsBTP = async (
     }
 
     if (usageInsert.length > 0) {
-      await INSERT.into('kernseife.db.DevelopmentObjectUsages').entries(usageInsert);
+      await INSERT.into('kernseife.db.DevelopmentObjectUsages').entries(
+        usageInsert
+      );
       if (tx) {
         await tx.commit();
       }
@@ -639,6 +649,50 @@ export const importDevelopmentObjectsBTP = async (
       );
     skip += top;
   }
+
+  return insertCount;
+};
+
+export const importDevelopmentObjectsBTP = async (
+  importId: string,
+  tx: Transaction,
+  updateProgress?: (progress: number) => Promise<void>
+): Promise<JobResult> => {
+  const developmentObjectsImport = await SELECT.one
+    .from('kernseife.db.Imports', (d: Import) => {
+      d.ID, d.title, d.systemId, d.createdAt;
+    })
+    .where({ ID: importId });
+
+  const systemId = developmentObjectsImport.systemId;
+
+  const successorMap = await getSuccessorRatingMap();
+
+  let insertCount = 0;
+
+  if (systemId == 'ALL') {
+    const systemList = await SELECT.from('AdminService.BTPSystems').columns(
+      'sid'
+    );
+    for (const system of systemList) {
+      insertCount += await importDevelopmentObjectsBTPBySystem(
+        importId,
+        system.sid,
+        successorMap,
+        tx,
+        updateProgress
+      );
+    }
+  } else {
+    insertCount = await importDevelopmentObjectsBTPBySystem(
+      importId,
+      systemId,
+      successorMap,
+      tx,
+      updateProgress
+    );
+  }
+
   return {
     message: `Inserted ${insertCount} DevelopmentObject(s)`,
     exportIdList: []
@@ -669,20 +723,20 @@ const createDevelopmentObjectFindings = async (
 };
 
 const prepareNewDevelopmentObjectsImport = async (
-  developmentImport: Import
+  importID: string,
+  systemId: string
 ) => {
   // Remove all Development Objects for this System
   await DELETE.from('kernseife.db.DevelopmentObjects').where({
-    systemId: developmentImport.systemId
+    systemId: systemId
   });
 
   await DELETE.from('kernseife.db.DevelopmentObjectFindings').where({
-    systemId: developmentImport.systemId
+    systemId: systemId
   });
-
   // Create new DevelopmentObjectVersion
   await INSERT.into('kernseife.db.DevelopmentObjectVersions').entries([
-    { ID: developmentImport.ID, systemId: developmentImport.systemId }
+    { ID: systemId, systemId: systemId }
   ]);
 };
 

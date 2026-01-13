@@ -1,4 +1,5 @@
 namespace kernseife.db;
+
 using kernseife.enums as enums from './enums';
 
 using {
@@ -505,24 +506,24 @@ entity ClassificationSuccessors : cuid {
 
 @cds.persistence.journal
 entity Imports : cuid, managed {
-    type          : String;
-    title         : String;
-    systemId      : String;
-    overwrite     : Boolean default false;
-    system        : Association to Systems
-                        on system.sid = $self.systemId;
+    type      : String;
+    title     : String;
+    systemId  : String;
+    overwrite : Boolean default false;
+    system    : Association to Systems
+                    on system.sid = $self.systemId;
 
     @Core.MediaType                  : fileType
     @Core.ContentDisposition.Filename: fileName
-    file          : LargeBinary;
+    file      : LargeBinary;
 
     @Core.IsMediaType
-    fileType      : String;
-    fileName      : String;
+    fileType  : String;
+    fileName  : String;
 
-    job_ID        : UUID;
-    job           : Association to Jobs
-                        on job.ID = $self.job_ID;
+    job_ID    : UUID;
+    job       : Association to Jobs
+                    on job.ID = $self.job_ID;
 }
 
 @cds.persistence.journal
@@ -576,7 +577,7 @@ entity FindingRecords {
 }
 
 @cds.redirection.target: false
-entity SuccessorRatings   as
+entity SuccessorRatings                  as
     projection on db.ClassificationSuccessors {
         key classification.tadirObjectType as tadirObjectType,
         key classification.tadirObjectName as tadirObjectName,
@@ -930,8 +931,8 @@ entity Enhancements : cuid, managed {
 
 
 entity JobTypes {
-    key code          : String;
-        title         : String;
+    key code  : String;
+        title : String;
 }
 
 
@@ -953,7 +954,7 @@ entity DevelopmentObjectUsages {
 }
 
 
-entity FindingsAggregated as
+entity FindingsAggregated                as
     select from db.FindingRecords as f
     inner join Ratings as r
         on f.messageId = r.code
@@ -1087,6 +1088,12 @@ entity ModificationTypes {
         title       : String;
 }
 
+
+@cds.odata.valuelist
+entity ClassificationFormats {
+    key code  : String;
+        title : String;
+}
 
 
 entity AdoptionEffortValueList           as

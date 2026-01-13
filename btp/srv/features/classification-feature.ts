@@ -1758,31 +1758,3 @@ export const getClassificationJsonAsZip = async (classificationJson: any) => {
   return file;
 };
 
-export const syncClassificationsToExternalSystemByRef = async (ref: any) => {
-  const system: System = await SELECT.one.from(ref);
-  if (!system || !system.destination) {
-    throw new Error('System not found or destination not set');
-  }
-  LOG.info(`Syncing Classifications to System ${system.sid}`);
-  const classificationJson = await getClassificationJsonCustom();
-  LOG.info(
-    `Retrieved Classification JSON with ${classificationJson.objectClassifications.length} entries`
-  );
-  const zipFile = await getClassificationJsonAsZip(classificationJson);
-  LOG.info(
-    `Created ZIP file for Classification JSON, size ${zipFile.length} bytes`
-  );
-  await syncClassifications({ destination: system.destination! }, zipFile);
-};
-
-export const syncClassificationsToExternalSystems = async () => {
-  const systemList: Systems = await SELECT.from('kernseife.db.Systems').where({
-    destination: { '!=': null }
-  });
-
-  const classificationJson = await getClassificationJsonCustom();
-  const zipFile = await getClassificationJsonAsZip(classificationJson);
-  for (const system of systemList) {
-    await syncClassifications({ destination: system.destination! }, zipFile);
-  }
-};
