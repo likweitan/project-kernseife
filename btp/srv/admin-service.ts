@@ -1,5 +1,5 @@
 import { Jobs } from '#cds-models/AdminService';
-import { log, Service, Transaction } from '@sap/cds';
+import { log, Service, Transaction, i18n } from '@sap/cds';
 import dayjs from 'dayjs';
 import {
   getClassificationCount,
@@ -374,6 +374,11 @@ export default (srv: Service) => {
         };
       }
     );
+  });
+
+  srv.on('READ', `BTPSystems`, async (req: any) => {
+    const result = await SELECT.from('AdminService.BTPSystems');
+    return [{ sid: 'ALL', title: i18n.labels.at('allSystems') }, ...result];
   });
 
   srv.on('exportClassificationsExternal', async (req: any) => {
