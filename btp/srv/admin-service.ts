@@ -1,4 +1,4 @@
-import { Jobs } from '#cds-models/AdminService';
+import { BTPSystems, Jobs } from '#cds-models/AdminService';
 import { log, Service, Transaction, i18n } from '@sap/cds';
 import dayjs from 'dayjs';
 import {
@@ -450,7 +450,7 @@ export default (srv: Service) => {
         tx: Transaction,
         updateProgress: (progress: number) => Promise<void>
       ): Promise<JobResult> => {
-        let systemList = [];
+        let systemList: BTPSystems = [];
         if (req.data.systemId == 'ALL') {
           systemList = await SELECT.from('AdminService.BTPSystems');
         } else {
