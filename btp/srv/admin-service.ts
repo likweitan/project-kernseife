@@ -455,8 +455,15 @@ export default (srv: Service) => {
           systemList = await SELECT.from('AdminService.BTPSystems');
         } else {
           systemList = await SELECT.from('AdminService.BTPSystems').where({
-            sid: req.data.systemId
+            sid: req.data.systemIdBTP
           });
+        }
+
+        if (systemList.length === 0) {
+          return {
+            message: `No BTP Systems found`,
+            exportIdList: []
+          };
         }
 
         const classificationJson = await getClassificationJsonCustom();
