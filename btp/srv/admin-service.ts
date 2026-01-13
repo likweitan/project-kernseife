@@ -8,7 +8,7 @@ import {
   getClassificationJsonCustom,
   importExternalClassificationById,
   importMissingClassificationsById,
-  importMissingClassificationsBTP,
+  importMissingClassificationsBTP
 } from './features/classification-feature';
 import {
   importFindingsById,
@@ -450,7 +450,15 @@ export default (srv: Service) => {
         tx: Transaction,
         updateProgress: (progress: number) => Promise<void>
       ): Promise<JobResult> => {
-        const systemList = await SELECT.from('AdminService.BTPSystems');
+        let systemList = [];
+        if (req.data.systemId == 'ALL') {
+          systemList = await SELECT.from('AdminService.BTPSystems');
+        } else {
+          systemList = await SELECT.from('AdminService.BTPSystems').where({
+            sid: req.data.systemId
+          });
+        }
+
         const classificationJson = await getClassificationJsonCustom();
         const zipFile = await getClassificationJsonAsZip(classificationJson);
         await updateProgress(20);
