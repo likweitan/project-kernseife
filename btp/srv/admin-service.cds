@@ -85,7 +85,7 @@ service AdminService @(requires: 'admin') {
     action importFindingsFile( @mandatory systemId: inSystem:systemId, file: inFileType not null);
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
-    action importFindingsBTP( @mandatory systemIdBTP: inSystemBTP:systemId, );
+    action importFindingsBTP( @mandatory systemId: inSystemBTP:systemId, );
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
     action importClassifications( @mandatory file: inFileType not null, @Common.Label: '{i18n>overwriteExisting}' overwriteExisting: Boolean);
@@ -96,7 +96,7 @@ service AdminService @(requires: 'admin') {
                                      @Common.Label: '{i18n>dateFrom}' dateFrom: Timestamp);
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
-    action exportClassificationsBTP( @mandatory systemIdBTP: inSystemBTP:systemId, );
+    action exportClassificationsBTP( @mandatory systemId: inSystemBTP:systemId, );
 
     entity ReleaseStates                     as projection on db.ReleaseStates;
     entity ReleaseStateSuccessors            as projection on db.ReleaseStateSuccessors;

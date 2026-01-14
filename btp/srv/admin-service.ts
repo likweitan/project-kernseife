@@ -455,7 +455,7 @@ export default (srv: Service) => {
           systemList = await SELECT.from('AdminService.BTPSystems');
         } else {
           systemList = await SELECT.from('AdminService.BTPSystems').where({
-            sid: req.data.systemIdBTP
+            sid: req.data.systemId
           });
         }
 
