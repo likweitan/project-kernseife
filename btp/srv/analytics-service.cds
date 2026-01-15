@@ -15,24 +15,38 @@ service AnalyticsService @(requires: ['analyst']) {
             IFNULL(
                 extension.title, 'Unassigned'
             ) as extension          : String,
+            @Common.Text                    : {
+                $value                : languageVersion_code,
+                ![@UI.TextArrangement]: #TextOnly,
+            }
             languageVersion,
+            @Common.Text                    : {
+                $value                : languageVersion_code,
+                ![@UI.TextArrangement]: #TextOnly,
+            }
             languageVersion_code,
             findingList,
             version_ID,
             namespace,
-            @Analytics.Measure: true  @Aggregation.default: #SUM
+            @Analytics.Measure: true                     @Aggregation.default: #SUM
             score,
-            @Analytics.Measure: true  @Aggregation.default: #SUM
+            @Analytics.Measure: true                     @Aggregation.default: #SUM
             @Common.Label     : '{i18n>cleanupPotential}'
             cleanupPotential,
             @Common.Label     : '{i18n>stableScore}'
-            @Analytics.Measure: true  @Aggregation.default: #SUM
+            @Analytics.Measure: true                     @Aggregation.default: #SUM
             potentialScore          : Integer,
-            @Common.Label                   : '{i18n>potentialLevel}'
-            potentialLevel          : String,
+            @Common.Label     : '{i18n>potentialLevel}'  @Common.Text        : {
+                $value                : potentialLevel,
+                ![@UI.TextArrangement]: #TextOnly,
+            }  potentialLevel       : String,
             cleanupPotentialPercent : Decimal(8, 2),
+            @Common.Text                    : {
+                $value                : level,
+                ![@UI.TextArrangement]: #TextOnly,
+            }
             level,
-            @Analytics.Measure: true  @Aggregation.default: #SUM
+            @Analytics.Measure: true                     @Aggregation.default: #SUM
             1 as objectCount        : Integer,
         }
 
@@ -81,7 +95,7 @@ service AnalyticsService @(requires: ['analyst']) {
             on h.version_ID = v.ID
         {
             key v.systemId,
-            key v.createdAt,
+            key v.createdAt           : DateTime,
                 sum(h.score) as score : Integer,
         }
         group by

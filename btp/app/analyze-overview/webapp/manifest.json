@@ -67,12 +67,12 @@
     }
   },
   "sap.platform.cf": {
-    "ui5VersionNumber": "1.134.x"
+    "ui5VersionNumber": "1.143"
   },
   "sap.ui5": {
     "flexEnabled": true,
     "dependencies": {
-      "minUI5Version": "1.134.1",
+      "minUI5Version": "1.143.2",
       "libs": {
         "sap.m": {},
         "sap.ui.core": {},
@@ -149,6 +149,20 @@
             }
           },
           "bEnableStableColors": true,
+          "colorPalette": [
+            {
+              "color": "sapUiChartPaletteSemanticNeutralDark2",
+              "dimensionValue": "X"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticGood",
+              "dimensionValue": "2"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticGoodDark2",
+              "dimensionValue": "5"
+            }
+          ],
           "defaultSpan": {
             "rows": 1,
             "cols": 1
@@ -174,6 +188,24 @@
             }
           },
           "bEnableStableColors": true,
+          "colorPalette": [
+            {
+              "color": "sapUiChartPaletteSemanticGoodDark2",
+              "dimensionValue": "A"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticGood",
+              "dimensionValue": "B"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticCritical",
+              "dimensionValue": "C"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticBad",
+              "dimensionValue": "D"
+            }
+          ],
           "defaultSpan": {
             "rows": 1,
             "cols": 1
@@ -199,6 +231,24 @@
             }
           },
           "bEnableStableColors": true,
+          "colorPalette": [
+            {
+              "color": "sapUiChartPaletteSemanticGoodDark2",
+              "dimensionValue": "A"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticGood",
+              "dimensionValue": "B"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticCritical",
+              "dimensionValue": "C"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticBad",
+              "dimensionValue": "D"
+            }
+          ],
           "defaultSpan": {
             "rows": 1,
             "cols": 1
@@ -224,6 +274,24 @@
             }
           },
           "bEnableStableColors": true,
+          "colorPalette": [
+            {
+              "color": "sapUiChartPaletteSemanticGoodDark2",
+              "dimensionValue": "A"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticGood",
+              "dimensionValue": "B"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticCritical",
+              "dimensionValue": "C"
+            },
+            {
+              "color": "sapUiChartPaletteSemanticBad",
+              "dimensionValue": "D"
+            }
+          ],
           "defaultSpan": {
             "rows": 1,
             "cols": 1
