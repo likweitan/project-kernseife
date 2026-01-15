@@ -5,8 +5,6 @@ import {
   Ratings,
   ReleaseState,
   SimplificationItems,
-  System,
-  Systems
 } from '#cds-models/kernseife/db';
 import dayjs from 'dayjs';
 import { Transaction, db, log, utils } from '@sap/cds';
@@ -34,7 +32,6 @@ import { JobResult } from '../types/jobs';
 import {
   getDestinationBySystemId,
   getMissingClassifications,
-  syncClassifications
 } from './btp-connector-feature';
 import { CleanCoreLevel } from '#cds-models/kernseife/enums';
 

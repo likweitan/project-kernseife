@@ -53,10 +53,10 @@ service AdminService @(requires: 'admin') {
     };
 
     type inClassificationExportFormat {
-        @Common.ValueListWithFixedValues: true
-        @(Common                        : {
-            Label    : '{i18n>system}',
-            ValueList: {
+        @(Common: {
+            ValueListWithFixedValues: true,
+            Label                   : '{i18n>classificationExportFormat}',
+            ValueList               : {
                 CollectionPath: 'ClassificationFormats',
                 Parameters    : [
                     {
@@ -92,7 +92,23 @@ service AdminService @(requires: 'admin') {
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
     action exportClassificationsFile(format: inClassificationExportFormat:format,
+                                     @UI.Hidden: {$edmJson: {$If: [
+                                         {$Eq: [
+                                             {$Path: 'format'},
+                                             'SYSTEM'
+                                         ]},
+                                         false,
+                                         true
+                                     ]}}
                                      @Common.Label: '{i18n>useLegacy}' useLegacy: Boolean,
+                                     @UI.Hidden: {$edmJson: {$If: [
+                                         {$Eq: [
+                                             {$Path: 'format'},
+                                             'EXTERNAL'
+                                         ]},
+                                         false,
+                                         true
+                                     ]}}
                                      @Common.Label: '{i18n>dateFrom}' dateFrom: Timestamp);
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
