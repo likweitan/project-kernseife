@@ -1,8 +1,6 @@
 using kernseife.db as db from '../db/schema';
 
-service AnalyticsService @(requires: [
-    'analyst'
-]) {
+service AnalyticsService @(requires: ['analyst']) {
 
     @Aggregation.CustomAggregate #score: 'Edm.Decimal'
     @readonly
@@ -84,7 +82,7 @@ service AnalyticsService @(requires: [
         {
             key v.systemId,
             key v.createdAt,
-                sum(score) as score : Integer,
+                sum(h.score) as score : Integer,
         }
         group by
             v.systemId,

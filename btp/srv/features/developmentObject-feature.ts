@@ -197,7 +197,7 @@ export const getDevelopmentObjectMap = async () => {
   }, new Map<string, DevelopmentObject>()) as Map<string, DevelopmentObject>;
 };
 
-export const importFinding = async (
+export const importFindingsCSV = async (
   findingImport: Import,
   tx?: Transaction,
   updateProgress?: (progress: number) => Promise<void>
@@ -425,7 +425,7 @@ export const importFinding = async (
   }
 };
 
-export const importFindingsById = async (
+export const importFindingsCSVById = async (
   findingImportId: string,
   tx: Transaction,
   updateProgress?: (progress: number) => Promise<void>
@@ -435,7 +435,7 @@ export const importFindingsById = async (
       d.ID, d.title, d.file, d.systemId, d.createdAt;
     })
     .where({ ID: findingImportId });
-  return await importFinding(findingsRunImport, tx, updateProgress);
+  return await importFindingsCSV(findingsRunImport, tx, updateProgress);
 };
 
 const importFindingsBTPBySystem = async (
@@ -736,7 +736,7 @@ const prepareNewDevelopmentObjectsImport = async (
   });
   // Create new DevelopmentObjectVersion
   await INSERT.into('kernseife.db.DevelopmentObjectVersions').entries([
-    { ID: systemId, systemId: systemId }
+    { ID: importID, systemId: systemId }
   ]);
 };
 

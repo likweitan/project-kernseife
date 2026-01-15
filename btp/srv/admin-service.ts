@@ -11,7 +11,7 @@ import {
   importMissingClassificationsBTP
 } from './features/classification-feature';
 import {
-  importFindingsById,
+  importFindingsCSVById,
   importFindingsBTP
 } from './features/developmentObject-feature';
 
@@ -213,7 +213,7 @@ export default (srv: Service) => {
               updateProgress
             );
           case 'FINDINGS':
-            return await importFindingsById(ID, tx, updateProgress);
+            return await importFindingsCSVById(ID, tx, updateProgress);
           // case 'ENHANCEMENT':
           //   return await importEnhancementObjectsById(ID, tx, updateProgress);
           // case 'EXPLICIT':

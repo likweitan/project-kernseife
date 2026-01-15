@@ -379,7 +379,16 @@
         "settings": {
           "chartAnnotationPath": "com.sap.vocabularies.UI.v1.Chart#scoreHistory",
           "entitySet": "ScoreHistory",
-          "title": "{{scoreHistory}}"
+          "title": "{{scoreHistory}}",
+          "chartProperties": {
+            "timeAxis": {
+              "levels": [
+                "year",
+                "month",
+                "day"
+              ]
+            }
+          }
         }
       }
     },
