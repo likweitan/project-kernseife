@@ -12,7 +12,7 @@ import {
 } from './features/classification-feature';
 import {
   importFindingsById,
-  importDevelopmentObjectsBTP
+  importFindingsBTP
 } from './features/developmentObject-feature';
 
 import {
@@ -224,8 +224,8 @@ export default (srv: Service) => {
               tx,
               updateProgress
             );
-          case 'BTP_DEVELOPMENT_OBJECTS':
-            return await importDevelopmentObjectsBTP(ID, tx, updateProgress);
+          case 'BTP_FINDINGS':
+            return await importFindingsBTP(ID, tx, updateProgress);
           case 'BTP_MISSING_CLASSIFICATION':
             return await importMissingClassificationsBTP(
               ID,

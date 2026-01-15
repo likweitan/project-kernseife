@@ -438,7 +438,7 @@ export const importFindingsById = async (
   return await importFinding(findingsRunImport, tx, updateProgress);
 };
 
-const importDevelopmentObjectsBTPBySystem = async (
+const importFindingsBTPBySystem = async (
   importId: string,
   systemId: string,
   successorMap: Map<string, string>,
@@ -653,7 +653,7 @@ const importDevelopmentObjectsBTPBySystem = async (
   return insertCount;
 };
 
-export const importDevelopmentObjectsBTP = async (
+export const importFindingsBTP = async (
   importId: string,
   tx: Transaction,
   updateProgress?: (progress: number) => Promise<void>
@@ -675,7 +675,7 @@ export const importDevelopmentObjectsBTP = async (
       'sid'
     );
     for (const system of systemList) {
-      insertCount += await importDevelopmentObjectsBTPBySystem(
+      insertCount += await importFindingsBTPBySystem(
         importId,
         system.sid,
         successorMap,
@@ -684,7 +684,7 @@ export const importDevelopmentObjectsBTP = async (
       );
     }
   } else {
-    insertCount = await importDevelopmentObjectsBTPBySystem(
+    insertCount = await importFindingsBTPBySystem(
       importId,
       systemId,
       successorMap,
