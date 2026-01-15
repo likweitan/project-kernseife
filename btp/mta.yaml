@@ -1,6 +1,6 @@
 _schema-version: '3.1'
 ID: kernseife
-version: 1.4.1
+version: 1.4.2
 description: 'Kernseife Project'
 parameters:
   deploy_mode: html5-repo
@@ -313,7 +313,7 @@ resources:
       service: destination
       service-plan: lite
       config:
-        version: 1.4.1
+        version: 1.4.2
         HTML5Runtime_enabled: true
         init_data:
           instance:
