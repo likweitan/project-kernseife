@@ -17,9 +17,9 @@
   },
   "devDependencies": {
     "@sap/eslint-plugin-ui5-jsdocs": "2.0.8",
-    "@sap/ux-specification": "^1.136.7",
-    "@sap/ux-ui5-tooling": "1.19.0",
-    "@ui5/cli": "^4.0.30",
+    "@sap/ux-specification": "^1.139.4",
+   
+    "@ui5/cli": "^4.0.39",
     "eslint": "9.25.1",
     "ui5-task-zipper": "^3.4.4"
   }

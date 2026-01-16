@@ -5,8 +5,6 @@ import {
   Ratings,
   ReleaseState,
   SimplificationItems,
-  System,
-  Systems
 } from '#cds-models/kernseife/db';
 import dayjs from 'dayjs';
 import { Transaction, db, log, utils } from '@sap/cds';
@@ -34,7 +32,6 @@ import { JobResult } from '../types/jobs';
 import {
   getDestinationBySystemId,
   getMissingClassifications,
-  syncClassifications
 } from './btp-connector-feature';
 import { CleanCoreLevel } from '#cds-models/kernseife/enums';
 
@@ -129,7 +126,9 @@ export const getSuccessorKey = (
 export const getSuccessorRatingMap = async (): Promise<Map<string, string>> => {
   const ratingScoreMap = await getRatingScoreMap();
   // Load all Successors that exist
-  const successorList = await SELECT.from('kernseife.db.SuccessorRatings').columns(
+  const successorList = await SELECT.from(
+    'kernseife.db.SuccessorRatings'
+  ).columns(
     'tadirObjectType',
     'tadirObjectName',
     'objectType',
@@ -274,7 +273,9 @@ export const updateSimplifications = async (classification: Classification) => {
 export const updateTotalScoreAndReferenceCount = async (
   classification: Classification
 ) => {
-  const totalScoreResult = await SELECT.from('kernseife.db.DevelopmentObjectFindings')
+  const totalScoreResult = await SELECT.from(
+    'kernseife.db.DevelopmentObjectFindings'
+  )
     .columns(
       'IFNULL(SUM(total),0) as totalScore',
       'IFNULL(SUM(count), 0) as referenceCount'
@@ -381,9 +382,12 @@ const getDefaultRatingCode = (classification: Classification) => {
 export const getRatingMap = async (): Promise<
   Map<string, { score: number; level: CleanCoreLevel }>
 > => {
-  const ratingList: Ratings = await SELECT.from('kernseife.db.Ratings', (c: any) => {
-    c.code, c.score, c.level;
-  });
+  const ratingList: Ratings = await SELECT.from(
+    'kernseife.db.Ratings',
+    (c: any) => {
+      c.code, c.score, c.level;
+    }
+  );
   return ratingList.reduce((map, rating) => {
     map.set(rating.code!, { score: rating.score!, level: rating.level! });
     return map;
@@ -391,9 +395,12 @@ export const getRatingMap = async (): Promise<
 };
 
 export const getRatingScoreMap = async (): Promise<Map<string, number>> => {
-  const ratingList: Ratings = await SELECT.from('kernseife.db.Ratings', (c: any) => {
-    c.code, c.score;
-  });
+  const ratingList: Ratings = await SELECT.from(
+    'kernseife.db.Ratings',
+    (c: any) => {
+      c.code, c.score;
+    }
+  );
   return ratingList.reduce((map, rating) => {
     map.set(rating.code!, rating.score!);
     return map;
@@ -509,7 +516,9 @@ export const importInitialClassification = async (csv: string) => {
     }
 
     if (classificationInsert.length > 0) {
-      await INSERT.into('kernseife.db.Classifications').entries(classificationInsert);
+      await INSERT.into('kernseife.db.Classifications').entries(
+        classificationInsert
+      );
       await tx.commit();
     }
   }
@@ -638,7 +647,9 @@ export const importMissingClassifications = async (
     }
 
     if (classificationInsert.length > 0) {
-      await INSERT.into('kernseife.db.Classifications').entries(classificationInsert);
+      await INSERT.into('kernseife.db.Classifications').entries(
+        classificationInsert
+      );
       if (tx) {
         await tx.commit();
       }
@@ -806,7 +817,9 @@ export const importEnhancementObjects = async (
           comment: classification.comment
         });
 
-        await INSERT.into('kernseife.db.Classifications').entries([classification]);
+        await INSERT.into('kernseife.db.Classifications').entries([
+          classification
+        ]);
         transactionPending = true;
         insertCount++;
       } else {
@@ -1001,7 +1014,9 @@ export const importExplicitObjects = async (
           comment: classification.comment
         });
 
-        await INSERT.into('kernseife.db.Classifications').entries([classification]);
+        await INSERT.into('kernseife.db.Classifications').entries([
+          classification
+        ]);
         transactionPending = true;
         insertCount++;
       } else {
@@ -1106,7 +1121,7 @@ export const importMissingClassificationsById = async (
 ): Promise<JobResult> => {
   const missingClassificationsImport = await SELECT.one
     .from('kernseife.db.Imports', (d: Import) => {
-      d.ID, d.title, d.file
+      d.ID, d.title, d.file;
     })
     .where({ ID: missingClassificationsImportId });
 
@@ -1160,14 +1175,26 @@ export const importMissingClassificationsBTP = async (
     .where({ ID: importId });
 
   const systemId = developmentObjectsImport.systemId;
-
-  // Get Destination from System
-  const destination = await getDestinationBySystemId(systemId);
-
-  // Get Missing Classifications
-  const missingClassificationList = await getMissingClassifications({
-    destination
-  });
+  const missingClassificationList: MissingClassificationImport[] = [];
+  if (systemId == 'ALL') {
+    // Get all Systems with Destinations
+    const systemList = await SELECT.from('AdminService.BTPSystems').columns('sid');
+    for (const system of systemList) {
+      // Get Destination from System
+      const destination = await getDestinationBySystemId(system.sid);
+      const missingClassifications = await getMissingClassifications({
+        destination
+      });
+      // Get Missing Classifications
+      missingClassificationList.push(...missingClassifications);
+    }
+  } else {
+    const destination = await getDestinationBySystemId(systemId);
+    const missingClassifications = await getMissingClassifications({
+      destination
+    });
+    missingClassificationList.push(...missingClassifications);
+  }
 
   return await importMissingClassifications(
     missingClassificationList,
@@ -1596,12 +1623,14 @@ const importClassification = async (
       } as ClassificationImportLog;
     } else if (updated) {
       // Update DB
-      await UPDATE('kernseife.db.Classifications').set(existingClassification).where({
-        tadirObjectType: existingClassification.tadirObjectType,
-        tadirObjectName: existingClassification.tadirObjectName,
-        objectName: existingClassification.objectName,
-        objectType: existingClassification.objectType
-      });
+      await UPDATE('kernseife.db.Classifications')
+        .set(existingClassification)
+        .where({
+          tadirObjectType: existingClassification.tadirObjectType,
+          tadirObjectName: existingClassification.tadirObjectName,
+          objectName: existingClassification.objectName,
+          objectType: existingClassification.objectType
+        });
 
       return {
         tadirObjectType: existingClassification.tadirObjectType as string,
@@ -1726,31 +1755,3 @@ export const getClassificationJsonAsZip = async (classificationJson: any) => {
   return file;
 };
 
-export const syncClassificationsToExternalSystemByRef = async (ref: any) => {
-  const system: System = await SELECT.one.from(ref);
-  if (!system || !system.destination) {
-    throw new Error('System not found or destination not set');
-  }
-  LOG.info(`Syncing Classifications to System ${system.sid}`);
-  const classificationJson = await getClassificationJsonCustom();
-  LOG.info(
-    `Retrieved Classification JSON with ${classificationJson.objectClassifications.length} entries`
-  );
-  const zipFile = await getClassificationJsonAsZip(classificationJson);
-  LOG.info(
-    `Created ZIP file for Classification JSON, size ${zipFile.length} bytes`
-  );
-  await syncClassifications({ destination: system.destination! }, zipFile);
-};
-
-export const syncClassificationsToExternalSystems = async () => {
-  const systemList: Systems = await SELECT.from('kernseife.db.Systems').where({
-    destination: { '!=': null }
-  });
-
-  const classificationJson = await getClassificationJsonCustom();
-  const zipFile = await getClassificationJsonAsZip(classificationJson);
-  for (const system of systemList) {
-    await syncClassifications({ destination: system.destination! }, zipFile);
-  }
-};

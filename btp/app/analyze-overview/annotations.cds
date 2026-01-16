@@ -335,12 +335,14 @@ annotate service.DevelopmentObjects with @(
         Value      : cleanupPotential,
         Title      : '{i18n>cleanupPotential}',
         Description: '{i18n>cleanupPotential}',
+        Criticality: #Positive
     },
     UI.DataPoint #potentialScore                                      : {
         $Type      : 'UI.DataPointType',
         Value      : potentialScore,
         Title      : '{i18n>potentialScore}',
         Description: '{i18n>potentialScore}',
+        Criticality: #Neutral
     },
 
 
@@ -610,7 +612,7 @@ annotate service.DevClasses with @(
         DimensionAttributes: [{
             $Type    : 'UI.ChartDimensionAttributeType',
             Dimension: devClass,
-            Role     : #Category
+            Role     : #Category,
         }],
         Measures           : [
             cleanupPotential,
@@ -618,16 +620,32 @@ annotate service.DevClasses with @(
         ],
         MeasureAttributes  : [
             {
-                $Type  : 'UI.ChartMeasureAttributeType',
-                Measure: cleanupPotential,
-                Role   : #Axis1,
+                $Type    : 'UI.ChartMeasureAttributeType',
+                Measure  : cleanupPotential,
+                Role     : #Axis1,
+                DataPoint: '@UI.DataPoint#cleanupPotential',
             },
             {
-                $Type  : 'UI.ChartMeasureAttributeType',
-                Measure: potentialScore,
-                Role   : #Axis1,
+                $Type    : 'UI.ChartMeasureAttributeType',
+                Measure  : potentialScore,
+                Role     : #Axis1,
+                DataPoint: '@UI.DataPoint#potentialScore',
             }
         ]
+    },
+    UI.DataPoint #cleanupPotential                       : {
+        $Type      : 'UI.DataPointType',
+        Value      : cleanupPotential,
+        Title      : '{i18n>cleanupPotential}',
+        Description: '{i18n>cleanupPotential}',
+        Criticality: #Positive
+    },
+    UI.DataPoint #potentialScore                         : {
+        $Type      : 'UI.DataPointType',
+        Value      : potentialScore,
+        Title      : '{i18n>potentialScore}',
+        Description: '{i18n>potentialScore}',
+        Criticality: #Neutral
     },
     UI.PresentationVariant #cleanupPotential             : {
         MaxItems      : 8,
@@ -639,20 +657,7 @@ annotate service.DevClasses with @(
         }],
         Visualizations: ['@UI.Chart#cleanupPotential']
     },
-    UI.DataPoint #cleanupPotential                       : {
-        $Type      : 'UI.DataPointType',
-        Value      : cleanupPotential,
-        Title      : '{i18n>cleanupPotential}',
-        Description: '{i18n>cleanupPotential}',
-    },
-    UI.DataPoint #potentialScore                         : {
-        $Type      : 'UI.DataPointType',
-        Value      : potentialScore,
-        Title      : '{i18n>potentialScore}',
-        Description: '{i18n>potentialScore}',
-        Criticality: #Positive
-    },
-
+    
     UI.Identification #cleanupPotential                  : [{
         $Type         : 'UI.DataFieldForIntentBasedNavigation',
         SemanticObject: 'DevelopmentObjects',
@@ -660,33 +665,32 @@ annotate service.DevClasses with @(
     }, ],
 );
 
-annotate service.ScoreHistory with @(
-    UI.Chart #scoreHistory                 : {
-        $Type              : 'UI.ChartDefinitionType',
-        Description        : '{i18n>scoreHistoryDescription}',
-        Title              : '{i18n>scoreHistory}',
-        ChartType          : #Line,
-        Dimensions         : [
-            createdAt,
-            systemId
-        ],
-        DimensionAttributes: [
-            {
-                $Type    : 'UI.ChartDimensionAttributeType',
-                Dimension: createdAt,
-                Role     : #Category,
-            },
-            {
-                $Type    : 'UI.ChartDimensionAttributeType',
-                Dimension: systemId,
-                Role     : #Series,
-            }
-        ],
-        Measures           : [score],
-        MeasureAttributes  : [{
-            $Type  : 'UI.ChartMeasureAttributeType',
-            Measure: score,
-            Role   : #Axis1,
-        }],
-    }
-);
+annotate service.ScoreHistory with @(UI.Chart #scoreHistory: {
+    $Type              : 'UI.ChartDefinitionType',
+    Description        : '{i18n>scoreHistoryDescription}',
+    Title              : '{i18n>scoreHistory}',
+    ChartType          : #Line,
+    Dimensions         : [
+        createdAt,
+        systemId
+    ],
+    DimensionAttributes: [
+        {
+            $Type    : 'UI.ChartDimensionAttributeType',
+            Dimension: createdAt,
+            Role     : #Category,
+
+        },
+        {
+            $Type    : 'UI.ChartDimensionAttributeType',
+            Dimension: systemId,
+            Role     : #Series,
+        }
+    ],
+    Measures           : [score],
+    MeasureAttributes  : [{
+        $Type  : 'UI.ChartMeasureAttributeType',
+        Measure: score,
+        Role   : #Axis1,
+    }],
+});

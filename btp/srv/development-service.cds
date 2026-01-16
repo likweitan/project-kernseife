@@ -69,6 +69,9 @@ service DevelopmentService @(requires: ['development-viewer']) {
 
     entity Customers                         as projection on db.Customers;
 
+    @readonly
+    entity Systems                           as projection on db.Systems;
+
     type inDevClass          : {
         devClass : String;
     }

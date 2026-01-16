@@ -129,13 +129,13 @@ annotate service.Jobs with @(
             Actions: [
                 {
                     $Type : 'UI.DataFieldForAction',
-                    Action: 'AdminService.EntityContainer/exportClassificationsSystem',
-                    Label : '{i18n>exportClassificationsSystem}',
+                    Action: 'AdminService.EntityContainer/exportClassificationsFile',
+                    Label : '{i18n>exportClassificationsFile}',
                 },
                 {
                     $Type : 'UI.DataFieldForAction',
-                    Action: 'AdminService.EntityContainer/exportClassificationsExternal',
-                    Label : '{i18n>exportClassificationsExternal}',
+                    Action: 'AdminService.EntityContainer/exportClassificationsBTP',
+                    Label : '{i18n>exportClassificationsBTP}',
                 },
             ],
             ID     : 'i18nexport',

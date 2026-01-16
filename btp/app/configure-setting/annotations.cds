@@ -242,11 +242,6 @@ annotate AdminService.Systems with @(
     },
     UI.Identification: [
         {
-            $Type : 'UI.DataFieldForAction',
-            Action: 'AdminService.syncClassifications',
-            Label : '{i18n>syncClassifications}',
-        },
-        {
             $Type        : 'UI.DataFieldForAction',
             Action       : 'AdminService.setupSystem',
             Label        : '{i18n>setupSystem}',

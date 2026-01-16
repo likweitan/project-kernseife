@@ -3,15 +3,6 @@ using {kernseife_btp as btp} from './external/kernseife_btp';
 
 service AdminService @(requires: 'admin') {
 
-
-    // Actions
-    @Common.IsActionCritical: true
-    action syncClassificationsToAllSystems();
-
-    action triggerExport(exportType: String, legacy: Boolean, dateFrom: Timestamp); // as "export" is not allowed due to TS type generation
-    action triggerImport(importType: String, systemId: String);
-
-
     type inSystemBTP                  : {
         @Common.ValueListWithFixedValues: true
         @(Common                        : {
@@ -61,27 +52,67 @@ service AdminService @(requires: 'admin') {
         fileName : String;
     };
 
+    type inClassificationExportFormat {
+        @(Common: {
+            ValueListWithFixedValues: true,
+            Label                   : '{i18n>classificationExportFormat}',
+            ValueList               : {
+                CollectionPath: 'ClassificationFormats',
+                Parameters    : [
+                    {
+                        $Type            : 'Common.ValueListParameterInOut',
+                        LocalDataProperty: format,
+                        ValueListProperty: 'code'
+                    },
+                    {
+                        $Type            : 'Common.ValueListParameterDisplayOnly',
+                        ValueListProperty: 'title'
+                    }
+                ]
+            }
+        })
+        format : ClassificationFormats:code;
+    };
+
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
-    action importMissingClassificationsBTP(@mandatory systemId: inSystemBTP:systemId, );
+    action importMissingClassificationsBTP( @mandatory systemId: inSystemBTP:systemId, );
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
     action importMissingClassificationsFile(file: inFileType not null);
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
-    action importFindingsFile(@mandatory systemId: inSystem:systemId, file: inFileType not null);
+    action importFindingsFile( @mandatory systemId: inSystem:systemId, file: inFileType not null);
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
-    action importFindingsBTP(@mandatory systemIdBTP: inSystemBTP:systemId, );
+    action importFindingsBTP( @mandatory systemId: inSystemBTP:systemId, );
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
     action importClassifications( @mandatory file: inFileType not null, @Common.Label: '{i18n>overwriteExisting}' overwriteExisting: Boolean);
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
-    action exportClassificationsSystem( @Common.Label: '{i18n>useLegacy}' useLegacy: Boolean);
+    action exportClassificationsFile(format: inClassificationExportFormat:format,
+                                     @UI.Hidden: {$edmJson: {$If: [
+                                         {$Eq: [
+                                             {$Path: 'format'},
+                                             'SYSTEM'
+                                         ]},
+                                         false,
+                                         true
+                                     ]}}
+                                     @Common.Label: '{i18n>useLegacy}' useLegacy: Boolean,
+                                     @UI.Hidden: {$edmJson: {$If: [
+                                         {$Eq: [
+                                             {$Path: 'format'},
+                                             'EXTERNAL'
+                                         ]},
+                                         false,
+                                         true
+                                     ]}}
+                                     @Common.Label: '{i18n>dateFrom}' dateFrom: Timestamp);
 
     @(Common.SideEffects: {TargetEntities: ['/AdminService.EntityContainer/Jobs'], })
-    action exportClassificationsExternal( @Common.Label: '{i18n>dateFrom}' dateFrom: Timestamp);
+    action exportClassificationsBTP( @mandatory systemId: inSystemBTP:systemId, );
 
     entity ReleaseStates                     as projection on db.ReleaseStates;
     entity ReleaseStateSuccessors            as projection on db.ReleaseStateSuccessors;
@@ -133,7 +164,6 @@ service AdminService @(requires: 'admin') {
                                        on project.systemId = $self.sid //Not exactly correct, but we need an ON condition here
         }
         actions {
-            action syncClassifications();
             action setupSystem();
             action triggerATCRun();
         };
@@ -199,6 +229,9 @@ service AdminService @(requires: 'admin') {
     @cds.redirection.target: false
     entity SuccessorClassificationsValueList as projection on db.SuccessorClassificationsValueList;
 
+
+    entity ClassificationFormats             as projection on db.ClassificationFormats;
+
     entity ObjectTypes                       as projection on db.ObjectTypes;
     entity Criticality                       as projection on db.Criticality;
 
@@ -207,4 +240,5 @@ service AdminService @(requires: 'admin') {
                                                 where
                                                         destination != null
                                                     and destination != '';
+
 }

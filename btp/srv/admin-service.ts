@@ -1,5 +1,5 @@
-import { Jobs } from '#cds-models/AdminService';
-import { log, Service, Transaction } from '@sap/cds';
+import { BTPSystems, Jobs } from '#cds-models/AdminService';
+import { log, Service, Transaction, i18n } from '@sap/cds';
 import dayjs from 'dayjs';
 import {
   getClassificationCount,
@@ -8,13 +8,11 @@ import {
   getClassificationJsonCustom,
   importExternalClassificationById,
   importMissingClassificationsById,
-  syncClassificationsToExternalSystemByRef,
-  syncClassificationsToExternalSystems,
   importMissingClassificationsBTP
 } from './features/classification-feature';
 import {
-  importFindingsById,
-  importDevelopmentObjectsBTP
+  importFindingsCSVById,
+  importFindingsBTP
 } from './features/developmentObject-feature';
 
 import {
@@ -32,6 +30,7 @@ import { JobResult } from './types/jobs';
 import {
   getProject,
   setupProject,
+  syncClassifications,
   triggerAtcRun
 } from './features/btp-connector-feature';
 import { System } from '#cds-models/kernseife/db';
@@ -214,7 +213,7 @@ export default (srv: Service) => {
               updateProgress
             );
           case 'FINDINGS':
-            return await importFindingsById(ID, tx, updateProgress);
+            return await importFindingsCSVById(ID, tx, updateProgress);
           // case 'ENHANCEMENT':
           //   return await importEnhancementObjectsById(ID, tx, updateProgress);
           // case 'EXPLICIT':
@@ -225,8 +224,8 @@ export default (srv: Service) => {
               tx,
               updateProgress
             );
-          case 'BTP_DEVELOPMENT_OBJECTS':
-            return await importDevelopmentObjectsBTP(ID, tx, updateProgress);
+          case 'BTP_FINDINGS':
+            return await importFindingsBTP(ID, tx, updateProgress);
           case 'BTP_MISSING_CLASSIFICATION':
             return await importMissingClassificationsBTP(
               ID,
@@ -248,29 +247,6 @@ export default (srv: Service) => {
     ['Destinations', 'Destinations.drafts'],
     async (req: any) => {
       await updateDestinations();
-    }
-  );
-
-  srv.on('syncClassificationsToAllSystems', async (req: any) => {
-    LOG.info('syncRatingsToAllSystems');
-    await syncClassificationsToExternalSystems();
-    req.notify('SYNC_SUCCESSFUL');
-  });
-
-  srv.on(
-    'syncClassifications',
-    ['Systems', 'Systems.drafts'],
-    async (req: any) => {
-      try {
-        await syncClassificationsToExternalSystemByRef(req.subject);
-
-        req.notify('SYNC_SUCCESSFUL');
-      } catch (e: any) {
-        handleMessage(req, {
-          message: e.message,
-          numericSeverity: 3
-        });
-      }
     }
   );
 
@@ -342,32 +318,179 @@ export default (srv: Service) => {
     }
   });
 
-  srv.on('exportClassificationsSystem', async (req: any) => {
-    LOG.info('exportClassificationsSystem', req.data);
+  srv.on('exportClassificationsFile', async (req: any) => {
+    LOG.info('exportClassificationsFile', req.data);
+
+    switch (req.data.format) {
+      case 'SYSTEM':
+        await runAsJob(
+          `Export SYSTEM_CLASSIFICATION`,
+          `EXPORT_SYSTEM_CLASSIFICATION`,
+          100,
+          async (
+            tx: Transaction,
+            updateProgress: (progress: number) => Promise<void>
+          ): Promise<JobResult> => {
+            const fileType = 'application/zip';
+            const filename = `system_classification_${dayjs().format('YYYY_MM_DD')}.zip`;
+            await updateProgress(15);
+            const classificationJson = await getClassificationJsonCustom({
+              legacy: req.data.useLegacy
+            });
+            await updateProgress(85);
+            const file = await getClassificationJsonAsZip(classificationJson);
+            await updateProgress(100);
+            return {
+              message: `Exported ${classificationJson.objectClassifications.length} classifications`,
+              exportIdList: [
+                await createExport(
+                  'SYSTEM_CLASSIFICATION',
+                  filename,
+                  file,
+                  fileType
+                )
+              ]
+            };
+          }
+        );
+        break;
+      case 'EXTERNAL':
+        await runAsJob(
+          `Export EXTERNAL_CLASSIFICATION`,
+          `EXPORT_EXTERNAL_CLASSIFICATION`,
+          100,
+          async (
+            tx: Transaction,
+            updateProgress: (progress: number) => Promise<void>
+          ): Promise<JobResult> => {
+            // Wrap in ZIP
+            const count = await getClassificationCount(req.data.dateFrom);
+            let offset = 0;
+            const rowSize = 100000;
+            let classificationList;
+            const exportList: string[] = [];
+            do {
+              const zip = new JSZip();
+              const fileType = 'application/zip';
+              const filename = `external_classification_${dayjs().format('YYYY_MM_DD')}_${offset + 1}.zip`;
+              const progress = Math.round((100 / count) * rowSize * offset);
+              classificationList = await getClassificationJsonExternal(
+                rowSize,
+                offset * rowSize,
+                req.data.dateFrom
+              );
+              if (tx) await tx.commit(); // Commit Read
+
+              if (classificationList.length === 0) {
+                return {
+                  message: `No classifications found`,
+                  exportIdList: []
+                };
+              }
+              for (const classification of classificationList) {
+                if (
+                  classification.tadirObjectType ===
+                    classification.objectType &&
+                  classification.tadirObjectName === classification.objectName
+                ) {
+                  zip.file(
+                    `${classification.objectName.replaceAll('/', '#').toUpperCase()}.${classification.objectType.toUpperCase()}.json`,
+                    JSON.stringify(classification, null, 2)
+                  );
+                } else {
+                  zip.file(
+                    `${classification.tadirObjectName.replaceAll('/', '#').toUpperCase()}.${classification.tadirObjectType.toUpperCase()}.${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toUpperCase()}.json`,
+                    JSON.stringify(classification, null, 2)
+                  );
+                }
+              }
+              offset++;
+
+              await updateProgress(progress);
+
+              LOG.info('Generate Zip - Start ' + Object.keys(zip.files).length);
+              const file = await zip.generateAsync({
+                streamFiles: true,
+                type: 'nodebuffer',
+                compression: 'DEFLATE',
+                compressionOptions: { level: 7 }
+              });
+
+              LOG.info('Generate Zip - Finish');
+
+              exportList.push(
+                await createExport(
+                  'EXTERNAL_CLASSIFICATION',
+                  filename,
+                  file,
+                  fileType
+                )
+              );
+              if (tx) await tx.commit();
+            } while (classificationList.length == rowSize);
+
+            await updateProgress(100);
+            return {
+              message: `Exported ${count} classifications`,
+              exportIdList: exportList
+            };
+          }
+        );
+        break;
+    }
+  });
+
+  srv.on('exportClassificationsBTP', async (req: any) => {
+    LOG.info('exportClassificationsBTP', req.data);
     await runAsJob(
-      `Export SYSTEM_CLASSIFICATION`,
-      `EXPORT_SYSTEM_CLASSIFICATION`,
+      `Export BTP_CLASSIFICATION`,
+      `EXPORT_BTP_CLASSIFICATION`,
       100,
       async (
         tx: Transaction,
         updateProgress: (progress: number) => Promise<void>
       ): Promise<JobResult> => {
+        let systemList: BTPSystems = [];
+        if (req.data.systemId == 'ALL') {
+          systemList = await SELECT.from('AdminService.BTPSystems');
+        } else {
+          systemList = await SELECT.from('AdminService.BTPSystems').where({
+            sid: req.data.systemId
+          });
+        }
+
+        if (systemList.length === 0) {
+          return {
+            message: `No BTP Systems found`,
+            exportIdList: []
+          };
+        }
+
+        const classificationJson = await getClassificationJsonCustom();
+        const zipFile = await getClassificationJsonAsZip(classificationJson);
+        await updateProgress(20);
+        let count = 0;
+        for (const system of systemList) {
+          await syncClassifications(
+            { destination: system.destination! },
+            zipFile
+          );
+          count++;
+          await updateProgress(
+            20 + Math.round((80.0 / systemList.length) * count)
+          );
+        }
         const fileType = 'application/zip';
         const filename = `system_classification_${dayjs().format('YYYY_MM_DD')}.zip`;
-        await updateProgress(15);
-        const classificationJson = await getClassificationJsonCustom({
-          legacy: req.data.useLegacy
-        });
-        await updateProgress(85);
-        const file = await getClassificationJsonAsZip(classificationJson);
+
         await updateProgress(100);
         return {
-          message: `Exported ${classificationJson.objectClassifications.length} classifications`,
+          message: `Exported classifications to ${systemList.length} systems`,
           exportIdList: [
             await createExport(
               'SYSTEM_CLASSIFICATION',
               filename,
-              file,
+              zipFile,
               fileType
             )
           ]
@@ -376,87 +499,8 @@ export default (srv: Service) => {
     );
   });
 
-  srv.on('exportClassificationsExternal', async (req: any) => {
-    LOG.info('exportClassificationsExternal', req.data);
-    await runAsJob(
-      `Export EXTERNAL_CLASSIFICATION`,
-      `EXPORT_EXTERNAL_CLASSIFICATION`,
-      100,
-      async (
-        tx: Transaction,
-        updateProgress: (progress: number) => Promise<void>
-      ): Promise<JobResult> => {
-        // Wrap in ZIP
-        const count = await getClassificationCount(req.data.dateFrom);
-        let offset = 0;
-        const rowSize = 100000;
-        let classificationList;
-        const exportList: string[] = [];
-        do {
-          const zip = new JSZip();
-          const fileType = 'application/zip';
-          const filename = `external_classification_${dayjs().format('YYYY_MM_DD')}_${offset + 1}.zip`;
-          const progress = Math.round((100 / count) * rowSize * offset);
-          classificationList = await getClassificationJsonExternal(
-            rowSize,
-            offset * rowSize,
-            req.data.dateFrom
-          );
-          if (tx) await tx.commit(); // Commit Read
-
-          if (classificationList.length === 0) {
-            return {
-              message: `No classifications found`,
-              exportIdList: []
-            };
-          }
-          for (const classification of classificationList) {
-            if (
-              classification.tadirObjectType === classification.objectType &&
-              classification.tadirObjectName === classification.objectName
-            ) {
-              zip.file(
-                `${classification.objectName.replaceAll('/', '#').toUpperCase()}.${classification.objectType.toUpperCase()}.json`,
-                JSON.stringify(classification, null, 2)
-              );
-            } else {
-              zip.file(
-                `${classification.tadirObjectName.replaceAll('/', '#').toUpperCase()}.${classification.tadirObjectType.toUpperCase()}.${classification.objectName.replaceAll('/', '#').toLowerCase()}.${classification.objectType.toUpperCase()}.json`,
-                JSON.stringify(classification, null, 2)
-              );
-            }
-          }
-          offset++;
-
-          await updateProgress(progress);
-
-          LOG.info('Generate Zip - Start ' + Object.keys(zip.files).length);
-          const file = await zip.generateAsync({
-            streamFiles: true,
-            type: 'nodebuffer',
-            compression: 'DEFLATE',
-            compressionOptions: { level: 7 }
-          });
-
-          LOG.info('Generate Zip - Finish');
-
-          exportList.push(
-            await createExport(
-              'EXTERNAL_CLASSIFICATION',
-              filename,
-              file,
-              fileType
-            )
-          );
-          if (tx) await tx.commit();
-        } while (classificationList.length == rowSize);
-
-        await updateProgress(100);
-        return {
-          message: `Exported ${count} classifications`,
-          exportIdList: exportList
-        };
-      }
-    );
+  srv.on('READ', `BTPSystems`, async (req: any) => {
+    const result = await SELECT.from('AdminService.BTPSystems');
+    return [{ sid: 'ALL', title: i18n.labels.at('allSystems') }, ...result];
   });
 };
