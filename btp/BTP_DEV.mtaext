@@ -7,6 +7,3 @@ resources:
   - name: kernseife-db
     parameters:
       service-name: kernseife-dev-db
-  - name: kernseife-cloud-logging
-    parameters:
-      service-plan: dev
